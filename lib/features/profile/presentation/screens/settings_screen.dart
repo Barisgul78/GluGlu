@@ -179,7 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'GlutensizizBiz',
+                      'GluGlu',
                       style: GoogleFonts.plusJakartaSans(
                         color: kOnSurface,
                         fontWeight: FontWeight.bold,

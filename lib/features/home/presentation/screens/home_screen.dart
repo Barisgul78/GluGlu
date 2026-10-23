@@ -218,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const Spacer(),
           Text(
-            'GluFree',
+            'GluGlu',
             style: GoogleFonts.plusJakartaSans(
               color: kPrimary,
               fontWeight: FontWeight.bold,
@@ -772,7 +772,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.glufree.app',
+                  userAgentPackageName: 'com.gluglu.app',
                 ),
                 if (_userPosition != null)
                   MarkerLayer(markers: [

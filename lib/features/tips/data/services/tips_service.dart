@@ -106,7 +106,7 @@ class TipsService {
       title: 'Belediyelerin Çölyak Yardımları',
       summary:
           'Pek çok belediye, çölyak tanısı almış düşük gelirli vatandaşlara aylık glutensiz ürün yardımı ve sosyal destek sunmaktadır. Başvuru süreci ve şartları öğrenmek için yakınınızdaki sosyal hizmetler müdürlüğüne başvurun.',
-      author: 'GluFree Editörü',
+      author: 'GluGlu Editörü',
       date: DateTime(2026, 6, 15),
       likes: 47,
       dislikes: 3,

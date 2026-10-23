@@ -1,8 +1,7 @@
-[README.md](https://github.com/user-attachments/files/29626382/README.md)
-# 🌾 GlutensizizBiz
+# 🌾 GluGlu
 
 <p align="center">
-  <img src="assets/images/logo.png" alt="GlutensizizBiz Logo" width="120"/>
+  <img src="assets/images/logo.png" alt="GluGlu Logo" width="120"/>
 </p>
 
 <p align="center">
@@ -20,7 +19,7 @@
 
 ## 📱 Uygulama Hakkında
 
-**GlutensizizBiz**, Türkiye'deki çölyak hastaları ve gluten hassasiyeti olan bireylerin günlük hayatını kolaylaştırmak amacıyla geliştirilmiş bir Flutter mobil uygulamasıdır. Glutensiz ürün rehberinden belediye yardımlarına, yakındaki glutensiz mekânlardan sağlık içeriklerine kadar her şey tek uygulamada toplanmıştır.
+**GluGlu**, Türkiye'deki çölyak hastaları ve gluten hassasiyeti olan bireylerin günlük hayatını kolaylaştırmak amacıyla geliştirilmiş bir Flutter mobil uygulamasıdır. Glutensiz ürün rehberinden belediye yardımlarına, yakındaki glutensiz mekânlardan sağlık içeriklerine kadar her şey tek uygulamada toplanmıştır.
 
 ---
 

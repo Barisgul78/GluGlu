@@ -50,7 +50,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeProvider);
     return MaterialApp.router(
-      title: 'GluFree',
+      title: 'GluGlu',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       // Henüz ayrı koyu palet yok — CLAUDE.md'deki tema sistemi korunur

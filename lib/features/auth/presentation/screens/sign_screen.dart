@@ -48,23 +48,13 @@ class _SignScreenState extends State<SignScreen> {
                 children: [
                   const SizedBox(height: 52),
 
-                  // ── İki renkli başlık ─────────────────────────────────
+                  // ── Başlık ────────────────────────────────────────────
                   Text(
-                    'Gluten-Free',
+                    'GluGlu',
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 34,
                       fontWeight: FontWeight.w800,
                       color: kPrimary,
-                      letterSpacing: -0.5,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    'Haven',
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 34,
-                      fontWeight: FontWeight.w800,
-                      color: kSecondary,
                       letterSpacing: -0.5,
                     ),
                     textAlign: TextAlign.center,

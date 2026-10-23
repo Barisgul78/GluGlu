@@ -1,4 +1,4 @@
-const String kAppName = 'GluFree';
+const String kAppName = 'GluGlu';
 const String kAppVersion = '1.0.0';
 
 // Firestore koleksiyon adları

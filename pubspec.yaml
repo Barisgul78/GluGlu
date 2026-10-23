@@ -1,6 +1,6 @@
 
-name: gluten_free_scanner
-description: A modern gluten-free product scanner app.
+name: gluglu
+description: GluGlu - çölyak ve gluten hassasiyeti için glutensiz ürün ve mekan rehberi.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -31,6 +31,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#174F41"
+  adaptive_icon_foreground: "assets/icon/app_icon.png"
+  remove_alpha_ios: true
+  background_color_ios: "#174F41"
 
 flutter:
   uses-material-design: true

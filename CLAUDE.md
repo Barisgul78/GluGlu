@@ -1,237 +1,284 @@
-# GluFree - Claude Code Geliştirme Rehberi
+# GluGlu — Çalışma Kılavuzu (Operating Manual)
 
-Bu dosya Claude Code için ana proje rehberidir. Her yeni istek, refactor ve revize bu kurallar okunmuş kabul edilerek yapılmalıdır.
+Bu dosya, bu repoda çalışan herhangi bir modelin **kod yazmadan önce** okuduğu varsayılan tek kaynaktır. Amaç: bu projeyi hiç görmemiş bir modelin, deneyimli bir geliştiricinin seviyesinde iş çıkarması. Kurallar "öneri" değil; her biri gerçekten yapılmış bir hatayı veya bilinçli bir kararı kodluyor.
 
-## 1. Proje Özeti
+---
 
-- **Uygulama:** GluFree — glutensiz ürün ve mekan keşif uygulaması.
-- **Hedef kitle:** Çölyak hastalığı ve gluten hassasiyeti olan kullanıcılar.
-- **Platform:** Flutter ile iOS ve Android.
-- **Mevcut stack:** Flutter, Dart, Firebase Auth, Cloud Firestore, go_router, flutter_riverpod, google_fonts, shared_preferences, flutter_map, latlong2, geolocator, flutter_typeahead.
-- **Mevcut akış:** `MainShell` (`NavigationBar`, 5 sekme — `lib/core/routing/main_shell.dart`):
-  - **Anasayfa** — hero banner, yakınındaki glutensiz mekanlar listesi (Firestore `mekanlar` koleksiyonundan, `home/data/services/home_service.dart` üzerinden), yeni eklenen ürünler grid, ipuçları/blog bento kartları. "Tümü" ile Mekanlar ekranına (`VenuesScreen`) `go_router` ile gidilir — Mekanlar bağımsız bir sekme değildir.
-  - **Ara** — ürün adı/marka/kategori filtresiyle Firestore canlı arama. Barkod tarayıcı **desteklenmeyecek** — bilinçli karar, entegre edilmeyecek.
-  - **Rehber** — glutensiz ipuçları/makaleler listesi ve detay ekranı (`lib/features/tips/`), Firestore favori entegrasyonlu.
-  - **Favoriler** — 3 sekmeli (Ürünler / Mekanlar / Makaleler) favori listesi; Firestore + local storage ile senkron.
-  - **Profil** — kullanıcı bilgisi, ayarlar, çıkış.
-  - **Mekanlar** — glutensiz restoran/kafe/belediye listesi, puan, mesafe, filtre; harita görünümü (`VenueMapScreen`, `flutter_map`) dahil. Anasayfa üzerinden erişilir.
-  - Ayrıca: **Auth akışı** (`lib/features/auth/`) ve **Onboarding** (`lib/features/onboarding/`) mevcut; router seviyesinde auth durumuna göre yönlendirme yapılır.
-- **UI dili:** Türkçe.
-- **Backend:** Firebase (Firestore). Firebase çağrıları UI içinde değil service katmanında kalmalıdır.
+## 0. Tek paragraf özet
 
-## 2. AI Çalışma Kuralları
+GluGlu: çölyak/gluten hassasiyeti olan kullanıcılar için glutensiz ürün + mekan keşif uygulaması. Flutter (iOS/Android), Firebase Auth + Firestore, go_router, Riverpod (sınırlı), UI dili Türkçe. Feature-first mimari, statik-metotlu servis katmanı, ekranlarda `StatefulWidget + setState`. Tek zorunlu kalite kapısı: `flutter analyze` temiz. Test klasörü **yok** (bkz. §2.5).
 
-- Kod yazmadan önce ilgili dosyaları oku, mevcut paterni anla ve gereksiz geniş refactor yapma.
-- Mevcut çalışan akış korunacak; davranış değişikliği gerekiyorsa bilinçli ve açık olmalı.
-- Her yeni ekran veya özellik responsive, tema uyumlu ve test edilebilir tasarlanacak.
-- Firebase config, paket sürümleri, native Android/iOS ayarları ve routing akışı gereksiz değiştirilmemeli.
-- Büyük veya birden fazla dosyayı etkileyen revizeler için önce plan mode ile plan sunulmalı, onay alınmadan kod yazılmamalı (bkz. Bölüm 3).
-- Revize sonunda mümkünse `flutter test` ve `flutter analyze` çalıştırılmalı.
-- Türkçe yorum yaz (kısa ve net!).
+---
 
-## 3. Plan Mode Kullanımı
+## 1. Gerçeklik Haritası
 
-- Yeni bir özellik, mimari değişiklik veya birden fazla dosyayı etkileyen revizeler önce plan mode'da ele alınmalı.
-- Plan mode çıktısı şunları içermeli:
-  - Değişikliğin kapsamı ve etkilenecek dosya/klasörler.
-  - Alınan mimari/teknik kararlar ve gerekçesi.
-  - Mevcut davranışta değişecek noktalar (breaking change'ler açıkça işaretlenmeli).
-  - Sırasıyla yapılacak adımlar (kod yazmadan önce net bir checklist).
-- Plan onaylanmadan implementasyon adımına geçilmemeli.
-- Plandan sapılıyorsa bu açıkça belirtilmeli.
+Bu bölüm dokümantasyonun değil **kodun** söylediğini yazar. Şüphede kaldığında koda güven, bu tabloya bak, eski dokümanlara güvenme.
 
-## 4. Mevcut Mimari
+| Konu | Gerçek durum |
+|---|---|
+| Ürün verisi | `collectionGroup('marka_urunleri')` üzerinden okunur (`search_service.dart`, `favorites_service.dart`). Kök `urunler` koleksiyonu şemada/rules'ta var ama **kod onu sorgulamaz.** |
+| Ürün arama | Server-side prefix sorgusu **bilinçli olarak yok** — veri karışık büyük/küçük harfli, toplam ~33 ürün; tümü çekilip Dart tarafında filtrelenir. Bunu "optimize etme". |
+| Makaleler (Tips) | Firestore'da **değil** — `TipsService._tips` hardcoded liste (`tips_service.dart`). Favori makaleler sadece ID listesi olarak Firestore'a yazılır, içerik lokalden filtrelenir. |
+| Mekan favorileri | Şemada `mekan_idleri` alanı var ama UI **placeholder** — Favoriler > Mekanlar sekmesi her zaman boş durum gösterir. Implement edilmedi, bug değil. |
+| Riverpod | Sadece `themeModeProvider` + `localeProvider`. Ekranlar `setState` ile çalışır. **Ekranları Riverpod'a taşıma** — istenirse ayrı, onaylı iş. |
+| Koyu tema | `darkTheme: AppTheme.light` — bilinçli. Koyu palet tanımlanana kadar böyle kalacak. |
+| Test | `test/` klasörü yok. `flutter test` çalıştırılamaz. "Testler geçiyor" cümlesi bu repoda kurulamaz. |
+| Anasayfa "Popüler Konular" | Hardcoded 4 kart, makale sayıları sahte ("12 makale"). Bilinen borç. |
+| Anasayfa "Haftanın Markası" | Boş stub (`_buildHaftaninMarkasi` sadece SizedBox döner). |
+| Profil sağlık profili/rozetler | Statik placeholder — onaylı karar, veri modeli yok. |
+| Barkod tarayıcı | **Asla eklenmeyecek.** Kamera izni/entegrasyonu planlanmıyor. Placeholder bile ekleme. |
+| Onboarding | Debug'da her açılışta gösterilir, release'te bir kez (`kReleaseMode` kontrolü `main.dart`'ta). Debug'da her seferinde onboarding görmek bug değil. |
+| Manrope fontu | pubspec'te bundle'lı ama UI'da kullanılmıyor (dead asset). Fontlar Google Fonts'tan geliyor. |
 
-Feature-first mimariye geçiş **tamamlandı** — eski düz `lib/components/` yapısı artık yok. Güncel ağaç:
+---
+
+## 2. Mimari ve Konvansiyonlar
+
+### 2.1 Klasör yapısı (feature-first)
 
 ```text
 lib/
   core/
-    routing/        (app_router.dart — go_router kurulumu, MainShell + StatefulShellRoute; main_shell.dart, splash_screen.dart)
-    theme/          (app_colors.dart, app_theme.dart)
-    widgets/        (custom_button.dart, custom_text_field.dart, bubble_background.dart)
-    utils/          (validators.dart, string_utils.dart, date_utils.dart, snackbars.dart, firebase_error_mapper.dart)
-    constants/      (app_sizes.dart, app_constants.dart)
-    providers/      (theme_provider.dart, locale_provider.dart — Riverpod StateNotifierProvider'lar)
-    localization/   (app_strings.dart)
-    services/       (location_service.dart)
+    routing/        app_router.dart (createAppRouter), main_shell.dart, splash_screen.dart
+    theme/          app_colors.dart (k-sabitleri), app_theme.dart (AppTheme.light)
+    widgets/        custom_button.dart (AppButton/AppOutlinedButton), custom_text_field.dart,
+                    safe_network_image.dart, bubble_background.dart
+    utils/          validators.dart, string_utils.dart (initials), date_utils.dart (formatDate),
+                    snackbars.dart (showErrorSnackBar/showInfoSnackBar),
+                    firebase_error_mapper.dart, paginated.dart (Paginated<T>)
+    constants/      app_sizes.dart (AppSizes), app_constants.dart (koleksiyon adları, limitler)
+    providers/      theme_provider.dart, locale_provider.dart
+    services/       location_service.dart
   features/
-    auth/
-      data/services/     (auth_service.dart)
-      presentation/screens/ (login_screen.dart, register_screen.dart, sign_screen.dart)
-    onboarding/
-      presentation/screens/ (onboarding_screen.dart)
-    home/
-      data/services/      (home_service.dart — mekanlar için venues servisini sarar)
-      presentation/screens/ (home_screen.dart)
-    search/
-      data/models/        (product.dart)
-      data/services/      (search_service.dart)
-      presentation/screens/ (search_screen.dart)
-    venues/
-      data/models/         (venue.dart)
-      data/services/       (venues_service.dart)
-      presentation/screens/ (venues_screen.dart, venue_map_screen.dart)
-    tips/
-      data/models/         (tip.dart)
-      data/services/       (tips_service.dart)
-      presentation/screens/ (tips_list_screen.dart, rehber_screen.dart, tip_detail_screen.dart)
-    favorites/
-      data/services/       (favorites_service.dart)
-      presentation/screens/ (favorites_screen.dart)
-    profile/
-      presentation/screens/ (profile_screen.dart, edit_profile_screen.dart, settings_screen.dart)
-    product_detail/
-      presentation/screens/ (detail_screen.dart)
+    <feature>/
+      data/models/          (immutable model + fromFirestore factory)
+      data/services/        (statik metotlu servis sınıfı)
+      presentation/screens/
+      presentation/widgets/ (feature'a özel, birden çok ekranda kullanılan parçalar)
   main.dart
   firebase_options.dart
 ```
 
-Yeni geliştirmelerde bu yapı korunmalı.
+Yeni dosya eklerken: önce feature sınırını belirle, dosyayı ilgili feature altına koy. İki feature'ın ortak kullandığı widget/util → `core/`'a taşınır (örn. `SafeNetworkImage`).
 
-## 5. Clean Architecture Standardı
+### 2.2 Servis deseni (bu reponun "repository"si)
 
-- **Presentation:** ekranlar, widget'lar, form state'i, UI event'leri.
-- **Domain:** entity, use case, repository sözleşmeleri, iş kuralları.
-- **Data:** Firestore datasource, model, repository implementasyonu.
-- UI katmanı Firestore veya Firebase SDK'yı doğrudan bilmemeli.
-- Service/repository metotları anlamlı exception veya result yapısı döndürmeli.
-- Yeni özelliklerde önce feature sınırı belirlenmeli, sonra dosyalar ilgili feature altına eklenmeli.
-- `search`, `tips`, `favorites`, `auth`, `venues`, `home` feature'ları bu katmanlara uyuyor.
+Repo Clean Architecture'ın tam halini **kullanmaz** — use case/repository interface katmanı yok. Yerleşik desen:
 
-## 6. State Management (Riverpod)
+```dart
+class XService {
+  XService._();                    // instance yok, statik sınıf
+  static Future<Sonuc> metod() ...  // Firestore SADECE burada
+}
+```
 
-- Global state ve dependency injection **Riverpod ile yönetiliyor** (`flutter_riverpod` pubspec'te mevcut).
-- `main.dart`'ta `runApp` çağrısı `ProviderScope` ile sarılı; `MyApp` `ConsumerStatefulWidget`.
-- `core/providers/theme_provider.dart` → `themeModeProvider` (`StateNotifierProvider<ThemeModeNotifier, ThemeMode>`), `core/providers/locale_provider.dart` → `localeProvider` (`StateNotifierProvider<LocaleNotifier, Locale>`).
-- UI, provider'ları `ConsumerWidget` veya `ConsumerStatefulWidget` ile kullanacak.
-- Async işlerde `AsyncValue`, `FutureProvider`, `StreamProvider` veya `StateNotifier`/`Notifier` tercih edilmeli.
-- Form içindeki geçici UI state için `setState` kullanılabilir; iş mantığı ve veri state'i provider'a taşınmalı.
-- Provider'lar tek sorumluluk taşımalı ve testte override edilebilir olmalı.
-- Gereksiz rebuild engellemek için `.select()` ve küçük provider'lar tercih edilmeli.
-- İstisna: `lib/core/routing/app_router.dart` içindeki `GoRouterRefreshStream` hâlâ `ChangeNotifier` — bu, go_router'ın `refreshListenable` mekanizmasına özel, kasıtlı bir tasarım; Riverpod'a taşınmaz.
+- Servis `BuildContext`, widget veya Flutter UI importu **bilmez**.
+- Firestore/Auth çağrısı ekran dosyasına yazılmaz — mevcut ekranlardaki tek istisna `favorites_screen.dart`'ın `StreamBuilder(stream: FavoritesService.favoritesStream(...))` kullanımı; stream servisten gelir, sorgu yine servistedir.
+- Koleksiyon adları `app_constants.dart`'taki `k...Collection` sabitlerinden gelir; string literal koleksiyon adı yazma.
+- Hata stratejisi: servis hatayı **yutmaz** — ya `rethrow` eder ya anlamlı exception fırlatır (`throw Exception('kullanici-adi-alinmis')` gibi kod-string deseni mevcut). Yakalayıp `debugPrint` + güvenli varsayılan dönmek yalnızca "yokluk normaldir" durumlarında meşru (örn. `LocationService` null döner).
 
-## 7. Routing Kuralları
+### 2.3 Ekran deseni
 
-- Uygulama navigasyonu **go_router ile yönetiliyor** (`go_router: ^14.6.2`, `lib/core/routing/app_router.dart`, `createAppRouter()`), `main.dart`'ta `MaterialApp.router` kullanılıyor.
-- UI içinde `Navigator.push` kullanılmaz; `context.go`/`context.push` ve lokal işlemlerde `context.pop()` kullanılır.
-- Route path değerleri `app_router.dart` içinde merkezi tanımlanır (`_branchPaths`, `GoRoute` path'leri).
-- Auth redirect mantığı router seviyesinde yönetiliyor (`redirect` callback, `GoRouterRefreshStream` ile Firebase Auth durumu dinlenip yeniden değerlendiriliyor).
-- 5 sekmeli ana gezinme `StatefulShellRoute.indexedStack` ile yapılıyor; sekme dışı ekranlar (`/urun`, `/settings`, `/profile/edit`, `/tips/detay`, `/venues/map`) `rootNavigatorKey` ile üstte açılıyor.
+- `StatefulWidget` + `setState`. Form/geçici state lokalde kalır.
+- `initState`'te veri yükleme başlatılır; her `await` sonrası UI'a dokunmadan önce `if (!mounted) return;`.
+- Her `TextEditingController`, `FocusNode`, `PageController`, `ScrollController`, `Timer` → `dispose()`'da temizlenir.
+- Debounce'lu arama için yerleşik desen `search_screen.dart`'ta: 500ms `Timer` + artan `_searchRequestId` ile stale cevap reddi. Yeni arama/async liste yazarken bu deseni kopyala.
+- Her async liste üç durumu gösterir: **loading** (CircularProgressIndicator, `color: kPrimary`), **error** (kullanıcı diliyle mesaj + mümkünse retry), **empty** (Türkçe tek satır açıklama). Üçünden biri eksikse iş bitmemiştir.
 
-## 8. Responsive Tasarım
+### 2.4 Routing (go_router)
 
-Uygulama iOS/Android telefonlar için tasarlanmıştır.
+- Tüm rotalar `core/routing/app_router.dart` içinde, `createAppRouter()`'da tanımlı. Başka yerde `GoRoute` tanımlama.
+- `Navigator.push` **yasak** — `context.go` (sekme değişimi), `context.push` (üste açılan ekran), `context.pop()` (geri).
+- 5 sekme `StatefulShellRoute.indexedStack` ile: `/home`, `/search`, `/rehber`, `/favorites`, `/profile` (`_branchPaths` sırası `MainShell`'deki `NavigationBar` destinations sırasıyla **aynı olmalı**).
+- Sekme çubuğunun ÜSTÜNDE açılması gereken her rota (`/urun`, `/settings`, `/profile/edit`, `/tips`, `/tips/detay`, `/venues`, `/venues/map`) → `parentNavigatorKey: rootNavigatorKey` almak **zorunda**. Bu satır unutulursa ekran sekme kabuğunun içinde, altta NavigationBar ile açılır.
+- Ekranlar arası nesne taşıma: `context.push('/urun', extra: product)` + rota builder'da `state.extra as Product` cast. Yeni rota eklerken aynı desen.
+- Auth redirect mantığı `redirect` callback'te; `GoRouterRefreshStream` (bilinçli `ChangeNotifier`, Riverpod'a taşınmaz) Firebase Auth stream'ini dinler. **Bu callback'e dokunacak her değişiklik önce onay ister** (bkz. §6).
 
-- Her ekran `SafeArea`, keyboard davranışı ve notch/padding değerlerini hesaba katmalı.
-- Layout'larda `LayoutBuilder`, `MediaQuery`, `Flexible`, `Expanded`, `SingleChildScrollView` bilinçli kullanılmalı.
-- Sabit genişlik/yükseklik sadece ikon, avatar, buton gibi kontrollü elemanlarda kullanılmalı.
-- Text overflow, keyboard overflow, scroll bozulması ve buton erişilebilirliği kontrol edilmeli.
+### 2.5 Test ve doğrulama gerçeği
 
-## 9. Tema Sistemi
+- Zorunlu kapı: `flutter analyze` → **0 issue**. Her anlamlı değişiklikten sonra çalıştır, çıktıyı raporla.
+- `test/` klasörü yok. Test yazman istenirse önce klasörü oluştur, `flutter test` o zaman anlam kazanır. İstenmeden test altyapısı kurma.
+- Testin yerini tutan şey: **manuel smoke listesi**. Değişen akışı adım adım yaz ("Makale detayında bookmark'a bas → Favoriler > Makaleler'de görünsün" formatında) ve teslimde kullanıcıya ver — cihazda koşan kullanıcıdır.
 
-Uygulamanın renk ve tipografi sistemi — **değiştirilmeden korunacak.** (Aşağıdaki değerler `lib/core/theme/app_colors.dart` dosyasının gerçek içeriğidir.)
+### 2.6 Kod stili
 
-**Renkler (Material 3, açık "Earthy" palet):**
-- `kBackground:` `#FFF8F4`
-- `kPrimary:` `#4F6145` · `kPrimaryContainer:` `#677A5C` · `kOnPrimary:` `#FFFFFF` · `kOnPrimaryContainer:` `#F8FFEE` · `kPrimaryFixed:` `#D4E9C5`
-- `kSurface:` `#FFF8F4` · `kSurfaceContainer:` `#FAEBE0` · `kSurfaceContainerHigh:` `#F4E6DA` · `kSurfaceContainerHighest:` `#EEE0D4` · `kSurfaceContainerLow:` `#FFF1E6`
-- `kOnSurface:` `#211A13` · `kOnSurfaceVariant:` `#444840`
-- `kSecondary:` `#964824` · `kSecondaryFixed:` `#FFDBCD`
-- `kOutline:` `#75786F` · `kOutlineVariant:` `#C4C8BD`
-- `kError:` `#BA1A1A` · `kErrorContainer:` `#FFDAD6` · `kOnErrorContainer:` `#93000A`
-- Pastel ikon arka planları: `kPastelGreen/Blue/Red/Yellow/Orange/Pink/Gray`, `kMapBackground`
-- Rozet renkleri: `kBadgeSuccess`, `kBadgeDanger`, `kBadgeInfo`
-- Onboarding koyu yeşil: `kOnboardingDarkGreen` `#2D4A2D` (sadece onboarding sayfası arka planı, genel tema değil)
+- Yorumlar Türkçe, kısa, **sadece koddan okunamayan kısıtı** anlatır (örn. "whereIn en fazla 30 eleman kabul eder"). Kodun yaptığını tekrar eden yorum yazılmaz.
+- `print()` yasak → `debugPrint()`. Boş `catch` yasak.
+- Dosya `snake_case.dart`, sınıf `PascalCase`, üye `camelCase`. UI metinleri ve Firestore alan adları Türkçe.
+- `const` constructor ve immutable model varsayılan.
+- Commit mesajları Türkçe, kısa, tek satır ağırlıklı (`bottom_picker eklendi`, `firebase mantık hataları düzeltimi` tarzı). Conventional-commit öneki (`feat:`) kabul ama şart değil.
 
-Ayrı bir koyu tema paleti henüz tanımlı değil; `MaterialApp.router`'da `darkTheme` şimdilik `AppTheme.light`'a eşit — `themeModeProvider` mekanizması hazır, koyu palet eklendiğinde sadece `darkTheme` değeri değişecek.
+### 2.7 Kullanıcının çalışma şekli
 
-**Tipografi:**
-- `google_fonts` paketi kullanılıyor — bundle edilmiş "Manrope" font asset'i UI'da kullanılmıyor (dead asset).
-- Başlıklar: **Plus Jakarta Sans** (`GoogleFonts.plusJakartaSans`)
-- Gövde metni: **Source Sans 3** (`GoogleFonts.sourceSans3`)
+- Çok dosyalı / davranış değiştiren işler **önce plan mode**: kapsam + etkilenen dosyalar + mimari karar & gerekçe + breaking change'ler açıkça + sıralı adım listesi. Onaysız implementasyona geçilmez; plandan sapma açıkça söylenir.
+- Orta/büyük özellikler için tasarım spec'i `docs/superpowers/specs/YYYY-MM-DD-<konu>-design.md` olarak yazılır (örneği repoda var). Spec "Kapsam Dışı" ve "Doğrulama" bölümü içerir — kapsam dışı bölümü scope creep'in freni.
+- `/simplify` tarzı incelemelerde: bulguları **önce sun, onay bekle**, sonra uygula.
+- Kullanıcı Windows'ta çalışır (PowerShell). Path'lerde `C:\projeler\glutenApp`, komutlarda POSIX varsayma.
 
-Renk ve tipografi token'ları `core/theme` altında toplanmalı. UI içinde direkt `Color(...)` ve `Colors.*` kullanımı minimuma indirilmeli.
+---
 
-## 10. UI ve UX Standartları
+## 3. Veri Sözleşmesi (Firestore)
 
-- Ortak buton, card, dialog, snackbar, loading ve empty state component'leri `core/widgets` altından gelmeli.
-- Butonlar loading, disabled ve error durumlarını desteklemeli.
-- Hata mesajları teknik değil, kullanıcıya anlamlı olmalıdır.
-- Her async işlemde loading state ve hata state'i görünür olmalı.
-- Barkod tarayıcı **desteklenmeyecek** — kamera izni/entegrasyon akışı planlanmıyor.
+Alan adları **Türkçe snake_case**. İngilizce alan adı üretmek bu repodaki en pahalı hata sınıfıdır — yazdığın veri hiçbir ekranda görünmez, okuduğun alan hep null gelir.
 
-## 11. Lokalizasyon
+### Koleksiyonlar ve gerçek alanlar
 
-- UI dili şu an Türkçe. Hardcoded metinler kabul edilebilir; ancak ileride arb/gen-l10n sistemine geçiş hedeflenmeli.
-- Yeni eklenen her metin TR karşılığıyla eklenmeli.
-- Not: `core/localization/app_strings.dart` ve `core/providers/locale_provider.dart` (Riverpod `localeProvider`) mevcut — dil değiştirme altyapısı için ilk adımlar atılmış (UI'da tam kullanım oranı doğrulanmadı).
+**`markalar/{marka}/marka_urunleri/{docId}`** — ürünlerin gerçek kaynağı (collectionGroup ile sorgulanır):
+`id` (String — doküman içinde ayrıca tutulur, `whereIn('id', ...)` sorguları buna dayanır), `urun_adi`, `marka`, `resim` (URL **veya** asset adı — bkz. SafeNetworkImage), `icindekiler`, `barkod`, `durum` (`"GUVENLI" | "RISKLI" | "BILINMIYOR"`), `kategori`, `kalori`, `protein`, `karbonhidrat`.
 
-## 12. Firebase ve Veri Kuralları
+**`mekanlar/{id}`**: `ad`, `aciklama`, `resim`, `puan` (num → UI'da string'e çevrilir), `mesafe` (String), `adres`, `rozet`, `etiketler` (List).
 
-- Firebase Auth ve Firestore işlemleri UI içinde yapılmaz; service katmanında kalır.
-- **Firestore `urunler/{id}` dokümanı:** `id` (String), `urun_adi` (String), `marka` (String), `resim` (String — URL veya asset adı), `icindekiler` (String), `barkod` (String), `durum` (`"GUVENLI"` | `"RISKLI"` | `"BILINMIYOR"`).
-- **Firestore `markalar/{marka}/marka_urunleri/{id}`:** marka bazlı alt koleksiyon, aynı ürün alanları.
-- **Firestore `mekanlar/{id}`:** mekan bilgileri (`ad`, `aciklama`, `resim`, `puan`, `mesafe`, `adres`, `rozet`, `etiketler`). `venues_service.dart` ve `home_service.dart` bu koleksiyonu okur.
-- **Firestore `favoriler/{userId}`:** `urun_idleri: []`, `mekan_idleri: []`, `makale_idleri: []`.
-- **Security rules mevcut** (`firestore.rules`, repo kökünde). `favoriler/{userId}` ve `users/{userId}` için `auth.uid == userId` şartı uygulanıyor; `urunler`, `markalar/{marka}/marka_urunleri` (+ collectionGroup), `mekanlar` herkese açık okuma/yazma-kapalı kuralına sahip.
-- Tarih alanları Firestore `Timestamp` olarak saklanmalı.
-- Firebase sorguları filtreli, index uyumlu ve minimum veri çekecek şekilde yazılmalı.
-- Hardcoded `"test_user_123"` kaldırıldı — `AuthService.currentUserId` üzerinden gerçek Firebase Auth UID kullanılıyor.
+**`favoriler/{userId}`**: `urun_idleri: []`, `mekan_idleri: []`, `makale_idleri: []` — hepsi `arrayUnion`/`arrayRemove` + `SetOptions(merge: true)` ile güncellenir.
 
-## 13. Kod Kalitesi
+**`users/{userId}`**: `ad`, `soyad`, `email`, `fotoURL`, `dogumTarihi` (Timestamp), `kullaniciAdi`, `olusturmaTarihi` (serverTimestamp), `anonim` (bool), `tani_tarihi` (Timestamp, opsiyonel), `istatistikler` (map — `StatsService`'in prefix'li sayaç alanları: `aranan_urun_toplam`, `kesfedilen_mekan_idleri`, `giris_serisi`, ...).
 
-- `flutter_lints` kuralları korunacak; `flutter analyze` temiz kalmalı.
-- `print()` kullanılmaz; gerekiyorsa `debugPrint()` kullanılır.
-- Boş `catch` bloğu yasak. Hata yutulmaz.
-- Async sonrası UI kullanılıyorsa `mounted` kontrol edilir.
-- Controller, FocusNode, PageController dispose edilir.
-- `const` constructor ve immutable modeller tercih edilir.
-- Dosya adları `snake_case.dart`, class adları `PascalCase`, değişken/metotlar `camelCase`.
-- Fonksiyonlar küçük ve tek sorumluluklu olmalı.
-- Yorumlar kısa ve gerekli olduğunda Türkçe olabilir; kodun zaten söylediğini tekrar eden yorum yazılmaz.
+**`usernames/{username}`**: `{ uid }` — kullanıcı adı rezervasyonu. Sadece create; update/delete client'tan kapalı (hesap silme akışındaki delete rules'ta ayrıca ele alınır).
 
-## 14. Test ve Doğrulama
+### Rules'un koda dayattığı kurallar
 
-Her anlamlı revizede şu kontroller düşünülmeli:
+- `urunler`, `marka_urunleri`, `mekanlar`: **client yazamaz** (`write: false`). Ürün/mekan ekleyen-güncelleyen bir özellik client-side yazılamaz; veri konsoldan girilir. Böyle bir istek gelirse bunu söyle, rules değişikliği öner, onaysız `firestore.rules` değiştirme.
+- `favoriler/{userId}` ve `users/{userId}`: sadece `auth.uid == userId`. Servislerde `AuthService.currentUserId` null ise sessizce erken dönme deseni bundandır.
+- Hesap silme sırası **değişmez**: önce Firestore dokümanları (username, favoriler, users), en son `user.delete()` — Auth önce silinirse rules `auth.uid == userId` şartını sağlayamaz ve dokümanlar öksüz kalır.
 
-- `flutter analyze`
-- `flutter test`
-- Service ve model için unit test
-- Kritik ekranlar için widget test
-- Arama, favori ekleme/çıkarma için manuel smoke test
-- Responsive kontrol: küçük/büyük telefon, portre
+### Sorgu desenleri
 
-## 15. Performans
+- `whereIn` limiti 30 → liste `FavoritesService._chunk` gibi parçalanıp `Future.wait` ile paralel sorgulanır.
+- Sayfalama → `Paginated<T>` (`core/utils/paginated.dart`) + `startAfterDocument` (`VenuesService.fetchPage` örnek).
+- Sayaç/streak yazımı → `runTransaction` + `SetOptions(merge: true)` (`StatsService` örnek). Sayaç eklerken bu deseni kullan, read-modify-write'ı transaction dışında yapma.
+- Tarih alanları **her zaman** `Timestamp` (`Timestamp.fromDate`), asla string.
+- Yeni alan eklerken: yazma tarafı `merge: true`, okuma tarafı toleranslı (`data['alan'] ?? varsayılan`) — eski dokümanlarda alan yoktur.
+- `collectionGroup('marka_urunleri')` sorguları için rules'taki wildcard kuralı ve `firestore.indexes.json`'daki fieldOverride zaten mevcut; yeni collectionGroup sorgusu eklersen ikisini de kontrol et.
 
-- Gereksiz rebuild, büyük widget build metotları ve kontrolsüz stream dinlemeleri engellenmeli.
-- Ürün ve mekan listelerinde pagination ve lazy loading planlanmalı (venues zaten `startAfterDocument` ile sayfalanıyor).
-- Görsellerde network cache ve placeholder kullanılmalı.
-- Firebase sorguları filtreli ve index uyumlu yazılmalı.
+---
 
-## 16. Yakın Revize Öncelikleri
+## 4. Bilinen Tuzaklar
 
-1. ~~Mimari yeniden yapılandırma~~ — **tamamlandı**, `lib/components/` artık yok.
-2. ~~Firebase Auth entegrasyonu~~ — **tamamlandı**, hardcoded `"test_user_123"` kaldırıldı.
-3. ~~Firestore security rules~~ — **tamamlandı**, `firestore.rules` mevcut.
-4. ~~go_router entegrasyonu~~ — **tamamlandı**, tüm navigasyon `context.go`/`context.push` ile yapılıyor.
-5. ~~Riverpod~~ — **tamamlandı**, `theme_provider.dart`/`locale_provider.dart` `StateNotifierProvider`'a taşındı, `main.dart` `ProviderScope` ile sarılı.
-6. ~~Home mock veri temizliği~~ — **tamamlandı**, `home_screen.dart` artık `home_service.dart` üzerinden Firestore `mekanlar` koleksiyonunu okuyor, veri yoksa empty-state gösteriyor.
-7. ~~Venues/Home data katmanı~~ — **tamamlandı**, `venues/data/` ve `home/data/services/home_service.dart` mevcut.
-8. **Barkod tarayıcı:** desteklenmeyecek, kapsam dışı bırakıldı — ilgili placeholder UI kaldırıldı.
-9. **Merkezi tema:** Renkler zaten `core/theme/app_colors.dart` altında merkezi. Font kullanımı hâlâ her çağrı noktasında ad-hoc (`GoogleFonts.plusJakartaSans(...)`) — tek bir `AppTypography`/token sınıfına taşınması önerilir.
-10. **Profil sağlık profili/rozetler:** bilinçli olarak statik placeholder (henüz veri modeli yok, onaylı karar).
+Her biri "zayıf modelin yapacağı hata → önleyen kural" formatında. Bunlar teorik değil; kod/şema bu hataları davet ediyor.
 
-## 17. Son Kontrol Listesi
+1. **Ürünleri `urunler` koleksiyonundan sorgulamak.** Şema dokümanları `urunler`'i tarif eder ama kod okumaz. → *Kural: ürün okuyan her sorgu `collectionGroup('marka_urunleri')` üzerinden; yeni sorgu yazmadan önce `search_service.dart`/`favorites_service.dart`'a bak.*
+2. **Tips/makaleleri Firestore'dan çekmeye çalışmak.** → *Kural: makale içeriği `TipsService.getAll()` (hardcoded); Firestore'da yalnızca favori ID listesi var. Firestore'a taşıma ayrı, onaylı iş.*
+3. **`Firebase.initializeApp(options: DefaultFirebaseOptions...)` yazmak.** Android'de google-services.json native tarafta `[DEFAULT]` app'i zaten kurar; options ile init `duplicate-app` fırlatır. → *Kural: `main.dart`'taki parametresiz çağrıya dokunma.*
+4. **Yeni rotaya `parentNavigatorKey: rootNavigatorKey` koymamak.** Ekran sekme kabuğunun içinde açılır, altta NavigationBar kalır. → *Kural: tam ekran açılan her rota rootNavigatorKey alır; sekme rotaları yalnızca `_branchPaths`'takilerdir.*
+5. **`Navigator.push(MaterialPageRoute(...))` kullanmak.** Eski spec'lerde bile geçebilir. → *Kural: yalnızca `context.go/push/pop`. Rota yoksa `app_router.dart`'a ekle.*
+6. **İngilizce Firestore alan adı uydurmak** (`name`, `created_at`, `favorites`...). → *Kural: alan adları §3'teki listeden; yeni alan Türkçe snake_case ve önce kullanıcıya bildirilir.*
+7. **Aramayı "düzeltmek" — server-side prefix/orderBy sorgusuna çevirmek.** Veri karışık harfli, sorgu boş döner. → *Kural: `SearchService.searchByName` client-side filtreler; ürün sayısı belirgin büyüyene kadar (>~500) dokunma.*
+8. **`await` sonrası `mounted` kontrolsüz `setState`/`context` kullanımı.** → *Kural: her await'ten sonra UI'a dokunmadan önce `if (!mounted) return;`. `finally` bloklarında da (`if (mounted) setState(...)`).*
+9. **Controller/Timer dispose unutmak.** → *Kural: `initState`'te oluşturulan her controller/focus node/timer `dispose()`'da kapatılır; PR'dan önce say: oluşturulan N, dispose edilen N.*
+10. **Renk/font'u elle yazmak** (`Colors.grey`, `Color(0xFF...)`, çıplak `TextStyle`). → *Kural: renkler `app_colors.dart` k-sabitlerinden; başlık `GoogleFonts.plusJakartaSans`, gövde `GoogleFonts.sourceSans3`; boşluk/radius/font boyutu `AppSizes`'tan. Mevcut istisnalar (`Colors.white`, `Colors.transparent`) kabul.*
+11. **Ekranları Riverpod'a "modernize" etmek.** → *Kural: ekran state'i `setState` ile kalır; Riverpod yalnızca tema/dil. Genişletme ancak açık istekle.*
+12. **Tema paletini veya `AppTheme`'i değiştirmek.** → *Kural: `app_colors.dart` değerleri donmuş. Yeni renk gerekiyorsa mevcut sabitlerden seç; yoksa sor.*
+13. **`whereIn`'e 30'dan uzun liste vermek.** Sorgu runtime'da patlar. → *Kural: `FavoritesService.fetchProductsByIds`'teki chunk desenini kullan.*
+14. **"Testler geçti" demek.** Test yok. → *Kural: doğrulama iddiası yalnızca `flutter analyze` çıktısı + manuel smoke listesiyle kurulur.*
+15. **Client'tan `mekanlar`/`marka_urunleri`'ne yazan özellik tasarlamak.** Rules sessizce reddeder (permission-denied). → *Kural: bu koleksiyonlara yazma isteği geldiğinde dur, §6'ya git.*
+16. **Barkod tarayıcı önermek/eklemek.** → *Kural: kapsam dışı, kalıcı karar. Öneri olarak bile getirme.*
+17. **UI'a İngilizce metin eklemek.** → *Kural: kullanıcıya görünen her string Türkçe. Hata mesajları teknik değil, kullanıcı diliyle (`FirebaseErrorMapper` örnek).*
+18. **Hesap silme/username değişikliği sırasını bozmak.** → *Kural: `AuthService.deleteAccount` ve `updateProfileBasics`'teki sıra ve batch yapısı korunur; bu metotlara dokunan değişiklik önce onay ister.*
+19. **`resim` alanını her zaman URL sanmak.** URL veya asset adı olabilir. → *Kural: network görsel her yerde `SafeNetworkImage` ile gösterilir, çıplak `Image.network` yazılmaz.*
+20. **Onboarding'in debug'da hep açılmasını "bug" diye düzeltmek.** → *Kural: `kReleaseMode` kontrolü bilinçli; dokunma.*
+21. **pubspec sürümlerini, firebase config'i, android/ios native ayarlarını "iyileştirmek".** → *Kural: bu dosyalar yalnızca açık istek + gerekçeyle değişir.*
 
-Yeni bir iş tamamlanmadan önce:
+---
 
-- Mimariye uygun mu?
-- UI responsive mi?
-- Tema renkleri ve tipografi merkezi token'lardan mı geliyor?
-- Firebase/UI ayrımı korunuyor mu?
-- Loading, error, empty state var mı?
-- Controller ve async lifecycle güvenli mi? (`mounted` kontrolü)
-- `flutter analyze` temiz mi?
-- Gereksiz dosya, paket veya refactor eklendi mi?
-- Kapsamlı bir değişiklikse önce plan mode'dan geçti mi?
+## 5. Kalite Çıtası — Teslimat Başına Kontrol Listeleri
+
+"İyi", "temiz", "sağlam" gibi sıfatlar geçersiz; aşağıdaki maddeler tek tek işaretlenebilir olmalı. Bir madde sağlanmıyorsa iş bitmemiştir, ya tamamla ya da neden sağlanmadığını açıkça yaz.
+
+### 5.1 Yeni ekran / ekran değişikliği
+- [ ] `Scaffold(backgroundColor: kBackground)` + içerik `SafeArea` içinde (CustomScrollView kullanan ekranlarda SliverAppBar deseni kabul).
+- [ ] Async veri için üç durum da render ediliyor: loading / error (Türkçe mesaj) / empty (Türkçe mesaj).
+- [ ] Her await sonrası `mounted` kontrolü var; oluşturulan tüm controller'lar dispose ediliyor.
+- [ ] Renkler yalnızca `app_colors.dart` sabitlerinden; fontlar `plusJakartaSans` (başlık) / `sourceSans3` (gövde); ölçüler `AppSizes`'tan.
+- [ ] Uzun metinlerde `maxLines` + `TextOverflow.ellipsis`; küçük ekranda taşma yok (klavye açıkken dahil — form varsa scroll edilebilir).
+- [ ] Rota `app_router.dart`'a eklendi; tam ekransa `parentNavigatorKey: rootNavigatorKey` var; navigasyon `context.go/push/pop`.
+- [ ] Firestore/Auth çağrısı ekranda yok — servis üzerinden.
+- [ ] Kullanıcıya görünen tüm metinler Türkçe.
+- [ ] `flutter analyze` → 0 issue (çıktı raporda).
+- [ ] Manuel smoke listesi yazıldı (adım adım, beklenen sonuçla).
+
+### 5.2 Yeni/değişen servis metodu
+- [ ] Statik sınıf deseni (`Service._()`); Flutter UI importu yok.
+- [ ] Koleksiyon adı `app_constants.dart` sabitinden.
+- [ ] `currentUserId == null` durumu ele alınmış (erken dön veya anlamlı hata — mevcut desenle tutarlı).
+- [ ] Hata yutulmuyor: rethrow / anlamlı exception / bilinçli-null (yorumla gerekçeli).
+- [ ] Yazmalar `merge: true` veya `update` bilinçli seçilmiş; sayaç/read-modify-write ise transaction içinde.
+- [ ] Sorgu limitli (limit/pagination) ve rules'a uygun (yazılamayan koleksiyona yazmıyor).
+- [ ] `whereIn` kullanılıyorsa 30'luk chunk deseni uygulanmış.
+
+### 5.3 Yeni/değişen model
+- [ ] Immutable, `const` constructor.
+- [ ] `fromFirestore` her alanda toleranslı (`?? ''` / `?? 0` / boş liste) — eksik alanlı doküman crash ettirmez.
+- [ ] Alan adları §3'teki gerçek Firestore adlarıyla birebir; Dart tarafı camelCase İngilizce olabilir (mevcut desen: `urun_adi` → `name`).
+- [ ] Tarihler `Timestamp` ↔ `DateTime` dönüşümüyle.
+
+### 5.4 Bugfix
+- [ ] Hata önce yeniden üretildi/nedeni koddan gösterildi (dosya:satır) — tahminle yama yok.
+- [ ] Kök neden bir cümleyle raporda: "X çünkü Y".
+- [ ] Diff minimal: davranışı değişen satırlar dışında refactor/format değişikliği yok.
+- [ ] Aynı hatanın diğer örnekleri arandı (grep) — varsa ya düzeltildi ya listelendi.
+- [ ] `flutter analyze` temiz + değişen akış için smoke adımı yazıldı.
+
+### 5.5 Plan / spec çıktısı
+- [ ] Kapsam ve etkilenen dosyalar listeli.
+- [ ] Mimari kararlar gerekçeli; mevcut davranışta değişecek noktalar **breaking** etiketiyle işaretli.
+- [ ] "Kapsam Dışı" bölümü var (neye dokunulmayacağı yazılı).
+- [ ] Sıralı, kod yazmadan önce doğrulanabilir adım listesi var.
+- [ ] "Doğrulama" bölümü: analyze + somut smoke adımları.
+
+### 5.6 Commit
+- [ ] Türkçe, kısa, yapılan işi söyler; tek commit tek mantıksal iş.
+- [ ] `flutter analyze` temiz olmadan commit önerilmez.
+
+---
+
+## 6. Belirsizlikte Ne Yapılır — Eskalasyon Kuralları
+
+Sıralı karar ağacı. "Sanırım", "muhtemelen" ile ilerleme; kural hangi kapıya düşüyorsa onu uygula.
+
+**Sormadan İLERLE (kendi başına karar ver, kararı raporda belirt):**
+- Mevcut bir desenin birebir tekrarı (yeni kart, yeni servis metodu, mevcut ekrana alan ekleme) — en yakın örneği kopyala, uyarl.
+- İsimlendirme, dosya yerleşimi, widget parçalama gibi bu kılavuzun zaten cevapladığı konular.
+- Dokümantasyon ile kod çelişiyorsa: **koda güven**, çelişkiyi raporunda tek cümleyle not et.
+
+**DUR ve SOR (tek soruluk net bir soruyla; seçenek + önerini ver):**
+- Firestore'a yeni koleksiyon/alan eklemek veya `firestore.rules` değiştirmek gerekiyorsa.
+- `app_router.dart` redirect mantığına, `main.dart` init sırasına, `AuthService.deleteAccount`/`updateProfileBasics` akışına dokunmak gerekiyorsa.
+- pubspec'e paket eklemek/sürüm değiştirmek gerekiyorsa (gerekçe + alternatifsizlik göster).
+- İstek, §1/§4'teki bilinçli bir kararla çelişiyorsa (barkod, Riverpod'a taşıma, koyu tema, server-side arama...) — kararı hatırlat, gerçekten isteniyorsa onay al.
+- UI metni/davranışı için tasarım kararı gerekiyorsa ve mevcut ekranlarda emsal yoksa.
+- Görev, Firestore'da bulunmayan veriye ihtiyaç duyuyorsa (örn. mekan koordinatları — şemada yok).
+
+**PLAN MODE'a GEÇ (onaysız kod yazma):**
+- 3+ dosyaya dokunan her iş.
+- Mevcut davranışı değiştiren her iş (refactor dahil).
+- Yeni feature klasörü açan her iş.
+
+**HİÇ YAPMA (istek gelse bile önce açık, tekrarlı onay iste):**
+- Tema paleti değerlerini değiştirmek.
+- Barkod tarayıcı eklemek.
+- Native android/ios config, firebase_options, google-services değişikliği.
+- `firestore.rules`'ta herkese-yazma açmak.
+
+**Doğrulanamıyorsa:** `flutter analyze` çalıştırılamadıysa veya beklenmedik çıktı verdiyse — "tamamlandı" deme; durumu çıktıyla birlikte raporla ve neyin doğrulanamadığını açıkça yaz.
+
+---
+
+## 7. Komutlar (Windows)
+
+```powershell
+flutter analyze          # zorunlu kalite kapısı
+flutter pub get          # pubspec değiştiyse (değiştirme kuralına dikkat)
+flutter run              # manuel smoke — cihaz/emülatör kullanıcıda
+```
+
+- `flutter test` şu an anlamsız (test yok) — bkz. §2.5.
+- Firestore verisi konsoldan yönetilir; seed/migration scripti repoda yok.
+
+---
+
+## 8. Proje Skill'leri
+
+`.claude/skills/` altında üç proje skill'i var; ilgili iş türünde **koda başlamadan önce** oku:
+
+- **`glufree-firestore`** — veri sözleşmesi, sorgu desenleri, rules etkileri. Firestore'a dokunan her işte.
+- **`glufree-ui-kit`** — ev stili UI tarifleri: kart, badge, boş durum, snackbar, ekran iskeleti. UI üreten her işte.
+- **`glufree-new-feature`** — uçtan uca özellik ekleme akışı: spec → katmanlar → rota → doğrulama. Yeni özellik/ekran işlerinde.

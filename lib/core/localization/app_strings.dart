@@ -3,7 +3,7 @@ class AppStrings {
   AppStrings._();
 
   // ── Uygulama ──────────────────────────────────────────────────────────────
-  static const appName = 'GluFree';
+  static const appName = 'GluGlu';
   static const appSlogan = 'Glutensiz dünyayı keşfet';
 
   // ── Genel Eylemler ────────────────────────────────────────────────────────

@@ -43,7 +43,7 @@ class VenueMapScreen extends StatelessWidget {
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.glufree.app',
+            userAgentPackageName: 'com.gluglu.app',
           ),
           if (hasUserLocation)
             MarkerLayer(markers: [
