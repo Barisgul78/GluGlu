@@ -82,7 +82,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _onQueryChanged(String value) {
     final q = value.trim();
-    setState(() => query = q.toLowerCase());
+    // Bekleyen/eski aramanın geç gelen cevabı yeni yazıyı bozmasın.
+    _searchRequestId++;
+    // Debounce beklerken de yükleniyor göster; yoksa 500 ms "bulunamadı" yazısı çıkar.
+    setState(() {
+      query = q.toLowerCase();
+      _searchLoading = q.isNotEmpty;
+    });
     _debounce?.cancel();
     if (q.isEmpty) {
       setState(() {
