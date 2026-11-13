@@ -81,15 +81,23 @@ class HealthJourneyCard extends StatelessWidget {
         ],
       );
 
-  Future<void> _onAddPressed(BuildContext context) async {
+  // current doluysa düzenleme: seçici kayıtlı tarihle açılır.
+  Future<void> _openPicker(BuildContext context, {DateTime? current}) async {
     final userId = AuthService.currentUserId;
     if (userId == null) {
       showInfoSnackBar(context, 'Tanı yılını eklemek için giriş yapmanız gerekiyor.');
       return;
     }
-    final date = await showDiagnosisDatePicker(context);
-    if (date != null) {
+    final date = await showDiagnosisDatePicker(context, initialDate: current);
+    if (date == null) return;
+    if (current != null && current.year == date.year && current.month == date.month) return;
+    try {
       await ProfileService.setDiagnosisDate(userId, date);
+    } catch (e) {
+      debugPrint('Tanı tarihi kaydedilemedi: $e');
+      if (context.mounted) {
+        showErrorSnackBar(context, 'Tanı tarihi kaydedilemedi. Lütfen tekrar deneyin.');
+      }
     }
   }
 
@@ -98,7 +106,7 @@ class HealthJourneyCard extends StatelessWidget {
     final userId = AuthService.currentUserId;
 
     if (userId == null) {
-      return _EmptyState(decoration: _decoration, onAddPressed: () => _onAddPressed(context));
+      return _EmptyState(decoration: _decoration, onAddPressed: () => _openPicker(context));
     }
 
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -107,12 +115,17 @@ class HealthJourneyCard extends StatelessWidget {
         final timestamp = snapshot.data?.data()?['tani_tarihi'] as Timestamp?;
 
         if (timestamp == null) {
-          return _EmptyState(decoration: _decoration, onAddPressed: () => _onAddPressed(context));
+          return _EmptyState(decoration: _decoration, onAddPressed: () => _openPicker(context));
         }
 
         final diagnosisDate = timestamp.toDate();
         final stats = _HealthJourneyStats.calculate(diagnosisDate);
-        return _FilledState(firstName: firstName, diagnosisDate: diagnosisDate, stats: stats);
+        return _FilledState(
+          firstName: firstName,
+          diagnosisDate: diagnosisDate,
+          stats: stats,
+          onEditPressed: () => _openPicker(context, current: diagnosisDate),
+        );
       },
     );
   }
@@ -185,11 +198,13 @@ class _FilledState extends StatelessWidget {
     required this.firstName,
     required this.diagnosisDate,
     required this.stats,
+    required this.onEditPressed,
   });
 
   final String firstName;
   final DateTime diagnosisDate;
   final _HealthJourneyStats stats;
+  final VoidCallback onEditPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -327,13 +342,37 @@ class _FilledState extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSizes.sm + 4),
-          Text(
-            'Başlangıç: ${du.formatMonthYear(diagnosisDate)}',
-            style: GoogleFonts.sourceSans3(
-              color: kOnSurfaceVariant,
-              fontSize: AppSizes.fontSm,
-              fontWeight: FontWeight.w500,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Başlangıç: ${du.formatMonthYear(diagnosisDate)}',
+                  style: GoogleFonts.sourceSans3(
+                    color: kOnSurfaceVariant,
+                    fontSize: AppSizes.fontSm,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              TextButton.icon(
+                onPressed: onEditPressed,
+                style: TextButton.styleFrom(
+                  foregroundColor: kPrimary,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.sm, vertical: AppSizes.xs),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                icon: const Icon(Icons.edit_outlined, size: AppSizes.iconSm),
+                label: Text(
+                  'Düzenle',
+                  style: GoogleFonts.sourceSans3(
+                    fontSize: AppSizes.fontSm,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

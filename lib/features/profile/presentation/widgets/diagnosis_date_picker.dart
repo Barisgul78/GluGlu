@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,20 +7,23 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/date_utils.dart' as du;
 import '../../../../core/widgets/custom_button.dart';
 
-// Tanı ayı+yılı seçimi için alttan açılan iki tekerlekli seçici (3. parti paket yok)
-Future<DateTime?> showDiagnosisDatePicker(BuildContext context) {
+// Tanı ayı+yılı seçimi için alttan açılan iki tekerlekli seçici (3. parti paket yok).
+// initialDate verilirse seçici o ay/yılla açılır (düzenleme); yoksa bugünle açılır.
+Future<DateTime?> showDiagnosisDatePicker(BuildContext context, {DateTime? initialDate}) {
   return showModalBottomSheet<DateTime>(
     context: context,
     backgroundColor: kOnPrimary,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
-    builder: (sheetContext) => const _DiagnosisDatePickerSheet(),
+    builder: (sheetContext) => _DiagnosisDatePickerSheet(initialDate: initialDate),
   );
 }
 
 class _DiagnosisDatePickerSheet extends StatefulWidget {
-  const _DiagnosisDatePickerSheet();
+  const _DiagnosisDatePickerSheet({this.initialDate});
+
+  final DateTime? initialDate;
 
   @override
   State<_DiagnosisDatePickerSheet> createState() => _DiagnosisDatePickerSheetState();
@@ -28,10 +33,26 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
   static final _now = DateTime.now();
   static final _years = List<int>.generate(80, (i) => _now.year - i); // azalan, gelecek yıl yok
 
-  late int _selectedYear = _years.first;
-  late int _selectedMonth = _now.month;
-  late final FixedExtentScrollController _monthController =
-      FixedExtentScrollController(initialItem: _selectedMonth - 1);
+  late int _selectedYear;
+  late int _selectedMonth;
+  late final FixedExtentScrollController _monthController;
+  late final FixedExtentScrollController _yearController;
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.initialDate;
+    if (initial != null && _years.contains(initial.year)) {
+      _selectedYear = initial.year;
+      final maxMonth = _selectedYear == _now.year ? _now.month : 12;
+      _selectedMonth = math.min(initial.month, maxMonth);
+    } else {
+      _selectedYear = _years.first;
+      _selectedMonth = _now.month;
+    }
+    _monthController = FixedExtentScrollController(initialItem: _selectedMonth - 1);
+    _yearController = FixedExtentScrollController(initialItem: _years.indexOf(_selectedYear));
+  }
 
   List<int> get _availableMonths {
     final maxMonth = _selectedYear == _now.year ? _now.month : 12;
@@ -55,6 +76,7 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
   @override
   void dispose() {
     _monthController.dispose();
+    _yearController.dispose();
     super.dispose();
   }
 
@@ -112,6 +134,7 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
                   Expanded(
                     child: CupertinoPicker(
                       itemExtent: 40,
+                      scrollController: _yearController,
                       onSelectedItemChanged: _onYearChanged,
                       children: _years
                           .map((y) => Center(
