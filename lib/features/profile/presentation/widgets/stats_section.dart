@@ -1,267 +1,218 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../auth/data/services/auth_service.dart';
 import '../../data/services/profile_service.dart';
+import 'profile_ui.dart';
 
 const _productBadgeSteps = [50, 100, 150, 200, 300, 400, 500, 750, 1000];
 
-BoxDecoration _cardDecoration() => BoxDecoration(
-      color: kOnPrimary,
-      borderRadius: BorderRadius.circular(16),
-      boxShadow: [
-        BoxShadow(
-          color: kOnSurface.withValues(alpha: 0.04),
-          blurRadius: 8,
-          offset: const Offset(0, 2),
-        ),
-      ],
-    );
+// Kullanıcı dokümanındaki `istatistikler` map'ini verir; misafirde boş map (sayaçlar 0 görünür)
+class _StatsBuilder extends StatelessWidget {
+  const _StatsBuilder({required this.builder});
 
-// Profil "İSTATİSTİKLERİM" bölümü: giriş serisi + 4 sayaç kutusu + rozet ilerlemesi
-class StatsSection extends StatelessWidget {
-  const StatsSection({super.key});
+  final Widget Function(Map<String, dynamic> stats) builder;
 
   @override
   Widget build(BuildContext context) {
     final userId = AuthService.currentUserId;
-    if (userId == null) return const SizedBox.shrink();
+    if (userId == null) return builder(const {});
 
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       stream: ProfileService.userStream(userId),
       builder: (context, snapshot) {
-        final stats = snapshot.data?.data()?['istatistikler'] as Map<String, dynamic>? ?? {};
+        final stats =
+            snapshot.data?.data()?['istatistikler'] as Map<String, dynamic>? ??
+                const {};
+        return builder(stats);
+      },
+    );
+  }
+}
 
-        final aranan = stats['aranan_urun_toplam'] as int? ?? 0;
-        final aranaBuAy = stats['aranan_urun_bu_ay'] as int? ?? 0;
+int _count(Map<String, dynamic> stats, String key) =>
+    (stats[key] as List?)?.length ?? 0;
 
-        final mekanIds = List<String>.from(stats['kesfedilen_mekan_idleri'] as List? ?? const []);
-        final mekanBuAy = stats['kesfedilen_mekan_bu_ay'] as int? ?? 0;
+// "Bir sonraki rozete N ürün kaldı" kartı
+class NextBadgeCard extends StatelessWidget {
+  const NextBadgeCard({super.key});
 
-        final urunIds = List<String>.from(stats['tiklanan_urun_idleri'] as List? ?? const []);
-        final urunBuAy = stats['tiklanan_urun_bu_ay'] as int? ?? 0;
+  @override
+  Widget build(BuildContext context) {
+    return _StatsBuilder(
+      builder: (stats) {
+        final incelenen = _count(stats, 'tiklanan_urun_idleri');
+        final nextBadge = _productBadgeSteps.firstWhere(
+          (s) => s > incelenen,
+          orElse: () => _productBadgeSteps.last,
+        );
+        final kalan = (nextBadge - incelenen).clamp(0, nextBadge);
+        final progress = nextBadge == 0 ? 0.0 : incelenen / nextBadge;
 
-        final okunanMakaleIds = List<String>.from(stats['okunan_makale_idleri'] as List? ?? const []);
-        final okunanMakaleBuAy = stats['okunan_makale_bu_ay'] as int? ?? 0;
-
-        final seri = stats['giris_serisi'] as int? ?? 0;
-        final rekor = stats['giris_serisi_rekor'] as int? ?? 0;
-
-        final tiklananUrunSayisi = urunIds.length;
-        final nextBadge = _productBadgeSteps
-            .firstWhere((s) => s > tiklananUrunSayisi, orElse: () => _productBadgeSteps.last);
-        final kalan = (nextBadge - tiklananUrunSayisi).clamp(0, nextBadge);
-        final badgeProgress = nextBadge == 0 ? 0.0 : tiklananUrunSayisi / nextBadge;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _StreakCard(seri: seri, rekor: rekor),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _StatTile(
-                    label: 'Aranan ürün',
-                    value: aranan,
-                    thisMonth: aranaBuAy,
-                  ),
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(AppSizes.md),
+          decoration: cardDecoration(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                kalan > 0
+                    ? 'Bir sonraki rozete $kalan ürün kaldı!'
+                    : 'Rozet tamamlandı!',
+                style: GoogleFonts.plusJakartaSans(
+                  color: kOnSurface,
+                  fontWeight: FontWeight.bold,
+                  fontSize: AppSizes.fontLg,
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _StatTile(
-                    label: 'Keşfedilen mekan',
-                    value: mekanIds.length,
-                    thisMonth: mekanBuAy,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _StatTile(
-                    label: 'Okunan makale',
-                    value: okunanMakaleIds.length,
-                    thisMonth: okunanMakaleBuAy,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _StatTile(
-                    label: 'Tıklanan ürün',
-                    value: tiklananUrunSayisi,
-                    thisMonth: urunBuAy,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: kPrimaryFixed,
-                borderRadius: BorderRadius.circular(16),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(height: AppSizes.xs),
+              Text(
+                'Keşfetmeye devam et, yeni rozetin yaklaşsın.',
+                style: GoogleFonts.sourceSans3(
+                  color: kOnSurfaceVariant,
+                  fontSize: AppSizes.fontMd - 1,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: AppSizes.md),
+              LinearPercentIndicator(
+                lineHeight: 8,
+                percent: progress.clamp(0.0, 1.0),
+                backgroundColor: kSurfaceContainerHigh,
+                progressColor: kPrimary,
+                barRadius: const Radius.circular(AppSizes.radiusFull),
+                padding: EdgeInsets.zero,
+              ),
+              const SizedBox(height: AppSizes.sm + 4),
+              Row(
                 children: [
-                  Text(
-                    kalan > 0 ? 'Sonraki rozete $kalan ürün kaldı 🏅' : 'Rozet tamamlandı 🏅',
-                    style: GoogleFonts.plusJakartaSans(
-                      color: kPrimary,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
+                  Expanded(
+                    child: Text(
+                      '$incelenen / $nextBadge ürün incelendi',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.sourceSans3(
+                        color: kOnSurfaceVariant,
+                        fontSize: AppSizes.fontSm,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  LinearPercentIndicator(
-                    lineHeight: 8,
-                    percent: badgeProgress.clamp(0, 1),
-                    backgroundColor: kOnPrimary,
-                    progressColor: kPrimary,
-                    barRadius: const Radius.circular(4),
-                    padding: EdgeInsets.zero,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    '$tiklananUrunSayisi / $nextBadge ürün tıklandı',
-                    style: GoogleFonts.sourceSans3(
-                      color: kPrimary,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
+                  const SizedBox(width: AppSizes.sm),
+                  FilledButton(
+                    onPressed: () => context.go('/search'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: kPrimary,
+                      foregroundColor: kOnPrimary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(AppSizes.radiusFull),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: AppSizes.md + 4,
+                          vertical: AppSizes.sm + 4),
+                    ),
+                    child: Text(
+                      'Ürün keşfet →',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontWeight: FontWeight.w700,
+                        fontSize: AppSizes.fontSm + 1,
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
   }
 }
 
-class _StreakCard extends StatelessWidget {
-  const _StreakCard({required this.seri, required this.rekor});
-
-  final int seri;
-  final int rekor;
+// "Keşif özetim" 3 sütunlu sayaç kartı
+class DiscoverySummaryCard extends StatelessWidget {
+  const DiscoverySummaryCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: _cardDecoration(),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: const BoxDecoration(color: kPastelOrange, shape: BoxShape.circle),
-            child: const Icon(Icons.local_fire_department_rounded, color: kSecondary, size: 24),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return _StatsBuilder(
+      builder: (stats) {
+        final aranan = stats['aranan_urun_toplam'] as int? ?? 0;
+        final makale = _count(stats, 'okunan_makale_idleri');
+        final mekan = _count(stats, 'kesfedilen_mekan_idleri');
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(
+              vertical: AppSizes.md + 4, horizontal: AppSizes.sm),
+          decoration: cardDecoration(),
+          child: IntrinsicHeight(
+            child: Row(
               children: [
-                Text(
-                  'Giriş Serisi',
-                  style: GoogleFonts.plusJakartaSans(
-                    color: kOnSurface,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-                Text(
-                  'Rekor: $rekor gün',
-                  style: GoogleFonts.sourceSans3(
-                    color: kOnSurfaceVariant,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                Expanded(child: _SummaryItem(value: aranan, label: 'Aranan ürün')),
+                const _SummaryDivider(),
+                Expanded(child: _SummaryItem(value: makale, label: 'Okunan makale')),
+                const _SummaryDivider(),
+                Expanded(
+                    child: _SummaryItem(value: mekan, label: 'Keşfedilen mekan')),
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '$seri',
-                style: GoogleFonts.plusJakartaSans(
-                  color: kSecondary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                ),
-              ),
-              Text(
-                'gün',
-                style: GoogleFonts.sourceSans3(
-                  color: kOnSurfaceVariant,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-class _StatTile extends StatelessWidget {
-  const _StatTile({required this.label, required this.value, required this.thisMonth});
+class _SummaryDivider extends StatelessWidget {
+  const _SummaryDivider();
 
-  final String label;
+  @override
+  Widget build(BuildContext context) => VerticalDivider(
+        width: 1,
+        thickness: 1,
+        color: kOutlineVariant.withValues(alpha: 0.6),
+      );
+}
+
+class _SummaryItem extends StatelessWidget {
+  const _SummaryItem({required this.value, required this.label});
+
   final int value;
-  final int? thisMonth;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: _cardDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.sourceSans3(
-              color: kOnSurfaceVariant,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          '$value',
+          style: GoogleFonts.plusJakartaSans(
+            color: kPrimary,
+            fontWeight: FontWeight.bold,
+            fontSize: AppSizes.fontXxl + 4,
           ),
-          const SizedBox(height: 6),
-          Text(
-            '$value',
-            style: GoogleFonts.plusJakartaSans(
-              color: kOnSurface,
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
+        ),
+        const SizedBox(height: AppSizes.xs),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.sourceSans3(
+            color: kOnSurfaceVariant,
+            fontSize: AppSizes.fontSm,
+            fontWeight: FontWeight.w500,
           ),
-          if (thisMonth != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              'Bu ay +$thisMonth',
-              style: GoogleFonts.sourceSans3(
-                color: kBadgeSuccess,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

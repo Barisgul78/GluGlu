@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/snackbars.dart';
 import '../../../../../core/utils/string_utils.dart';
@@ -14,41 +15,26 @@ import '../widgets/stats_section.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  static const _quickActions = [
-    _QuickAction(Icons.edit_outlined, 'Hesap\nBilgileri',
-        route: '/profile/edit'),
-    _QuickAction(Icons.badge_outlined, 'Sağlık\nKartım'),
-    _QuickAction(Icons.military_tech_outlined, 'Rozetlerim'),
-  ];
-
+  // Statik placeholder — rozet veri modeli henüz yok (onaylı karar)
   static const _badges = [
     _Badge(
       icon: Icons.center_focus_strong_outlined,
       title: 'İlk Tarama',
-      subtitle: '47 ürün tarandı',
       bgColor: kPastelGreen,
       unlocked: true,
     ),
     _Badge(
       icon: Icons.explore_outlined,
       title: 'Kaşif',
-      subtitle: '12 mekan keşfedildi',
       bgColor: kPastelOrange,
-      unlocked: true,
-    ),
-    _Badge(
-      icon: Icons.menu_book_outlined,
-      title: 'Rehber Kurdu',
-      subtitle: '23 makale okundu',
-      bgColor: kPastelBlue,
       unlocked: true,
     ),
     _Badge(
       icon: Icons.lock_outline,
       title: 'Tarif Ustası',
-      subtitle: '5 tarif ekle',
       bgColor: kSurfaceContainerHigh,
       unlocked: false,
+      hint: '5 tarif ekle',
     ),
   ];
 
@@ -70,12 +56,19 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: kBackground,
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.screenPaddingH),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(context),
-              if (isAnonymous || uid == null)
-                _buildAvatar('Misafir', email)
-              else
+              if (isAnonymous || uid == null) ...[
+                _buildIdentity(context, 'Misafir', email),
+                const SizedBox(height: AppSizes.lg),
+                _buildHealthCardLink(context),
+                const SizedBox(height: AppSizes.md),
+                const HealthJourneyCard(),
+              ] else
                 StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                   stream: ProfileService.userStream(uid),
                   builder: (context, snap) {
@@ -86,55 +79,44 @@ class ProfileScreen extends StatelessWidget {
                     final displayName =
                         combined.isNotEmpty ? combined : fallbackName;
                     final kullaniciAdi = data?['kullaniciAdi'] as String?;
-                    final subtitle = (kullaniciAdi != null && kullaniciAdi.isNotEmpty)
-                        ? '@$kullaniciAdi'
-                        : email;
-                    return _buildAvatar(displayName, subtitle);
+                    final subtitle =
+                        (kullaniciAdi != null && kullaniciAdi.isNotEmpty)
+                            ? '@$kullaniciAdi'
+                            : email;
+                    final firstName = ad.isNotEmpty
+                        ? ad
+                        : displayName.split(' ').first;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildIdentity(context, displayName, subtitle),
+                        const SizedBox(height: AppSizes.lg),
+                        _buildHealthCardLink(context),
+                        const SizedBox(height: AppSizes.md),
+                        HealthJourneyCard(firstName: firstName),
+                      ],
+                    );
                   },
                 ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: _buildQuickActions(context),
+              const SizedBox(height: AppSizes.lg),
+              _buildSectionHeader(
+                'Rozetlerim',
+                actionLabel: 'Tümünü gör',
+                onAction: () => showInfoSnackBar(context, 'Yakında'),
               ),
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    sectionTitle('SAĞLIK PROFİLİM'),
-                    const SizedBox(height: 10),
-                    const HealthJourneyCard(),
-                    const SizedBox(height: 24),
-                    sectionTitle('ROZETLERİM'),
-                    const SizedBox(height: 10),
-                    _buildBadgesGrid(),
-                    const SizedBox(height: 24),
-                    sectionTitle('İSTATİSTİKLERİM'),
-                    const SizedBox(height: 10),
-                    const StatsSection(),
-                    const SizedBox(height: 24),
-                    sectionTitle('UYGULAMA'),
-                    const SizedBox(height: 10),
-                    _buildSettingsGroup(context, [
-                      const _SettingsItem(
-                        icon: Icons.notifications_outlined,
-                        iconBgColor: kSurfaceContainerHigh,
-                        title: 'Bildirim Ayarları',
-                        subtitle: 'Günlük ipucu, ürün değişiklikleri',
-                      ),
-                      const _SettingsItem(
-                        icon: Icons.help_outline,
-                        iconBgColor: kSurfaceContainerHigh,
-                        title: 'Yardım ve Destek',
-                        subtitle: 'SSS, iletişim',
-                      ),
-                    ]),
-                    const SizedBox(height: 20),
-                    _buildLogoutCard(context),
-                    const SizedBox(height: 32),
-                  ],
-                ),
-              ),
+              const SizedBox(height: AppSizes.sm + 4),
+              _buildBadgesRow(),
+              const SizedBox(height: AppSizes.sm + 4),
+              const NextBadgeCard(),
+              const SizedBox(height: AppSizes.lg),
+              _buildSectionHeader('Keşif özetim'),
+              const SizedBox(height: AppSizes.sm + 4),
+              const DiscoverySummaryCard(),
+              const SizedBox(height: AppSizes.md),
+              _buildHelpCard(context),
+              const SizedBox(height: AppSizes.md),
+              _buildLogoutButton(context),
+              const SizedBox(height: AppSizes.lg),
             ],
           ),
         ),
@@ -144,258 +126,347 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-      child: SizedBox(
-        height: 48,
-        child: Row(
-          children: [
-            const SizedBox(width: 48),
-            Expanded(
-              child: Center(
-                child: Text(
-                  'Profil',
-                  style: GoogleFonts.plusJakartaSans(
-                    color: kOnSurface,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.settings_outlined, color: kOnSurface),
-              onPressed: () => context.push('/settings'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAvatar(String displayName, String email) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Column(
+      padding: const EdgeInsets.only(top: AppSizes.md, bottom: AppSizes.md),
+      child: Row(
         children: [
-          Stack(
-            children: [
-              Container(
-                width: 104,
-                height: 104,
-                decoration: const BoxDecoration(
-                  color: kPrimary,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    initials(displayName),
-                    style: GoogleFonts.plusJakartaSans(
-                      color: Colors.white,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+          Expanded(
+            child: Text(
+              'Profil',
+              style: GoogleFonts.plusJakartaSans(
+                color: kOnSurface,
+                fontWeight: FontWeight.bold,
+                fontSize: AppSizes.fontHeading,
               ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Text(
-            displayName,
-            style: GoogleFonts.plusJakartaSans(
-              color: kOnSurface,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            email,
-            style: GoogleFonts.sourceSans3(
-                color: kOnSurfaceVariant,
-                fontSize: 14,
-                fontWeight: FontWeight.w500),
+          GestureDetector(
+            onTap: () => context.push('/settings'),
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: kOnPrimary,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: kOnSurface.withValues(alpha: 0.06),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Icon(Icons.settings_outlined,
+                  color: kOnSurface, size: AppSizes.iconMd),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildQuickActions(BuildContext context) {
+  Widget _buildIdentity(BuildContext context, String displayName, String sub) {
     return Row(
-      children: _quickActions
-          .map((a) => Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: GestureDetector(
-                    onTap: () => a.route != null
-                        ? context.push(a.route!)
-                        : showInfoSnackBar(context, 'Yakında'),
-                    child: Container(
-                      height: 88,
-                      decoration: cardDecoration(radius: 14),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(a.icon, color: kPrimary, size: 20),
-                          const SizedBox(height: 6),
-                          Text(
-                            a.label,
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            style: GoogleFonts.sourceSans3(
-                              color: kOnSurface,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              height: 1.2,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ))
-          .toList(),
-    );
-  }
-
-  Widget _buildBadgesGrid() {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      childAspectRatio: 1.7,
-      children: _badges.map((b) {
-        return Container(
-          padding: const EdgeInsets.all(14),
-          decoration: cardDecoration(),
-          child: Opacity(
-            opacity: b.unlocked ? 1 : 0.5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: b.bgColor, shape: BoxShape.circle),
-                      child: Icon(b.icon, color: kPrimary, size: 16),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        b.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.plusJakartaSans(
-                          color: kOnSurface,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  b.subtitle,
-                  style: GoogleFonts.sourceSans3(
-                      color: kOnSurfaceVariant,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: const BoxDecoration(
+            color: kPrimary,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              initials(displayName),
+              style: GoogleFonts.plusJakartaSans(
+                color: Colors.white,
+                fontSize: AppSizes.fontHeading,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildSettingsGroup(BuildContext context, List<_SettingsItem> items) {
-    return Container(
-      decoration: cardDecoration(),
-      child: Column(
-        children: items.asMap().entries.map((entry) {
-          final index = entry.key;
-          final item = entry.value;
-          return Column(
+        ),
+        const SizedBox(width: AppSizes.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconRow(
-                icon: item.icon,
-                iconBgColor: item.iconBgColor,
-                title: item.title,
-                subtitle: item.subtitle,
+              Text(
+                displayName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.plusJakartaSans(
+                  color: kOnSurface,
+                  fontSize: AppSizes.fontXxl,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              if (index < items.length - 1) sectionDivider(),
+              Text(
+                sub,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.sourceSans3(
+                  color: kOnSurfaceVariant,
+                  fontSize: AppSizes.fontMd,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: AppSizes.xs),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => context.push('/profile/edit'),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppSizes.xs),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Profili düzenle',
+                        style: GoogleFonts.plusJakartaSans(
+                          color: kOnSurface,
+                          fontSize: AppSizes.fontMd - 1,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: AppSizes.sm - 2),
+                      const Icon(Icons.edit_outlined,
+                          color: kOnSurface, size: AppSizes.iconSm),
+                    ],
+                  ),
+                ),
+              ),
             ],
-          );
-        }).toList(),
-      ),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildLogoutCard(BuildContext context) {
+  Widget _buildHealthCardLink(BuildContext context) {
     return GestureDetector(
-      onTap: () => _signOut(context),
+      onTap: () => showInfoSnackBar(context, 'Yakında'),
       child: Container(
-        decoration: cardDecoration(
-          color: kErrorContainer,
-          borderColor: kError.withValues(alpha: 0.3),
+        width: double.infinity,
+        padding: const EdgeInsets.all(AppSizes.md + 4),
+        decoration: BoxDecoration(
+          color: kPrimary,
+          borderRadius: BorderRadius.circular(AppSizes.radiusXl),
         ),
-        child: IconRow(
-          icon: Icons.logout,
-          iconBgColor: kError.withValues(alpha: 0.12),
-          title: 'Çıkış Yap',
-          showChevron: false,
-          titleColor: kError,
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: kOnPrimary.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+              ),
+              child: const Icon(Icons.badge_outlined,
+                  color: kOnPrimary, size: AppSizes.iconMd),
+            ),
+            const SizedBox(width: AppSizes.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Sağlık kartım',
+                    style: GoogleFonts.plusJakartaSans(
+                      color: kOnPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: AppSizes.fontXl,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Beslenme ihtiyaçlarını kolayca paylaş.',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.sourceSans3(
+                      color: kOnPrimary.withValues(alpha: 0.85),
+                      fontSize: AppSizes.fontMd - 1,
+                      fontWeight: FontWeight.w500,
+                      height: 1.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: kOnPrimary),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title,
+      {String? actionLabel, VoidCallback? onAction}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: GoogleFonts.plusJakartaSans(
+            color: kOnSurface,
+            fontWeight: FontWeight.bold,
+            fontSize: AppSizes.fontXxl - 4,
+          ),
+        ),
+        if (actionLabel != null)
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onAction,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSizes.xs),
+              child: Text(
+                actionLabel,
+                style: GoogleFonts.sourceSans3(
+                  color: kOnSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                  fontSize: AppSizes.fontMd,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildBadgesRow() {
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var i = 0; i < _badges.length; i++) ...[
+            if (i > 0) const SizedBox(width: AppSizes.sm + 4),
+            Expanded(child: _BadgeCard(badge: _badges[i])),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHelpCard(BuildContext context) {
+    return GestureDetector(
+      onTap: () => showInfoSnackBar(context, 'Yakında'),
+      child: Container(
+        decoration: cardDecoration(),
+        child: const IconRow(
+          icon: Icons.help_outline,
+          iconBgColor: kSurfaceContainerHigh,
+          title: 'Yardım ve destek',
+          subtitle: 'Soruların için buradayız',
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: AppSizes.buttonHeight,
+      child: OutlinedButton.icon(
+        onPressed: () => _signOut(context),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: kOnSurface,
+          side: const BorderSide(color: kOutlineVariant),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+          ),
+        ),
+        icon: const Icon(Icons.logout, size: AppSizes.iconMd - 4),
+        label: Text(
+          'Çıkış yap',
+          style: GoogleFonts.plusJakartaSans(
+            fontWeight: FontWeight.w700,
+            fontSize: AppSizes.fontLg,
+          ),
         ),
       ),
     );
   }
 }
 
-class _SettingsItem {
-  final IconData icon;
-  final Color iconBgColor;
-  final String title;
-  final String? subtitle;
+class _BadgeCard extends StatelessWidget {
+  const _BadgeCard({required this.badge});
 
-  const _SettingsItem({
-    required this.icon,
-    required this.iconBgColor,
-    required this.title,
-    this.subtitle,
-  });
-}
+  final _Badge badge;
 
-class _QuickAction {
-  final IconData icon;
-  final String label;
-  final String? route;
-
-  const _QuickAction(this.icon, this.label, {this.route});
+  @override
+  Widget build(BuildContext context) {
+    final unlocked = badge.unlocked;
+    return Container(
+      padding: const EdgeInsets.symmetric(
+          vertical: AppSizes.md, horizontal: AppSizes.sm),
+      decoration: unlocked
+          ? cardDecoration()
+          : BoxDecoration(
+              color: kSurfaceContainer,
+              borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+            ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration:
+                BoxDecoration(color: badge.bgColor, shape: BoxShape.circle),
+            child: Icon(
+              badge.icon,
+              color: unlocked ? kPrimary : kOutline,
+              size: AppSizes.iconMd - 2,
+            ),
+          ),
+          const SizedBox(height: AppSizes.sm + 4),
+          Text(
+            badge.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.plusJakartaSans(
+              color: unlocked ? kOnSurface : kOnSurfaceVariant,
+              fontWeight: FontWeight.bold,
+              fontSize: AppSizes.fontMd - 1,
+            ),
+          ),
+          const SizedBox(height: AppSizes.xs),
+          Text(
+            unlocked ? '✓ Kazanıldı' : 'Kilitli',
+            style: GoogleFonts.sourceSans3(
+              color: unlocked ? kPrimary : kOnSurfaceVariant,
+              fontSize: AppSizes.fontSm,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          if (badge.hint != null)
+            Text(
+              badge.hint!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.sourceSans3(
+                color: kOnSurfaceVariant,
+                fontSize: AppSizes.fontSm - 1,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 class _Badge {
   final IconData icon;
   final String title;
-  final String subtitle;
   final Color bgColor;
   final bool unlocked;
+  final String? hint;
 
   const _Badge({
     required this.icon,
     required this.title,
-    required this.subtitle,
     required this.bgColor,
     required this.unlocked,
+    this.hint,
   });
 }

@@ -9,7 +9,10 @@ class Product {
   final String? barkod;
   final ProductStatus status;
   final String category;
-  final Map<String, String>? nutrition;
+  // Anahtarlar Firestore `besin_degerleri` anahtarlarıdır (enerji_kcal, protein, yag...).
+  // Yalnızca dolu olanlar bulunur; boşsa ürünün besin bilgisi yoktur.
+  final Map<String, String> nutrition;
+  final String? kanitCumlesi;
 
   const Product({
     required this.id,
@@ -20,7 +23,8 @@ class Product {
     this.barkod,
     required this.status,
     required this.category,
-    this.nutrition,
+    this.nutrition = const {},
+    this.kanitCumlesi,
   });
 
   factory Product.fromFirestore(Map<String, dynamic> data) {
@@ -39,11 +43,28 @@ class Product {
       barkod: data['barkod'],
       status: parseStatus(data['durum']),
       category: data['kategori'] ?? 'Genel',
-      nutrition: {
-        'calories': data['kalori'] ?? 'N/A',
-        'protein': data['protein'] ?? 'N/A',
-        'carbs': data['karbonhidrat'] ?? 'N/A',
-      },
+      nutrition: _parseNutrition(data),
+      kanitCumlesi: data['kanit_cumlesi']?.toString(),
     );
+  }
+
+  // Eski düz alanlar (kalori/protein/karbonhidrat) yedek okunur; besin_degerleri öncelikli.
+  static Map<String, String> _parseNutrition(Map<String, dynamic> data) {
+    final result = <String, String>{};
+
+    void put(String key, Object? value) {
+      final text = value?.toString().trim() ?? '';
+      if (text.isNotEmpty) result[key] = text;
+    }
+
+    put('enerji_kcal', data['kalori']);
+    put('protein', data['protein']);
+    put('karbonhidrat', data['karbonhidrat']);
+
+    final map = data['besin_degerleri'];
+    if (map is Map) {
+      map.forEach((key, value) => put(key.toString(), value));
+    }
+    return result;
   }
 }

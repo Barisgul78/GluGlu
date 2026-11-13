@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/date_utils.dart' as du;
 import '../../../../core/utils/snackbars.dart';
@@ -64,7 +65,9 @@ class _HealthJourneyStats {
 
 // Sağlık Profilim kartı: tanı yılı girilmemişse boş durum, girilmişse gün sayacı gösterir
 class HealthJourneyCard extends StatelessWidget {
-  const HealthJourneyCard({super.key});
+  const HealthJourneyCard({super.key, this.firstName = ''});
+
+  final String firstName;
 
   BoxDecoration get _decoration => BoxDecoration(
         color: kOnPrimary,
@@ -109,7 +112,7 @@ class HealthJourneyCard extends StatelessWidget {
 
         final diagnosisDate = timestamp.toDate();
         final stats = _HealthJourneyStats.calculate(diagnosisDate);
-        return _FilledState(decoration: _decoration, diagnosisDate: diagnosisDate, stats: stats);
+        return _FilledState(firstName: firstName, diagnosisDate: diagnosisDate, stats: stats);
       },
     );
   }
@@ -179,159 +182,161 @@ class _EmptyState extends StatelessWidget {
 
 class _FilledState extends StatelessWidget {
   const _FilledState({
-    required this.decoration,
+    required this.firstName,
     required this.diagnosisDate,
     required this.stats,
   });
 
-  final BoxDecoration decoration;
+  final String firstName;
   final DateTime diagnosisDate;
   final _HealthJourneyStats stats;
 
   @override
   Widget build(BuildContext context) {
+    final target = stats.totalDaysAtNextYear;
+    final progress = target == 0 ? 0.0 : stats.totalDays / target;
+    final title = firstName.isNotEmpty
+        ? 'Her adımın değerli, $firstName!'
+        : 'Her adımın değerli!';
+
     return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: decoration,
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSizes.md + 4),
+      decoration: BoxDecoration(
+        color: kPrimaryFixed.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(AppSizes.radiusXl),
+        border: Border.all(color: kOutlineVariant.withValues(alpha: 0.6)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(color: kPastelGreen, shape: BoxShape.circle),
-                child: const Icon(Icons.eco_outlined, color: kPrimary, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Çölyak Yolculuğun',
-                      style: GoogleFonts.plusJakartaSans(
-                        color: kOnSurface,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                    Text(
-                      'Tanı tarihi: ${du.formatMonthYear(diagnosisDate)}',
-                      style: GoogleFonts.sourceSans3(
-                        color: kOnSurfaceVariant,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: '${stats.totalDays}',
-                  style: GoogleFonts.plusJakartaSans(
-                    color: kOnSurface,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                  ),
-                ),
-                TextSpan(
-                  text: ' gün glutensiz 💪',
-                  style: GoogleFonts.sourceSans3(
-                    color: kOnSurface,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                  ),
-                ),
-              ],
+          Text(
+            'GLUTENSİZ YAŞAM YOLCULUĞUM',
+            style: GoogleFonts.sourceSans3(
+              color: kOnSurfaceVariant,
+              fontSize: AppSizes.fontXs + 1,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.6,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSizes.sm + 4),
+          Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.plusJakartaSans(
+              color: kOnSurface,
+              fontWeight: FontWeight.bold,
+              fontSize: AppSizes.fontXl + 2,
+            ),
+          ),
+          const SizedBox(height: AppSizes.sm + 4),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                '${stats.totalDays}',
+                style: GoogleFonts.plusJakartaSans(
+                  color: kPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 48,
+                  height: 1.1,
+                ),
+              ),
+              const SizedBox(width: AppSizes.sm + 4),
+              Text(
+                'gün\nglutensiz',
+                style: GoogleFonts.sourceSans3(
+                  color: kOnSurfaceVariant,
+                  fontSize: AppSizes.fontMd,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2,
+                ),
+              ),
+              const Spacer(),
+              if (stats.lastMilestone != null)
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.sm + 4, vertical: AppSizes.sm),
+                    decoration: BoxDecoration(
+                      color: kPastelOrange,
+                      borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+                    ),
+                    child: Text(
+                      '✓ ${stats.lastMilestone} gün tamamlandı',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.sourceSans3(
+                        color: kSecondary,
+                        fontSize: AppSizes.fontSm,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: AppSizes.md),
+          Text(
+            'Sıradaki dönüm noktası: $target gün',
+            style: GoogleFonts.plusJakartaSans(
+              color: kOnSurface,
+              fontWeight: FontWeight.bold,
+              fontSize: AppSizes.fontMd - 1,
+            ),
+          ),
+          const SizedBox(height: AppSizes.sm),
           LinearPercentIndicator(
-            lineHeight: 8,
-            percent: stats.yearProgress.clamp(0, 1),
-            backgroundColor: kSurfaceContainerHigh,
+            lineHeight: 10,
+            percent: progress.clamp(0.0, 1.0),
+            backgroundColor: kOnPrimary,
             progressColor: kPrimary,
-            barRadius: const Radius.circular(4),
+            barRadius: const Radius.circular(AppSizes.radiusFull),
             padding: EdgeInsets.zero,
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: AppSizes.sm - 2),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${stats.completedYears}. yıl',
+                '${stats.totalDays} / $target gün',
                 style: GoogleFonts.sourceSans3(
                   color: kOnSurfaceVariant,
-                  fontSize: 11,
+                  fontSize: AppSizes.fontSm,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               Text(
-                '${stats.nextYearNumber}. yıla ${stats.daysToNextYear} gün kaldı',
+                '${stats.daysToNextYear} gün kaldı',
                 style: GoogleFonts.sourceSans3(
-                  color: kOnSurfaceVariant,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
+                  color: kOnSurface,
+                  fontSize: AppSizes.fontSm,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],
           ),
-          const Divider(height: 24, color: kOutlineVariant),
-          _statRow(
-            icon: Icons.emoji_events_outlined,
-            label: 'Son milestone',
-            value: stats.lastMilestone != null ? '${stats.lastMilestone} gün 🏆' : '-',
-          ),
-          const SizedBox(height: 10),
-          _statRow(
-            icon: Icons.flag_outlined,
-            label: 'Sonraki hedef',
-            value: '${stats.nextYearNumber}. yıl → ${stats.totalDaysAtNextYear} gün',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _statRow({required IconData icon, required String label, required String value}) {
-    return Row(
-      children: [
-        Icon(icon, color: kOnSurfaceVariant, size: 16),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Text(
-            label,
+          const SizedBox(height: AppSizes.md),
+          Text(
+            'Küçük adımlar, büyük bir yolculuk.',
             style: GoogleFonts.sourceSans3(
               color: kOnSurfaceVariant,
-              fontSize: 12,
+              fontSize: AppSizes.fontMd,
               fontWeight: FontWeight.w500,
             ),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: kPrimaryFixed,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            value,
+          const SizedBox(height: AppSizes.sm + 4),
+          Text(
+            'Başlangıç: ${du.formatMonthYear(diagnosisDate)}',
             style: GoogleFonts.sourceSans3(
-              color: kPrimary,
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
+              color: kOnSurfaceVariant,
+              fontSize: AppSizes.fontSm,
+              fontWeight: FontWeight.w500,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -15,6 +15,7 @@ class AppButton extends StatelessWidget {
     this.backgroundColor,
     this.foregroundColor,
     this.borderRadius = AppSizes.radiusFull,
+    this.icon,
   });
 
   final String label;
@@ -25,6 +26,7 @@ class AppButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? foregroundColor;
   final double borderRadius;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +54,22 @@ class AppButton extends StatelessWidget {
                   strokeWidth: 2.5,
                 ),
               )
-            : Text(
-                label,
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: AppSizes.fontLg,
-                  fontWeight: FontWeight.w700,
-                  color: fg,
-                ),
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null) ...[
+                    Icon(icon, color: fg, size: AppSizes.iconMd - 4),
+                    const SizedBox(width: AppSizes.sm),
+                  ],
+                  Text(
+                    label,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: AppSizes.fontLg,
+                      fontWeight: FontWeight.w700,
+                      color: fg,
+                    ),
+                  ),
+                ],
               ),
       ),
     );
