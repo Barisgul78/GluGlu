@@ -27,7 +27,8 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   List<String> recentSearches = [];
-  String selectedCategory = 'Tümü';
+  static const _allCategory = 'Tümü';
+  String selectedCategory = _allCategory;
   Future<List<Product>>? _popularProductsFuture;
 
   List<Product> _searchResults = [];
@@ -36,24 +37,63 @@ class _SearchScreenState extends State<SearchScreen> {
   Timer? _debounce;
   int _searchRequestId = 0;
 
-  static const _categories = [
-    'Tümü',
-    'Ekmek & Pasta',
-    'Makarna',
-    'Atıştırmalık',
-    'İçecek'
-  ];
+  // Çipler Firestore'daki ürünlerin `kategori` alanından gelir ('Tümü' hariç).
+  List<String> _categories = [];
+  bool _categoriesLoading = true;
+  bool _categoriesError = false;
+
+  bool get _hasActiveSearch => query.isNotEmpty || selectedCategory != _allCategory;
 
   @override
   void initState() {
     super.initState();
     _popularProductsFuture = SearchService.fetchFeatured();
+    _loadCategories();
     _loadRecentSearches();
     if (widget.initialQuery != null && widget.initialQuery!.isNotEmpty) {
       _searchController.text = widget.initialQuery!;
       query = widget.initialQuery!.trim().toLowerCase();
       _startNewSearch(query);
     }
+  }
+
+  Future<void> _loadCategories() async {
+    setState(() {
+      _categoriesLoading = true;
+      _categoriesError = false;
+    });
+    try {
+      final categories = await SearchService.fetchCategories();
+      if (!mounted) return;
+      setState(() {
+        _categories = categories;
+        _categoriesLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Kategori yükleme hatası: $e');
+      if (!mounted) return;
+      setState(() {
+        _categoriesError = true;
+        _categoriesLoading = false;
+      });
+    }
+  }
+
+  void _onCategorySelected(String category) {
+    if (category == selectedCategory) return;
+    _debounce?.cancel();
+    setState(() => selectedCategory = category);
+    if (category == _allCategory && query.isEmpty) {
+      // Filtre ve yazı yok: ana görünüme dön, bekleyen aramanın cevabını yok say.
+      _searchRequestId++;
+      setState(() {
+        _searchResults = [];
+        _searchError = null;
+        _searchLoading = false;
+      });
+      return;
+    }
+    _startNewSearch(query);
   }
 
   Future<void> _startNewSearch(String q) async {
@@ -64,7 +104,10 @@ class _SearchScreenState extends State<SearchScreen> {
       _searchLoading = true;
     });
     try {
-      final results = await SearchService.searchByName(q);
+      final results = await SearchService.searchByName(
+        q,
+        category: selectedCategory == _allCategory ? null : selectedCategory,
+      );
       // Beklerken yeni bir arama başlamışsa bu cevap eski (stale) demektir, yok say.
       if (!mounted || requestId != _searchRequestId) return;
       setState(() {
@@ -87,10 +130,15 @@ class _SearchScreenState extends State<SearchScreen> {
     // Debounce beklerken de yükleniyor göster; yoksa 500 ms "bulunamadı" yazısı çıkar.
     setState(() {
       query = q.toLowerCase();
-      _searchLoading = q.isNotEmpty;
+      _searchLoading = _hasActiveSearch;
     });
     _debounce?.cancel();
     if (q.isEmpty) {
+      if (selectedCategory != _allCategory) {
+        // Yazı silindi ama kategori seçili: kategorinin tüm ürünleri kalsın.
+        _startNewSearch('');
+        return;
+      }
       setState(() {
         _searchResults = [];
         _searchError = null;
@@ -191,8 +239,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (query.isNotEmpty) _buildLiveSearchList(),
-                    if (query.isEmpty) ...[
+                    if (_hasActiveSearch) _buildLiveSearchList(),
+                    if (!_hasActiveSearch) ...[
                       if (recentSearches.isNotEmpty) _buildRecentSearches(),
                       _buildPopularSection(),
                     ],
@@ -297,35 +345,76 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildCategoryChips() {
     return SizedBox(
       height: 44,
-      child: ListView.separated(
+      child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: _categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
-        itemBuilder: (context, index) {
-          final cat = _categories[index];
-          final isSelected = selectedCategory == cat;
-          return GestureDetector(
-            onTap: () => setState(() => selectedCategory = cat),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: isSelected ? kPrimary : kSurfaceContainerHigh,
-                borderRadius: BorderRadius.circular(20),
-                border:
-                    Border.all(color: isSelected ? kPrimary : kOutlineVariant),
+        children: [
+          for (final cat in [_allCategory, ..._categories])
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: _categoryChip(cat),
+            ),
+          if (_categoriesLoading)
+            const Center(
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                    color: kPrimary, strokeWidth: 2),
               ),
-              child: Text(
-                cat,
-                style: GoogleFonts.plusJakartaSans(
-                  color: isSelected ? kOnPrimary : kOnSurface,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
+            ),
+          if (_categoriesError)
+            GestureDetector(
+              onTap: _loadCategories,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: kOutlineVariant),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.refresh, color: kPrimary, size: 16),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Kategoriler yüklenemedi, tekrar dene',
+                      style: GoogleFonts.plusJakartaSans(
+                        color: kPrimary,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          );
-        },
+        ],
+      ),
+    );
+  }
+
+  Widget _categoryChip(String cat) {
+    final isSelected = selectedCategory == cat;
+    return GestureDetector(
+      onTap: () => _onCategorySelected(cat),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? kPrimary : kSurfaceContainerHigh,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: isSelected ? kPrimary : kOutlineVariant),
+        ),
+        child: Center(
+          child: Text(
+            cat,
+            style: GoogleFonts.plusJakartaSans(
+              color: isSelected ? kOnPrimary : kOnSurface,
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -587,10 +676,16 @@ class _SearchScreenState extends State<SearchScreen> {
     final results = _searchResults;
 
     if (results.isEmpty) {
+      final hasCategory = selectedCategory != _allCategory;
+      final emptyText = query.isEmpty
+          ? '"$selectedCategory" kategorisinde ürün bulunamadı.'
+          : hasCategory
+              ? '"$query" ile "$selectedCategory" kategorisinde eşleşen ürün bulunamadı.'
+              : '"$query" ile eşleşen ürün bulunamadı.';
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Text(
-          '"$query" ile eşleşen ürün bulunamadı.',
+          emptyText,
           style: GoogleFonts.sourceSans3(
               color: kOnSurfaceVariant,
               fontSize: 14,
