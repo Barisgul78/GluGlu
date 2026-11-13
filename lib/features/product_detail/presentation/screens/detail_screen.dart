@@ -250,9 +250,11 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget _buildBrandRow() {
     final hasCategory = _p.category.isNotEmpty && _p.category != _kDefaultCategory;
 
+    // İki flex çocuk boş alanı eşit paylaşır; Expanded kullanılırsa çip ortadan başlar.
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
+        Flexible(
           child: Text(
             _trUpper(_p.brand),
             maxLines: 1,
