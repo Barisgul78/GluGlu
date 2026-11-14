@@ -196,26 +196,6 @@ class _HomeScreenState extends State<HomeScreen> {
       titleSpacing: AppSizes.screenPaddingH,
       title: Row(
         children: [
-          Container(
-            width: 38,
-            height: 38,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: kPrimary,
-            ),
-            child: Center(
-              child: Text(
-                initials(AuthService.isAnonymous
-                    ? null
-                    : AuthService.currentUser?.displayName),
-                style: GoogleFonts.plusJakartaSans(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ),
           const Spacer(),
           Text(
             'GluGlu',
@@ -226,16 +206,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const Spacer(),
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: kOutlineVariant, width: 1.5),
-            ),
-            child: const Icon(Icons.notifications_outlined,
-                color: kOnSurfaceVariant, size: 20),
-          ),
         ],
       ),
     );

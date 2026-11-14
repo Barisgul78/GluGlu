@@ -42,7 +42,8 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _categoriesLoading = true;
   bool _categoriesError = false;
 
-  bool get _hasActiveSearch => query.isNotEmpty || selectedCategory != _allCategory;
+  bool get _hasActiveSearch =>
+      query.isNotEmpty || selectedCategory != _allCategory;
 
   @override
   void initState() {
@@ -286,16 +287,6 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
           ),
-          Container(
-            width: 36,
-            height: 36,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: kSurfaceContainerHigh,
-            ),
-            child: const Icon(Icons.notifications_outlined,
-                color: kOnSurfaceVariant, size: 20),
-          ),
         ],
       ),
     );
@@ -359,8 +350,8 @@ class _SearchScreenState extends State<SearchScreen> {
               child: SizedBox(
                 width: 20,
                 height: 20,
-                child: CircularProgressIndicator(
-                    color: kPrimary, strokeWidth: 2),
+                child:
+                    CircularProgressIndicator(color: kPrimary, strokeWidth: 2),
               ),
             ),
           if (_categoriesError)

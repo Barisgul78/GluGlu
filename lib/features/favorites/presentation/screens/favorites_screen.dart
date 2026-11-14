@@ -60,24 +60,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
       child: Row(
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: kPrimary,
-            ),
-            child: Center(
-              child: Text(
-                initials(AuthService.currentUser?.displayName),
-                style: GoogleFonts.plusJakartaSans(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
-              ),
-            ),
-          ),
           const Spacer(),
           Text(
             'Favoriler',
@@ -88,15 +70,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             ),
           ),
           const Spacer(),
-          Container(
-            width: 36,
-            height: 36,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: kSurfaceContainerHigh,
-            ),
-            child: const Icon(Icons.notifications_outlined, color: kOnSurfaceVariant, size: 20),
-          ),
         ],
       ),
     );
@@ -172,7 +145,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       stream: FavoritesService.favoritesStream(userId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(color: kPrimary));
+          return const Center(
+              child: CircularProgressIndicator(color: kPrimary));
         }
 
         final data = snapshot.data;
@@ -184,30 +158,37 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           return Center(
             child: Text(
               'Henüz favori ürün eklemediniz.',
-              style: GoogleFonts.sourceSans3(color: kOnSurfaceVariant, fontSize: 14, fontWeight: FontWeight.w500),
+              style: GoogleFonts.sourceSans3(
+                  color: kOnSurfaceVariant,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500),
             ),
           );
         }
 
         return FutureBuilder<List<Product>>(
-          future: FavoritesService.fetchProductsByIds(productIds.take(10).toList()),
+          future:
+              FavoritesService.fetchProductsByIds(productIds.take(10).toList()),
           builder: (context, productSnapshot) {
             if (productSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator(color: kPrimary));
+              return const Center(
+                  child: CircularProgressIndicator(color: kPrimary));
             }
 
             final products = productSnapshot.data ?? [];
             if (products.isEmpty) {
               return Center(
                 child: Text('Ürünler yüklenemedi.',
-                    style: GoogleFonts.sourceSans3(color: kOnSurfaceVariant, fontWeight: FontWeight.w500)),
+                    style: GoogleFonts.sourceSans3(
+                        color: kOnSurfaceVariant, fontWeight: FontWeight.w500)),
               );
             }
 
             return ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               itemCount: products.length,
-              itemBuilder: (context, index) => _buildProductCard(products[index]),
+              itemBuilder: (context, index) =>
+                  _buildProductCard(products[index]),
             );
           },
         );
@@ -275,7 +256,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       stream: FavoritesService.favoritesStream(userId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(color: kPrimary));
+          return const Center(
+              child: CircularProgressIndicator(color: kPrimary));
         }
 
         final data = snapshot.data;
@@ -287,12 +269,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           return Center(
             child: Text(
               'Kayıtlı makale bulunamadı.',
-              style: GoogleFonts.sourceSans3(color: kOnSurfaceVariant, fontSize: 14, fontWeight: FontWeight.w500),
+              style: GoogleFonts.sourceSans3(
+                  color: kOnSurfaceVariant,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500),
             ),
           );
         }
 
-        final tips = TipsService.getAll().where((t) => tipIds.contains(t.id)).toList();
+        final tips =
+            TipsService.getAll().where((t) => tipIds.contains(t.id)).toList();
 
         return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -331,7 +317,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   left: 4,
                   child: CategoryBadge(
                     label: tip.category,
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     fontSize: 9,
                   ),
                 ),
@@ -365,18 +352,23 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   const SizedBox(height: 4),
                   Text(
                     du.formatDate(tip.date),
-                    style: GoogleFonts.sourceSans3(color: kOnSurfaceVariant, fontSize: 12, fontWeight: FontWeight.w500),
+                    style: GoogleFonts.sourceSans3(
+                        color: kOnSurfaceVariant,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
             ),
             GestureDetector(
               onTap: () async {
-                await FavoritesService.toggleArticleFavorite(tip.id, isFavorite: true);
+                await FavoritesService.toggleArticleFavorite(tip.id,
+                    isFavorite: true);
               },
               child: const Padding(
                 padding: EdgeInsets.all(6),
-                child: Icon(Icons.bookmark_rounded, color: kSecondary, size: 20),
+                child:
+                    Icon(Icons.bookmark_rounded, color: kSecondary, size: 20),
               ),
             ),
           ],
@@ -425,7 +417,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   const SizedBox(height: 2),
                   Text(
                     product.brand,
-                    style: GoogleFonts.sourceSans3(color: kOnSurfaceVariant, fontSize: 12, fontWeight: FontWeight.w500),
+                    style: GoogleFonts.sourceSans3(
+                        color: kOnSurfaceVariant,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 6),
                   _statusBadge(product.status),
@@ -460,10 +455,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(8)),
-      child: Text(text, style: TextStyle(color: fg, fontSize: 11, fontWeight: FontWeight.w600)),
+      decoration:
+          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(8)),
+      child: Text(text,
+          style:
+              TextStyle(color: fg, fontSize: 11, fontWeight: FontWeight.w600)),
     );
   }
-
 }
-
