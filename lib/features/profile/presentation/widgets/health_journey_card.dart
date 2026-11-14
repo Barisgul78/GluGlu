@@ -10,7 +10,19 @@ import '../../../auth/data/services/auth_service.dart';
 import '../../data/services/profile_service.dart';
 import 'diagnosis_date_picker.dart';
 
-const _milestones = [100, 500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7500, 10000];
+const _milestones = [
+  100,
+  500,
+  1000,
+  1500,
+  2000,
+  2500,
+  3000,
+  4000,
+  5000,
+  7500,
+  10000
+];
 
 // Tanı yılına göre gün sayacı, yıl ilerlemesi ve milestone hesaplaması
 class _HealthJourneyStats {
@@ -85,18 +97,24 @@ class HealthJourneyCard extends StatelessWidget {
   Future<void> _openPicker(BuildContext context, {DateTime? current}) async {
     final userId = AuthService.currentUserId;
     if (userId == null) {
-      showInfoSnackBar(context, 'Tanı yılını eklemek için giriş yapmanız gerekiyor.');
+      showInfoSnackBar(
+          context, 'Tanı yılını eklemek için giriş yapmanız gerekiyor.');
       return;
     }
     final date = await showDiagnosisDatePicker(context, initialDate: current);
     if (date == null) return;
-    if (current != null && current.year == date.year && current.month == date.month) return;
+    if (current != null &&
+        current.year == date.year &&
+        current.month == date.month) {
+      return;
+    }
     try {
       await ProfileService.setDiagnosisDate(userId, date);
     } catch (e) {
       debugPrint('Tanı tarihi kaydedilemedi: $e');
       if (context.mounted) {
-        showErrorSnackBar(context, 'Tanı tarihi kaydedilemedi. Lütfen tekrar deneyin.');
+        showErrorSnackBar(
+            context, 'Tanı tarihi kaydedilemedi. Lütfen tekrar deneyin.');
       }
     }
   }
@@ -106,7 +124,8 @@ class HealthJourneyCard extends StatelessWidget {
     final userId = AuthService.currentUserId;
 
     if (userId == null) {
-      return _EmptyState(decoration: _decoration, onAddPressed: () => _openPicker(context));
+      return _EmptyState(
+          decoration: _decoration, onAddPressed: () => _openPicker(context));
     }
 
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -115,7 +134,9 @@ class HealthJourneyCard extends StatelessWidget {
         final timestamp = snapshot.data?.data()?['tani_tarihi'] as Timestamp?;
 
         if (timestamp == null) {
-          return _EmptyState(decoration: _decoration, onAddPressed: () => _openPicker(context));
+          return _EmptyState(
+              decoration: _decoration,
+              onAddPressed: () => _openPicker(context));
         }
 
         final diagnosisDate = timestamp.toDate();
@@ -149,7 +170,8 @@ class _EmptyState extends StatelessWidget {
           Container(
             width: 56,
             height: 56,
-            decoration: const BoxDecoration(color: kPastelGreen, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+                color: kPastelGreen, shape: BoxShape.circle),
             child: const Icon(Icons.eco_outlined, color: kPrimary, size: 28),
           ),
           const SizedBox(height: 14),
@@ -178,7 +200,8 @@ class _EmptyState extends StatelessWidget {
             style: FilledButton.styleFrom(
               backgroundColor: kPrimary,
               foregroundColor: kOnPrimary,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             ),
             icon: const Icon(Icons.add, size: 18),
@@ -268,28 +291,6 @@ class _FilledState extends StatelessWidget {
                   height: 1.2,
                 ),
               ),
-              const Spacer(),
-              if (stats.lastMilestone != null)
-                Flexible(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: AppSizes.sm + 4, vertical: AppSizes.sm),
-                    decoration: BoxDecoration(
-                      color: kPastelOrange,
-                      borderRadius: BorderRadius.circular(AppSizes.radiusFull),
-                    ),
-                    child: Text(
-                      '✓ ${stats.lastMilestone} gün tamamlandı',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.sourceSans3(
-                        color: kSecondary,
-                        fontSize: AppSizes.fontSm,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ),
           const SizedBox(height: AppSizes.md),
