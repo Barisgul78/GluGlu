@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/snackbars.dart';
 import '../../../../../core/utils/string_utils.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../auth/data/services/auth_service.dart';
 import '../../data/services/profile_service.dart';
+import '../widgets/city_picker_sheet.dart';
 import '../widgets/profile_ui.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -22,10 +24,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _soyadCtrl = TextEditingController();
   final _kullaniciAdiCtrl = TextEditingController();
   final _telefonCtrl = TextEditingController();
-  final _sehirCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
 
   String _currentUsername = '';
+  String? _sehir;
   bool _loading = true;
   bool _saving = false;
   bool _emailVerified = false;
@@ -66,7 +68,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _soyadCtrl.dispose();
     _kullaniciAdiCtrl.dispose();
     _telefonCtrl.dispose();
-    _sehirCtrl.dispose();
     _emailCtrl.dispose();
     super.dispose();
   }
@@ -101,6 +102,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     } finally {
       if (mounted) setState(() => _checkingVerification = false);
     }
+  }
+
+  Future<void> _pickCity() async {
+    final city = await showCityPickerSheet(context, selected: _sehir);
+    if (!mounted || city == null) return;
+    setState(() => _sehir = city);
   }
 
   Future<void> _save() async {
@@ -148,87 +155,81 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   _buildHeader(context),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.screenPaddingH,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildAvatar(user),
-                          _section('KİŞİSEL BİLGİLER', Column(
-                            children: [
-                              _ProfileField(
-                                icon: Icons.person_outline,
-                                iconBgColor: kPastelGreen,
-                                label: 'Ad',
-                                controller: _adCtrl,
-                              ),
-                              sectionDivider(),
-                              _ProfileField(
-                                icon: Icons.person_outline,
-                                iconBgColor: kPastelGreen,
-                                label: 'Soyad',
-                                controller: _soyadCtrl,
-                              ),
-                              sectionDivider(),
-                              _ProfileField(
-                                icon: Icons.alternate_email,
-                                iconBgColor: kPastelBlue,
-                                label: 'Kullanıcı Adı',
-                                controller: _kullaniciAdiCtrl,
-                              ),
-                            ],
-                          )),
-                          const SizedBox(height: 24),
-                          _section('İLETİŞİM BİLGİLERİ', Column(
-                            children: [
-                              _ProfileField(
-                                icon: Icons.mail_outline,
-                                iconBgColor: kPastelOrange,
-                                label: 'E-posta',
-                                controller: _emailCtrl,
-                                readOnly: true,
-                                trailing: _verifiedBadge(_emailVerified),
-                              ),
-                                if (!_emailVerified) _buildVerificationActions(),
-                                sectionDivider(),
-                              _ProfileField(
-                                icon: Icons.call_outlined,
-                                iconBgColor: kPastelBlue,
-                                label: 'Telefon',
-                                controller: _telefonCtrl,
-                                hint: 'Telefon ekle...',
-                                keyboardType: TextInputType.phone,
-                                trailing: _optionalBadge(),
-                              ),
-                            ],
-                          )),
-                          const SizedBox(height: 24),
-                          _section('KONUM', _ProfileField(
-                            icon: Icons.location_on_outlined,
-                            iconBgColor: kPastelOrange,
-                            label: 'Şehir',
-                            controller: _sehirCtrl,
-                            hint: 'Şehir ekle...',
-                            trailing: _optionalBadge(),
-                          )),
-                          const SizedBox(height: 24),
-                          Container(
-                            decoration: cardDecoration(),
-                            child: tappableIconRow(
-                              context,
-                              icon: Icons.lock_outline,
-                              iconBgColor: kSurfaceContainerHigh,
-                              title: 'Şifre Değiştir',
-                              subtitle: 'Hesap güvenliğini güncelle',
-                              onTap: () => showInfoSnackBar(context, 'Yakında'),
+                          _sectionHeading('Kişisel bilgiler'),
+                          _card(
+                            child: Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: _LabeledField(
+                                        label: 'Ad',
+                                        controller: _adCtrl,
+                                      ),
+                                    ),
+                                    const SizedBox(width: AppSizes.sm + 4),
+                                    Expanded(
+                                      child: _LabeledField(
+                                        label: 'Soyad',
+                                        controller: _soyadCtrl,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: AppSizes.md),
+                                _LabeledField(
+                                  label: 'Kullanıcı adı',
+                                  controller: _kullaniciAdiCtrl,
+                                  icon: Icons.alternate_email,
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: AppSizes.lg),
+                          _sectionHeading('İletişim bilgileri'),
+                          _card(child: _buildEmailBlock()),
+                          const SizedBox(height: AppSizes.sm + 4),
+                          _card(
+                            child: _LabeledField(
+                              label: 'Telefon',
+                              controller: _telefonCtrl,
+                              icon: Icons.phone_outlined,
+                              hint: 'Telefon numarası ekle',
+                              keyboardType: TextInputType.phone,
+                              trailing: const _OptionalLabel(),
+                            ),
+                          ),
+                          const SizedBox(height: AppSizes.lg),
+                          _sectionHeading('Konum'),
+                          _card(
+                            child: _LabeledSelect(
+                              label: 'Şehir',
+                              icon: Icons.location_on_outlined,
+                              value: _sehir,
+                              hint: 'Şehir seç',
+                              trailing: const _OptionalLabel(),
+                              onTap: _pickCity,
+                            ),
+                          ),
+                          const SizedBox(height: AppSizes.lg),
+                          _buildPasswordCard(),
+                          const SizedBox(height: AppSizes.lg),
                           AppButton(
-                            label: 'Değişiklikleri Kaydet',
+                            label: 'Değişiklikleri kaydet',
+                            icon: Icons.check,
                             loading: _saving,
+                            borderRadius: AppSizes.radiusLg,
                             onPressed: _save,
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: AppSizes.lg),
                         ],
                       ),
                     ),
@@ -239,65 +240,164 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  // Başlık + kart iskeleti — Kişisel/İletişim/Konum bölümlerinde tekrar eder.
-  Widget _section(String title, Widget child) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        sectionTitle(title),
-        const SizedBox(height: 10),
-        Container(decoration: cardDecoration(), child: child),
-      ],
-    );
-  }
-
-  Widget _buildVerificationActions() {
+  Widget _sectionHeading(String title) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-      child: Row(
-        children: [
-          _VerificationActionButton(
-            loading: _sendingVerification,
-            label: 'Doğrulama Maili Gönder',
-            color: kPrimary,
-            onPressed: _sendVerificationEmail,
-          ),
-          const SizedBox(width: 16),
-          _VerificationActionButton(
-            loading: _checkingVerification,
-            label: 'Yenile',
-            icon: Icons.refresh,
-            color: kOnSurfaceVariant,
-            onPressed: _refreshVerificationStatus,
-          ),
-        ],
+      padding: const EdgeInsets.only(bottom: AppSizes.sm + 4),
+      child: Text(
+        title,
+        style: GoogleFonts.plusJakartaSans(
+          color: kOnSurface,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
       ),
     );
   }
 
-  Widget _optionalBadge() => const _Badge(text: 'Opsiyonel', color: kBadgeInfo);
+  Widget _card({required Widget child}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSizes.md),
+      decoration: cardDecoration(radius: AppSizes.radiusXl - 4),
+      child: child,
+    );
+  }
 
-  Widget _verifiedBadge(bool verified) => _Badge(
-        text: verified ? 'Doğrulandı' : 'Doğrulanmadı',
-        color: verified ? kBadgeSuccess : kBadgeDanger,
-      );
+  Widget _buildEmailBlock() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _LabeledField(
+          label: 'E-posta',
+          controller: _emailCtrl,
+          icon: Icons.mail_outline,
+          readOnly: true,
+          trailing: _StatusPill(verified: _emailVerified),
+        ),
+        if (!_emailVerified) ...[
+          const SizedBox(height: AppSizes.sm + 4),
+          Row(
+            children: [
+              Expanded(
+                child: _VerificationButton(
+                  loading: _sendingVerification,
+                  label: 'Doğrulama maili gönder',
+                  icon: Icons.send_outlined,
+                  onPressed: _sendVerificationEmail,
+                ),
+              ),
+              const SizedBox(width: AppSizes.sm),
+              TextButton.icon(
+                onPressed: _checkingVerification ? null : _refreshVerificationStatus,
+                icon: _checkingVerification
+                    ? const SizedBox(
+                        width: 14,
+                        height: 14,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: kOnSurfaceVariant,
+                        ),
+                      )
+                    : const Icon(Icons.refresh, size: 16, color: kOnSurface),
+                label: Text(
+                  'Yenile',
+                  style: GoogleFonts.plusJakartaSans(
+                    color: kOnSurface,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildPasswordCard() {
+    return GestureDetector(
+      onTap: () => showInfoSnackBar(context, 'Yakında'),
+      child: Container(
+        padding: const EdgeInsets.all(AppSizes.md),
+        decoration: cardDecoration(radius: AppSizes.radiusXl - 4),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: kPastelOrange,
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+              ),
+              child: const Icon(Icons.lock_outline, color: kSecondary, size: 22),
+            ),
+            const SizedBox(width: AppSizes.sm + 4),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Şifre değiştir',
+                    style: GoogleFonts.plusJakartaSans(
+                      color: kOnSurface,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Hesap güvenliğini güncelle',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.sourceSans3(
+                      color: kOnSurfaceVariant,
+                      fontSize: AppSizes.fontSm,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: kOnSurfaceVariant, size: 22),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 12, 12, 8),
+      padding: const EdgeInsets.fromLTRB(
+        AppSizes.screenPaddingH,
+        AppSizes.sm + 4,
+        AppSizes.screenPaddingH,
+        AppSizes.sm,
+      ),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back, color: kOnSurface),
-            onPressed: () => context.pop(),
+          GestureDetector(
+            onTap: () => context.pop(),
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.arrow_back, color: kOnSurface, size: 22),
+            ),
           ),
+          const SizedBox(width: AppSizes.md),
           Expanded(
             child: Text(
-              'Hesap Bilgileri',
+              'Profili düzenle',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.plusJakartaSans(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: AppSizes.fontXxl,
               ),
             ),
           ),
@@ -308,15 +408,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Widget _buildAvatar(User? user) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
       child: Center(
         child: Column(
           children: [
             Stack(
               children: [
                 Container(
-                  width: 96,
-                  height: 96,
+                  width: 72,
+                  height: 72,
                   decoration: const BoxDecoration(
                     color: kPrimary,
                     shape: BoxShape.circle,
@@ -326,7 +426,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       initials(user?.displayName),
                       style: GoogleFonts.plusJakartaSans(
                         color: Colors.white,
-                        fontSize: 32,
+                        fontSize: AppSizes.fontXxl,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -338,37 +438,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: GestureDetector(
                     onTap: () => showInfoSnackBar(context, 'Yakında'),
                     child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: const BoxDecoration(
-                        color: kSecondary,
+                      width: 26,
+                      height: 26,
+                      decoration: BoxDecoration(
+                        color: kPrimary,
                         shape: BoxShape.circle,
+                        border: Border.all(color: kBackground, width: 2),
                       ),
                       child: const Icon(Icons.camera_alt,
-                          color: Colors.white, size: 14),
+                          color: Colors.white, size: 13),
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppSizes.sm + 4),
             GestureDetector(
               onTap: () => showInfoSnackBar(context, 'Yakında'),
               child: Text(
-                'Fotoğraf Değiştir',
+                'Fotoğrafı değiştir',
                 style: GoogleFonts.plusJakartaSans(
                   color: kPrimary,
                   fontWeight: FontWeight.w700,
-                  fontSize: 14,
+                  fontSize: AppSizes.fontMd,
                 ),
               ),
             ),
             const SizedBox(height: 2),
             Text(
-              'JPG veya PNG, max 5MB',
+              'JPG veya PNG · En fazla 5 MB',
               style: GoogleFonts.sourceSans3(
                 color: kOnSurfaceVariant,
-                fontSize: 12,
+                fontSize: AppSizes.fontSm,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -379,23 +480,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 }
 
-// Görseldeki kart-içi alan satırı: sol ikon dairesi + üstte etiket + altta input.
-class _ProfileField extends StatelessWidget {
-  const _ProfileField({
-    required this.icon,
-    required this.iconBgColor,
+// Kart içi alan: üstte etiket (+ opsiyonel sağ yazı/pill), altında dolgulu input kutusu.
+class _LabeledField extends StatelessWidget {
+  const _LabeledField({
     required this.label,
     required this.controller,
+    this.icon,
     this.hint,
     this.readOnly = false,
     this.keyboardType,
     this.trailing,
   });
 
-  final IconData icon;
-  final Color iconBgColor;
   final String label;
   final TextEditingController controller;
+  final IconData? icon;
   final String? hint;
   final bool readOnly;
   final TextInputType? keyboardType;
@@ -403,81 +502,186 @@ class _ProfileField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration:
-                BoxDecoration(color: iconBgColor, shape: BoxShape.circle),
-            child: Icon(icon, color: kPrimary, size: 18),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: GoogleFonts.sourceSans3(
-                    color: kOnSurfaceVariant,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                TextField(
-                  controller: controller,
-                  readOnly: readOnly,
-                  keyboardType: keyboardType,
-                  style: GoogleFonts.plusJakartaSans(
-                    color: readOnly ? kOnSurfaceVariant : kOnSurface,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                  ),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    hintText: hint,
-                    hintStyle: GoogleFonts.plusJakartaSans(
-                      color: kOnSurfaceVariant,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                ),
-              ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _FieldLabel(label: label, trailing: trailing),
+        const SizedBox(height: AppSizes.sm),
+        _FieldBox(
+          icon: icon,
+          child: TextField(
+            controller: controller,
+            readOnly: readOnly,
+            keyboardType: keyboardType,
+            maxLines: 1,
+            style: GoogleFonts.plusJakartaSans(
+              color: readOnly ? kOnSurfaceVariant : kOnSurface,
+              fontWeight: FontWeight.w600,
+              fontSize: AppSizes.fontMd + 1,
+            ),
+            decoration: InputDecoration(
+              isDense: true,
+              hintText: hint,
+              hintStyle: GoogleFonts.plusJakartaSans(
+                color: kOnSurfaceVariant,
+                fontWeight: FontWeight.w500,
+                fontSize: AppSizes.fontMd + 1,
+              ),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.zero,
             ),
           ),
-          if (trailing != null) ...[const SizedBox(width: 8), trailing!],
-        ],
+        ),
+      ],
+    );
+  }
+}
+
+// Tıklanınca seçici açan (dropdown görünümlü) alan.
+class _LabeledSelect extends StatelessWidget {
+  const _LabeledSelect({
+    required this.label,
+    required this.icon,
+    required this.hint,
+    required this.onTap,
+    this.value,
+    this.trailing,
+  });
+
+  final String label;
+  final IconData icon;
+  final String hint;
+  final String? value;
+  final Widget? trailing;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasValue = value != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _FieldLabel(label: label, trailing: trailing),
+        const SizedBox(height: AppSizes.sm),
+        _FieldBox(
+          icon: icon,
+          onTap: onTap,
+          suffix: const Icon(Icons.keyboard_arrow_down,
+              color: kOnSurfaceVariant, size: 20),
+          child: Text(
+            value ?? hint,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.plusJakartaSans(
+              color: hasValue ? kOnSurface : kOnSurfaceVariant,
+              fontWeight: hasValue ? FontWeight.w600 : FontWeight.w500,
+              fontSize: AppSizes.fontMd + 1,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FieldLabel extends StatelessWidget {
+  const _FieldLabel({required this.label, this.trailing});
+
+  final String label;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.sourceSans3(
+              color: kOnSurfaceVariant,
+              fontSize: AppSizes.fontSm,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        if (trailing != null) trailing!,
+      ],
+    );
+  }
+}
+
+// Dolgulu, yuvarlak köşeli input kutusu: [ikon] [içerik] [sağ ek].
+class _FieldBox extends StatelessWidget {
+  const _FieldBox({required this.child, this.icon, this.suffix, this.onTap});
+
+  final Widget child;
+  final IconData? icon;
+  final Widget? suffix;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: AppSizes.sm + 4),
+        decoration: BoxDecoration(
+          color: kPastelGray,
+          borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+        ),
+        child: Row(
+          children: [
+            if (icon != null) ...[
+              Icon(icon, color: kOnSurfaceVariant, size: 20),
+              const SizedBox(width: AppSizes.sm + 4),
+            ],
+            Expanded(child: child),
+            if (suffix != null) ...[const SizedBox(width: AppSizes.sm), suffix!],
+          ],
+        ),
       ),
     );
   }
 }
 
-class _Badge extends StatelessWidget {
-  const _Badge({required this.text, required this.color});
+class _OptionalLabel extends StatelessWidget {
+  const _OptionalLabel();
 
-  final String text;
-  final Color color;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'İsteğe bağlı',
+      style: GoogleFonts.sourceSans3(
+        color: kOnSurfaceVariant,
+        fontSize: AppSizes.fontSm,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+}
+
+class _StatusPill extends StatelessWidget {
+  const _StatusPill({required this.verified});
+
+  final bool verified;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(8),
+        color: verified ? kPrimaryFixed : kErrorContainer,
+        borderRadius: BorderRadius.circular(AppSizes.radiusFull),
       ),
       child: Text(
-        text,
+        verified ? 'Doğrulandı' : 'Doğrulanmadı',
         style: GoogleFonts.sourceSans3(
-          color: color,
-          fontSize: 11,
+          color: verified ? kPrimary : kOnErrorContainer,
+          fontSize: AppSizes.fontSm - 1,
           fontWeight: FontWeight.w700,
         ),
       ),
@@ -485,52 +689,59 @@ class _Badge extends StatelessWidget {
   }
 }
 
-// E-posta doğrulama satırındaki "Gönder"/"Yenile" butonları — ikisi de
-// aynı loading-spinner + metin/ikon desenini paylaşır.
-class _VerificationActionButton extends StatelessWidget {
-  const _VerificationActionButton({
+// "Doğrulama maili gönder" — açık yeşil dolgulu, loading'de spinner gösterir.
+class _VerificationButton extends StatelessWidget {
+  const _VerificationButton({
     required this.loading,
     required this.label,
-    required this.color,
+    required this.icon,
     required this.onPressed,
-    this.icon,
   });
 
   final bool loading;
   final String label;
-  final Color color;
+  final IconData icon;
   final VoidCallback onPressed;
-  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: loading ? null : onPressed,
-      style: TextButton.styleFrom(
-        padding: EdgeInsets.zero,
-        minimumSize: Size.zero,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-      child: loading
-          ? SizedBox(
-              width: 14,
-              height: 14,
-              child: CircularProgressIndicator(strokeWidth: 2, color: color),
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 14, color: color),
-                  const SizedBox(width: 4),
+    return SizedBox(
+      height: 44,
+      child: TextButton(
+        onPressed: loading ? null : onPressed,
+        style: TextButton.styleFrom(
+          backgroundColor: kPrimaryFixed,
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.sm + 4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+          ),
+        ),
+        child: loading
+            ? const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(strokeWidth: 2, color: kPrimary),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, size: 16, color: kPrimary),
+                  const SizedBox(width: AppSizes.sm),
+                  Flexible(
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.plusJakartaSans(
+                        color: kPrimary,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
                 ],
-                Text(
-                  label,
-                  style: GoogleFonts.plusJakartaSans(
-                      color: color, fontWeight: FontWeight.w700, fontSize: 12),
-                ),
-              ],
-            ),
+              ),
+      ),
     );
   }
 }
