@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/theme/app_colors.dart';
 
 // Profil ve Ayarlar ekranları arasında paylaşılan kart/satır stilleri.
@@ -45,6 +47,72 @@ Widget sectionTitle(String title) {
           fontWeight: FontWeight.bold,
           fontSize: 12,
           letterSpacing: 0.6,
+        ),
+      ),
+    ),
+  );
+}
+
+// Tam ekran alt sayfaların üst çubuğu: yuvarlak beyaz geri butonu + büyük başlık.
+class ProfileHeader extends StatelessWidget {
+  const ProfileHeader({super.key, required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSizes.screenPaddingH,
+        AppSizes.sm + 4,
+        AppSizes.screenPaddingH,
+        AppSizes.sm,
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => context.pop(),
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.arrow_back, color: kOnSurface, size: 22),
+            ),
+          ),
+          const SizedBox(width: AppSizes.md),
+          Expanded(
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.plusJakartaSans(
+                color: kOnSurface,
+                fontWeight: FontWeight.bold,
+                fontSize: AppSizes.fontXxl,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Kartın dışında, üstünde duran sentence-case bölüm başlığı.
+Widget sectionHeading(String title) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: AppSizes.sm + 4),
+    child: Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        title,
+        style: GoogleFonts.plusJakartaSans(
+          color: kOnSurface,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
         ),
       ),
     ),

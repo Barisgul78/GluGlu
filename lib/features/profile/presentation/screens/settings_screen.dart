@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/snackbars.dart';
 import '../../../auth/data/services/auth_service.dart';
@@ -70,247 +71,391 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  void _soon() => showInfoSnackBar(context, 'Yakında');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackground,
-      appBar: AppBar(
-        backgroundColor: kBackground,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: kOnSurface),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          'Ayarlar',
-          style: GoogleFonts.plusJakartaSans(
-            color: kOnSurface,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        centerTitle: true,
-      ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: Column(
-            children: [
-              sectionTitle('TERCİHLER'),
-              const SizedBox(height: 10),
-              _buildPreferencesGroup(context),
-              const SizedBox(height: 24),
-              sectionTitle('HAKKINDA & YASAL'),
-              const SizedBox(height: 10),
-              _buildAboutSection(context),
-              const SizedBox(height: 24),
-              sectionTitle('HESAP YÖNETİMİ'),
-              const SizedBox(height: 10),
-              _buildAccountSection(context),
-              const SizedBox(height: 32),
-            ],
-          ),
+        child: Column(
+          children: [
+            const ProfileHeader(title: 'Ayarlar'),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.screenPaddingH,
+                  vertical: AppSizes.sm,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    sectionHeading('Tercihler'),
+                    _buildPreferencesGroup(),
+                    const SizedBox(height: AppSizes.lg),
+                    sectionHeading('Hakkında ve yasal'),
+                    _buildAboutSection(),
+                    const SizedBox(height: AppSizes.lg),
+                    sectionHeading('Bağlantıda kal'),
+                    _buildSocialRow(),
+                    const SizedBox(height: AppSizes.lg),
+                    sectionHeading('Hesap yönetimi'),
+                    _buildAccountSection(),
+                    const SizedBox(height: AppSizes.xl),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  // ── Tercihler (hardcoded — gerçek tema/dil geçişi sonraki iş) ────────────────
-  Widget _buildPreferencesGroup(BuildContext context) {
+  // ── Tercihler (gerçek tema/dil geçişi bağlı değil — dokunuş "Yakında" der) ──
+  Widget _buildPreferencesGroup() {
     return Container(
-      decoration: cardDecoration(),
+      decoration: _cardDecoration(),
       child: Column(
         children: [
-          const IconRow(
+          _SettingsRow(
             icon: Icons.dark_mode_outlined,
-            iconBgColor: kSurfaceContainerHigh,
-            title: 'Karanlık Mod',
+            title: 'Karanlık mod',
             subtitle: 'Koyu tema kullan',
-            showChevron: false,
-            // Henüz bağlı değil — Switch.disabled ile dürüstçe "pasif" gösteriliyor
-            trailing: Switch(value: true, onChanged: null),
+            trailing: Switch(value: false, onChanged: (_) => _soon()),
           ),
           sectionDivider(),
-          IconRow(
+          const _SettingsRow(
             icon: Icons.language_outlined,
-            iconBgColor: kSurfaceContainerHigh,
-            title: 'Dil Seçimi',
+            title: 'Dil seçimi',
             subtitle: 'Uygulama dili',
-            showChevron: false,
-            trailing: SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'TR', label: Text('TR')),
-                ButtonSegment(value: 'EN', label: Text('EN')),
-              ],
-              selected: const {'TR'},
-              onSelectionChanged: null,
-              showSelectedIcon: false,
-              style: SegmentedButton.styleFrom(
-                visualDensity: VisualDensity.compact,
-                selectedBackgroundColor: kPrimary,
-                selectedForegroundColor: kOnPrimary,
-              ),
-            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+                AppSizes.md, 0, AppSizes.md, AppSizes.md),
+            child: _LanguageSegments(onTap: _soon),
           ),
         ],
       ),
     );
   }
 
-  // ── Hakkında & Yasal (hardcoded) ──────────────────────────────────────────
-  Widget _buildAboutSection(BuildContext context) {
+  // ── Hakkında ve yasal (hardcoded) ─────────────────────────────────────────
+  Widget _buildAboutSection() {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: cardDecoration(),
-          child: Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: const BoxDecoration(color: kPastelGreen, shape: BoxShape.circle),
-                child: const Icon(Icons.eco_outlined, color: kPrimary, size: 22),
+          decoration: _cardDecoration(
+            color: kPrimaryFixed.withValues(alpha: 0.45),
+          ),
+          child: _SettingsRow(
+            icon: Icons.eco_outlined,
+            iconBg: kPrimaryFixed.withValues(alpha: 0.7),
+            title: 'GluGlu',
+            subtitle: 'Çölyak yaşam rehberi',
+            trailing: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppSizes.radiusSm),
               ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              child: Text(
+                'v1.0.0',
+                style: GoogleFonts.sourceSans3(
+                  color: kOnSurface,
+                  fontSize: AppSizes.fontSm - 1,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSizes.sm + 4),
+        Container(
+          decoration: _cardDecoration(),
+          child: Column(
+            children: [
+              _SettingsRow(
+                icon: Icons.lock_outline,
+                title: 'Gizlilik Politikası',
+                onTap: _soon,
+                trailing: const _Chevron(),
+              ),
+              sectionDivider(),
+              _SettingsRow(
+                icon: Icons.description_outlined,
+                title: 'Kullanım Koşulları',
+                onTap: _soon,
+                trailing: const _Chevron(),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── Bağlantıda kal (hardcoded) ────────────────────────────────────────────
+  Widget _buildSocialRow() {
+    const gap = SizedBox(width: AppSizes.sm + 4);
+    return Row(
+      children: [
+        Expanded(child: _SocialTile(
+            icon: Icons.camera_alt_outlined, label: 'Instagram', onTap: _soon)),
+        gap,
+        Expanded(child: _SocialTile(
+            icon: Icons.close_rounded, label: 'X', onTap: _soon)),
+        gap,
+        Expanded(child: _SocialTile(
+            icon: Icons.smart_display_outlined, label: 'YouTube', onTap: _soon)),
+        gap,
+        Expanded(child: _SocialTile(
+            icon: Icons.mail_outline, label: 'E-posta', onTap: _soon)),
+      ],
+    );
+  }
+
+  // ── Hesap yönetimi (veri indirme "Yakında"; hesap silme gerçek) ───────────
+  Widget _buildAccountSection() {
+    return Column(
+      children: [
+        Container(
+          decoration: _cardDecoration(),
+          child: _SettingsRow(
+            icon: Icons.download_outlined,
+            title: 'Verilerimi indir',
+            subtitle: 'GDPR kapsamında tüm verilerini al',
+            onTap: _soon,
+            trailing: const _Chevron(),
+          ),
+        ),
+        const SizedBox(height: AppSizes.sm + 4),
+        Container(
+          decoration: cardDecoration(
+            color: kErrorContainer.withValues(alpha: 0.6),
+            borderColor: kError.withValues(alpha: 0.3),
+            radius: AppSizes.radiusXl - 4,
+          ),
+          child: _SettingsRow(
+            icon: Icons.delete_outline,
+            iconBg: kError.withValues(alpha: 0.12),
+            iconColor: kError,
+            title: 'Hesabı sil',
+            subtitle: 'Tüm verilerin kalıcı olarak silinir',
+            titleColor: kOnErrorContainer,
+            subtitleColor: kError,
+            onTap: _isDeleting ? null : () => _confirmAndDeleteAccount(context),
+            trailing: _isDeleting
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: kError),
+                  )
+                : const _Chevron(color: kError),
+          ),
+        ),
+      ],
+    );
+  }
+
+  BoxDecoration _cardDecoration({Color color = kOnPrimary}) =>
+      cardDecoration(color: color, radius: AppSizes.radiusXl - 4);
+}
+
+// Kart içi satır: yuvarlak-kare pastel ikon kutusu + başlık/alt yazı + sağ eleman.
+class _SettingsRow extends StatelessWidget {
+  const _SettingsRow({
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.onTap,
+    this.iconBg = kPastelGreen,
+    this.iconColor = kPrimary,
+    this.titleColor = kOnSurface,
+    this.subtitleColor = kOnSurfaceVariant,
+  });
+
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+  final Color iconBg;
+  final Color iconColor;
+  final Color titleColor;
+  final Color subtitleColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.all(AppSizes.md),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: iconBg,
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+              ),
+              child: Icon(icon, color: iconColor, size: 22),
+            ),
+            const SizedBox(width: AppSizes.sm + 4),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.plusJakartaSans(
+                      color: titleColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 2),
                     Text(
-                      'GluGlu',
-                      style: GoogleFonts.plusJakartaSans(
-                        color: kOnSurface,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                      subtitle!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.sourceSans3(
+                        color: subtitleColor,
+                        fontSize: AppSizes.fontSm,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
+                  ],
+                ],
+              ),
+            ),
+            if (trailing != null) ...[
+              const SizedBox(width: AppSizes.sm),
+              trailing!,
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Chevron extends StatelessWidget {
+  const _Chevron({this.color = kOnSurfaceVariant});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) =>
+      Icon(Icons.chevron_right, color: color, size: 22);
+}
+
+// Türkçe / English seçici — dil geçişi henüz bağlı değil, Türkçe seçili sabit.
+class _LanguageSegments extends StatelessWidget {
+  const _LanguageSegments({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(AppSizes.xs),
+        decoration: BoxDecoration(
+          color: kPastelGray,
+          borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: AppSizes.sm + 4),
+                decoration: BoxDecoration(
+                  color: kPrimary,
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMd - 2),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.check, color: Colors.white, size: 16),
+                    const SizedBox(width: AppSizes.sm - 2),
                     Text(
-                      'Çölyak yaşam rehberi',
-                      style: GoogleFonts.sourceSans3(
-                        color: kOnSurfaceVariant,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
+                      'Türkçe',
+                      style: GoogleFonts.plusJakartaSans(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: AppSizes.fontMd,
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: kBadgeSuccess.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(20),
-                ),
+            ),
+            Expanded(
+              child: Center(
                 child: Text(
-                  'v1.0.0',
-                  style: GoogleFonts.sourceSans3(
-                    color: kBadgeSuccess,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                  'English',
+                  style: GoogleFonts.plusJakartaSans(
+                    color: kOnSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                    fontSize: AppSizes.fontMd,
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        Container(
-          decoration: cardDecoration(),
-          child: Column(
-            children: [
-              tappableIconRow(
-                context,
-                icon: Icons.lock_outline,
-                iconBgColor: kSurfaceContainerHigh,
-                title: 'Gizlilik Politikası',
-                onTap: () => showInfoSnackBar(context, 'Yakında'),
-              ),
-              sectionDivider(),
-              tappableIconRow(
-                context,
-                icon: Icons.description_outlined,
-                iconBgColor: kSurfaceContainerHigh,
-                title: 'Kullanım Koşulları',
-                onTap: () => showInfoSnackBar(context, 'Yakında'),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(child: _socialButton(context, Icons.camera_alt_outlined)),
-            const SizedBox(width: 10),
-            Expanded(child: _socialButton(context, Icons.close_rounded)),
-            const SizedBox(width: 10),
-            Expanded(child: _socialButton(context, Icons.smart_display_outlined)),
-            const SizedBox(width: 10),
-            Expanded(child: _socialButton(context, Icons.mail_outline)),
+            ),
           ],
         ),
-      ],
-    );
-  }
-
-  Widget _socialButton(BuildContext context, IconData icon) {
-    return GestureDetector(
-      onTap: () => showInfoSnackBar(context, 'Yakında'),
-      child: Container(
-        height: 48,
-        decoration: cardDecoration(radius: 14),
-        child: Icon(icon, color: kOnSurfaceVariant, size: 20),
       ),
     );
   }
+}
 
-  // ── Hesap Yönetimi (hardcoded — gerçek veri indirme/hesap silme YOK) ────────
-  Widget _buildAccountSection(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          decoration: cardDecoration(),
-          child: tappableIconRow(
-            context,
-            icon: Icons.download_outlined,
-            iconBgColor: kSurfaceContainerHigh,
-            title: 'Verilerimi İndir',
-            subtitle: 'GDPR kapsamında tüm verilerini al',
-            onTap: () => showInfoSnackBar(context, 'Yakında'),
-          ),
+// "Bağlantıda kal" karosu: üstte ikon, altında etiket.
+class _SocialTile extends StatelessWidget {
+  const _SocialTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: AppSizes.md,
+          horizontal: AppSizes.xs,
         ),
-        const SizedBox(height: 12),
-        GestureDetector(
-          onTap: _isDeleting ? null : () => _confirmAndDeleteAccount(context),
-          child: Container(
-            decoration: cardDecoration(
-              color: kErrorContainer,
-              borderColor: kError.withValues(alpha: 0.3),
+        decoration: cardDecoration(radius: AppSizes.radiusLg),
+        child: Column(
+          children: [
+            Icon(icon, color: kOnSurfaceVariant, size: 22),
+            const SizedBox(height: AppSizes.sm),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.sourceSans3(
+                color: kOnSurfaceVariant,
+                fontSize: AppSizes.fontSm - 1,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            child: IconRow(
-              icon: Icons.delete_outline,
-              iconBgColor: kError.withValues(alpha: 0.12),
-              title: 'Hesabı Sil',
-              subtitle: 'Tüm veriler kalıcı olarak silinir',
-              showChevron: false,
-              titleColor: kError,
-              subtitleColor: kError,
-              trailing: _isDeleting
-                  ? const Padding(
-                      padding: EdgeInsets.only(top: 6),
-                      child: SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2, color: kError),
-                      ),
-                    )
-                  : null,
-            ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
