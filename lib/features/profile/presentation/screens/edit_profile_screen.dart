@@ -116,9 +116,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<void> _save() async {
     final ad = _adCtrl.text.trim();
-    final kullaniciAdi = _kullaniciAdiCtrl.text.trim();
+    // usernames dokümanları küçük harfli (kayıt ekranıyla aynı kural)
+    final kullaniciAdi = _kullaniciAdiCtrl.text.trim().toLowerCase();
     if (ad.isEmpty || kullaniciAdi.isEmpty) {
       showErrorSnackBar(context, 'Ad ve kullanıcı adı boş bırakılamaz.');
+      return;
+    }
+    final usernameError = Validators.username(kullaniciAdi);
+    if (usernameError != null) {
+      showErrorSnackBar(context, usernameError);
       return;
     }
     final phoneError = Validators.phone(_telefonCtrl.text);
@@ -147,6 +153,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       showInfoSnackBar(context, 'Değişiklikler kaydedildi.');
       context.pop();
     } catch (e) {
+      debugPrint('Profil kaydı hatası: $e');
       if (!mounted) return;
       final message = e.toString().contains('kullanici-adi-alinmis')
           ? 'Bu kullanıcı adı zaten alınmış.'

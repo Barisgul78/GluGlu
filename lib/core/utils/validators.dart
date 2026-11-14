@@ -36,6 +36,18 @@ class Validators {
     return null;
   }
 
+  // Kullanıcı adı: usernames/{ad} doküman ID'si olduğu için küçük harfli olmalı.
+  static final usernameRegex = RegExp(r'^[a-z0-9_]{3,20}$');
+
+  static String? username(String? v) {
+    final u = (v ?? '').trim().toLowerCase();
+    if (u.isEmpty) return 'Kullanıcı adı gerekli.';
+    if (!usernameRegex.hasMatch(u)) {
+      return '3-20 karakter, sadece harf/rakam/_ kullanılabilir.';
+    }
+    return null;
+  }
+
   // Telefon opsiyoneldir: boşsa geçerli, doluysa TR cep numarası olmalı.
   // Kabul: 05XXXXXXXXX, 5XXXXXXXXX, 905XXXXXXXXX, +905XXXXXXXXX (boşluk/-/() serbest).
   static final _phoneRegex = RegExp(r'^(\+?90|0)?5\d{9}$');

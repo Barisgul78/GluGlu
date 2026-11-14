@@ -11,7 +11,9 @@ service cloud.firestore {
       allow create: if request.auth != null
                     && request.auth.uid == request.resource.data.uid
                     && request.resource.data.keys().hasOnly(['uid']);
-      allow update, delete: if false;
+      allow update: if false;
+      // Kullanıcı adı değişikliği ve hesap silme eski rezervasyonu siler; sadece sahibi silebilir.
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
     }
 
     match /favoriler/{userId} {

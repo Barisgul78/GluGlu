@@ -14,8 +14,6 @@ import '../../data/services/auth_service.dart';
 
 enum _UsernameStatus { idle, invalid, checking, available, taken }
 
-final _usernameRegex = RegExp(r'^[a-z0-9_]{3,20}$');
-
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -60,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() => _usernameStatus = _UsernameStatus.idle);
       return;
     }
-    if (!_usernameRegex.hasMatch(username)) {
+    if (!Validators.usernameRegex.hasMatch(username)) {
       setState(() => _usernameStatus = _UsernameStatus.invalid);
       return;
     }
@@ -225,7 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   validator: (v) {
                     final username = v?.trim().toLowerCase() ?? '';
                     if (username.isEmpty) return 'Kullanıcı adı gerekli.';
-                    if (!_usernameRegex.hasMatch(username)) {
+                    if (!Validators.usernameRegex.hasMatch(username)) {
                       return '3-20 karakter, sadece harf/rakam/_ kullanılabilir.';
                     }
                     if (_usernameStatus == _UsernameStatus.checking) {
