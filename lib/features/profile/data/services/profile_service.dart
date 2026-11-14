@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../models/health_card.dart';
 
 // Kullanıcı profil verisi (users/{userId}) okuma/yazma
 class ProfileService {
@@ -15,6 +16,13 @@ class ProfileService {
   static Future<void> setDiagnosisDate(String userId, DateTime date) =>
       _users.doc(userId).set(
         {'tani_tarihi': Timestamp.fromDate(date)},
+        SetOptions(merge: true),
+      );
+
+  // Okuma: userStream/getUser → `saglik_karti` map'i (HealthCard.fromMap).
+  static Future<void> saveHealthCard(String userId, HealthCard card) =>
+      _users.doc(userId).set(
+        {'saglik_karti': card.toMap()},
         SetOptions(merge: true),
       );
 

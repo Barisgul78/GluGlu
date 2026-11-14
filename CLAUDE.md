@@ -25,7 +25,8 @@ Bu bölüm dokümantasyonun değil **kodun** söylediğini yazar. Şüphede kald
 | Test | `test/` klasörü yok. `flutter test` çalıştırılamaz. "Testler geçiyor" cümlesi bu repoda kurulamaz. |
 | Anasayfa "Popüler Konular" | Hardcoded 4 kart, makale sayıları sahte ("12 makale"). Bilinen borç. |
 | Anasayfa "Haftanın Markası" | Boş stub (`_buildHaftaninMarkasi` sadece SizedBox döner). |
-| Profil sağlık profili/rozetler | Statik placeholder — onaylı karar, veri modeli yok. |
+| Profil rozetleri | Statik placeholder — onaylı karar, veri modeli yok. |
+| Sağlık kartı | Gerçek: `users/{uid}.saglik_karti` map'i (`/saglik-karti` rotaları, `health_card_*` dosyaları). Paylaşım PNG, `share_plus` ile. Spec: `docs/superpowers/specs/2026-11-14-saglik-karti-design.md`. |
 | Barkod tarayıcı | **Asla eklenmeyecek.** Kamera izni/entegrasyonu planlanmıyor. Placeholder bile ekleme. |
 | Onboarding | Debug'da her açılışta gösterilir, release'te bir kez (`kReleaseMode` kontrolü `main.dart`'ta). Debug'da her seferinde onboarding görmek bug değil. |
 | Manrope fontu | pubspec'te bundle'lı ama UI'da kullanılmıyor (dead asset). Fontlar Google Fonts'tan geliyor. |
@@ -130,7 +131,7 @@ Alan adları **Türkçe snake_case**. İngilizce alan adı üretmek bu repodaki 
 
 **`favoriler/{userId}`**: `urun_idleri: []`, `mekan_idleri: []`, `makale_idleri: []` — hepsi `arrayUnion`/`arrayRemove` + `SetOptions(merge: true)` ile güncellenir.
 
-**`users/{userId}`**: `ad`, `soyad`, `email`, `fotoURL`, `dogumTarihi` (Timestamp), `kullaniciAdi`, `olusturmaTarihi` (serverTimestamp), `anonim` (bool), `tani_tarihi` (Timestamp, opsiyonel), `telefon` (String, opsiyonel, `+905XXXXXXXXX`, doğrulanmamış), `sehir` (String, opsiyonel), `istatistikler` (map — `StatsService`'in prefix'li sayaç alanları: `aranan_urun_toplam`, `kesfedilen_mekan_idleri`, `giris_serisi`, ...).
+**`users/{userId}`**: `ad`, `soyad`, `email`, `fotoURL`, `dogumTarihi` (Timestamp), `kullaniciAdi`, `olusturmaTarihi` (serverTimestamp), `anonim` (bool), `tani_tarihi` (Timestamp, opsiyonel), `telefon` (String, opsiyonel, `+905XXXXXXXXX`, doğrulanmamış), `sehir` (String, opsiyonel), `saglik_karti` (map, opsiyonel: `ad_soyad`, `ihtiyaclar` [`COLYAK`/`GLUTEN_HASSASIYETI`/`BUGDAY_ALERJISI`/`DIGER`], `tuketilemeyenler`, `capraz_temas` bool, `not`, `guncelleme_tarihi` Timestamp), `istatistikler` (map — `StatsService`'in prefix'li sayaç alanları: `aranan_urun_toplam`, `kesfedilen_mekan_idleri`, `giris_serisi`, ...).
 
 **`usernames/{username}`**: `{ uid }` — kullanıcı adı rezervasyonu. Sadece create; update/delete client'tan kapalı (hesap silme akışındaki delete rules'ta ayrıca ele alınır).
 

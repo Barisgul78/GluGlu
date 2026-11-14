@@ -12,7 +12,11 @@ import '../../features/favorites/presentation/screens/favorites_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/product_detail/presentation/screens/detail_screen.dart';
+import '../../features/profile/data/models/health_card.dart';
 import '../../features/profile/presentation/screens/edit_profile_screen.dart';
+import '../../features/profile/presentation/screens/health_card_form_screen.dart';
+import '../../features/profile/presentation/screens/health_card_fullscreen_screen.dart';
+import '../../features/profile/presentation/screens/health_card_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/settings_screen.dart';
 import '../../features/search/data/models/product.dart';
@@ -120,6 +124,27 @@ GoRouter createAppRouter({required bool showOnboarding}) {
         path: '/profile/edit',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: '/saglik-karti',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => const HealthCardScreen(),
+        routes: [
+          GoRoute(
+            path: 'duzenle',
+            parentNavigatorKey: rootNavigatorKey,
+            builder: (context, state) => HealthCardFormScreen(
+              initial: state.extra as HealthCard,
+              popOnSave: true,
+            ),
+          ),
+          GoRoute(
+            path: 'tam-ekran',
+            parentNavigatorKey: rootNavigatorKey,
+            builder: (context, state) =>
+                HealthCardFullscreenScreen(card: state.extra as HealthCard),
+          ),
+        ],
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

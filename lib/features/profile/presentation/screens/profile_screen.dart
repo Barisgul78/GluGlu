@@ -243,7 +243,15 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildHealthCardLink(BuildContext context) {
     return GestureDetector(
-      onTap: () => showInfoSnackBar(context, 'Yakında'),
+      onTap: () {
+        // Anonim hesap çıkışta kaybolur; kart kalıcı bir hesaba bağlanmalı.
+        if (AuthService.isAnonymous) {
+          showInfoSnackBar(
+              context, 'Sağlık kartı için hesap oluşturman gerekiyor.');
+          return;
+        }
+        context.push('/saglik-karti');
+      },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(AppSizes.md + 4),
