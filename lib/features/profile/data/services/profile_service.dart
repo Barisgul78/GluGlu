@@ -17,4 +17,18 @@ class ProfileService {
         {'tani_tarihi': Timestamp.fromDate(date)},
         SetOptions(merge: true),
       );
+
+  // İletişim/konum alanları opsiyonel: null verilen alan dokümandan silinir.
+  static Future<void> updateContact(
+    String userId, {
+    String? telefon,
+    String? sehir,
+  }) =>
+      _users.doc(userId).set(
+        {
+          'telefon': telefon ?? FieldValue.delete(),
+          'sehir': sehir ?? FieldValue.delete(),
+        },
+        SetOptions(merge: true),
+      );
 }

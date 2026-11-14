@@ -6,6 +6,7 @@ import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/snackbars.dart';
 import '../../../../../core/utils/string_utils.dart';
+import '../../../../../core/utils/validators.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../auth/data/services/auth_service.dart';
 import '../../data/services/profile_service.dart';
@@ -48,10 +49,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final doc = await ProfileService.getUser(uid);
       final data = doc.data();
       final username = data?['kullaniciAdi'] as String? ?? '';
+      final sehir = data?['sehir'] as String?;
       if (mounted) {
         setState(() {
           _adCtrl.text = data?['ad'] as String? ?? '';
           _soyadCtrl.text = data?['soyad'] as String? ?? '';
+          _telefonCtrl.text = data?['telefon'] as String? ?? '';
+          _sehir = (sehir == null || sehir.isEmpty) ? null : sehir;
           _currentUsername = username;
           _kullaniciAdiCtrl.text = username;
           _loading = false;
@@ -117,16 +121,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       showErrorSnackBar(context, 'Ad ve kullanıcı adı boş bırakılamaz.');
       return;
     }
+    final phoneError = Validators.phone(_telefonCtrl.text);
+    if (phoneError != null) {
+      showErrorSnackBar(context, phoneError);
+      return;
+    }
 
     setState(() => _saving = true);
     try {
-      // Not: Telefon/Şehir henüz Firestore şemasında yok, bilinçli olarak kaydedilmiyor.
       await AuthService.updateProfileBasics(
         ad: ad,
         soyad: _soyadCtrl.text.trim(),
         currentUsername: _currentUsername,
         newUsername: kullaniciAdi,
       );
+      final uid = AuthService.currentUserId;
+      if (uid != null) {
+        await ProfileService.updateContact(
+          uid,
+          telefon: Validators.normalizePhone(_telefonCtrl.text),
+          sehir: _sehir,
+        );
+      }
       if (!mounted) return;
       showInfoSnackBar(context, 'Değişiklikler kaydedildi.');
       context.pop();

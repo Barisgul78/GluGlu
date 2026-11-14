@@ -130,7 +130,7 @@ Alan adları **Türkçe snake_case**. İngilizce alan adı üretmek bu repodaki 
 
 **`favoriler/{userId}`**: `urun_idleri: []`, `mekan_idleri: []`, `makale_idleri: []` — hepsi `arrayUnion`/`arrayRemove` + `SetOptions(merge: true)` ile güncellenir.
 
-**`users/{userId}`**: `ad`, `soyad`, `email`, `fotoURL`, `dogumTarihi` (Timestamp), `kullaniciAdi`, `olusturmaTarihi` (serverTimestamp), `anonim` (bool), `tani_tarihi` (Timestamp, opsiyonel), `istatistikler` (map — `StatsService`'in prefix'li sayaç alanları: `aranan_urun_toplam`, `kesfedilen_mekan_idleri`, `giris_serisi`, ...).
+**`users/{userId}`**: `ad`, `soyad`, `email`, `fotoURL`, `dogumTarihi` (Timestamp), `kullaniciAdi`, `olusturmaTarihi` (serverTimestamp), `anonim` (bool), `tani_tarihi` (Timestamp, opsiyonel), `telefon` (String, opsiyonel, `+905XXXXXXXXX`, doğrulanmamış), `sehir` (String, opsiyonel), `istatistikler` (map — `StatsService`'in prefix'li sayaç alanları: `aranan_urun_toplam`, `kesfedilen_mekan_idleri`, `giris_serisi`, ...).
 
 **`usernames/{username}`**: `{ uid }` — kullanıcı adı rezervasyonu. Sadece create; update/delete client'tan kapalı (hesap silme akışındaki delete rules'ta ayrıca ele alınır).
 

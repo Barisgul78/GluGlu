@@ -35,4 +35,26 @@ class Validators {
     if (v == null || v.trim().isEmpty) return '$label gerekli.';
     return null;
   }
+
+  // Telefon opsiyoneldir: boşsa geçerli, doluysa TR cep numarası olmalı.
+  // Kabul: 05XXXXXXXXX, 5XXXXXXXXX, 905XXXXXXXXX, +905XXXXXXXXX (boşluk/-/() serbest).
+  static final _phoneRegex = RegExp(r'^(\+?90|0)?5\d{9}$');
+
+  static String _stripPhone(String? v) =>
+      (v ?? '').replaceAll(RegExp(r'[\s\-()]'), '');
+
+  static String? phone(String? v) {
+    final s = _stripPhone(v);
+    if (s.isEmpty) return null;
+    return _phoneRegex.hasMatch(s)
+        ? null
+        : 'Geçerli bir telefon numarası gir (örn. 05XX XXX XX XX).';
+  }
+
+  // Kayıt biçimi: +905XXXXXXXXX. Boşsa null (alan silinir). Önce phone() ile doğrula.
+  static String? normalizePhone(String? v) {
+    final s = _stripPhone(v);
+    if (s.isEmpty) return null;
+    return '+90${s.substring(s.length - 10)}';
+  }
 }
