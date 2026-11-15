@@ -177,7 +177,7 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
       title: Text(
         'Ürün detayı',
-        style: GoogleFonts.plusJakartaSans(
+        style: GoogleFonts.manrope(
           color: kOnSurface,
           fontWeight: FontWeight.w700,
           fontSize: AppSizes.fontXl,
@@ -236,10 +236,10 @@ class _DetailScreenState extends State<DetailScreen> {
           const SizedBox(height: AppSizes.sm + 4),
           Text(
             'Ürün görseli bulunmuyor',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontSm,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -259,7 +259,7 @@ class _DetailScreenState extends State<DetailScreen> {
             _trUpper(_p.brand),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontSm,
               fontWeight: FontWeight.w700,
@@ -278,7 +278,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget _buildTitle() {
     return Text(
       _p.name,
-      style: GoogleFonts.plusJakartaSans(
+      style: GoogleFonts.manrope(
         color: kPrimary,
         fontSize: AppSizes.fontDisplay,
         fontWeight: FontWeight.w800,
@@ -323,15 +323,15 @@ class _DetailScreenState extends State<DetailScreen> {
                   children: [
                     Text(
                       'Gluten durumu',
-                      style: GoogleFonts.sourceSans3(
+                      style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
                         fontSize: AppSizes.fontMd,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(
                       style.label,
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.manrope(
                         color: style.labelColor,
                         fontSize: AppSizes.fontXxl,
                         fontWeight: FontWeight.w800,
@@ -352,7 +352,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 const SizedBox(width: AppSizes.sm - 2),
                 Text(
                   'Marka Beyanı',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontSize: AppSizes.fontSm,
                     fontWeight: FontWeight.w700,
@@ -363,10 +363,10 @@ class _DetailScreenState extends State<DetailScreen> {
             const SizedBox(height: AppSizes.sm),
             Text(
               proof,
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontSize: AppSizes.fontLg,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 height: 1.4,
               ),
             ),
@@ -437,7 +437,7 @@ class _DetailScreenState extends State<DetailScreen> {
       padding: const EdgeInsets.only(bottom: AppSizes.sm + 4),
       child: Text(
         text,
-        style: GoogleFonts.plusJakartaSans(
+        style: GoogleFonts.manrope(
           color: kOnSurface,
           fontSize: AppSizes.fontXl,
           fontWeight: FontWeight.w700,
@@ -480,10 +480,10 @@ class _DetailScreenState extends State<DetailScreen> {
         children: [
           Text(
             label,
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontMd,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(width: AppSizes.md),
@@ -493,7 +493,7 @@ class _DetailScreenState extends State<DetailScreen> {
               textAlign: TextAlign.end,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontSize: AppSizes.fontMd,
                 fontWeight: FontWeight.w600,
@@ -512,10 +512,10 @@ class _DetailScreenState extends State<DetailScreen> {
       decoration: _whiteCardDecoration,
       child: Text(
         text,
-        style: GoogleFonts.sourceSans3(
+        style: GoogleFonts.manrope(
           color: kOnSurfaceVariant,
           fontSize: AppSizes.fontMd,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           height: 1.5,
         ),
       ),
@@ -534,10 +534,10 @@ class _DetailScreenState extends State<DetailScreen> {
         Expanded(
           child: Text(
             'Tüketmeden önce ambalajdaki güncel içerik ve alerjen bilgisini kontrol edin.',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontSm,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               height: 1.4,
             ),
           ),

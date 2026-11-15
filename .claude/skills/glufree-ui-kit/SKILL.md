@@ -10,8 +10,9 @@ Bu uygulamanın görünümü birkaç tekrar eden tariften oluşur. Yeni UI üret
 ## 0. Token kuralları (istisnasız)
 
 - **Renk:** yalnızca `lib/core/theme/app_colors.dart` k-sabitleri. `Color(0xFF...)` ve `Colors.*` yasak — kabul edilen istisnalar: `Colors.white`, `Colors.transparent`.
-- **Başlık fontu:** `GoogleFonts.plusJakartaSans(...)` — ekran başlığı, kart başlığı, buton metni, rakamlar.
-- **Gövde fontu:** `GoogleFonts.sourceSans3(...)` — açıklama, alt satır, boş durum metni, hint. Genelde `fontWeight: FontWeight.w500`.
+- **Font:** tüm metin `GoogleFonts.manrope(...)` (bundle'lı, çevrimdışı çalışır). Başlık/gövde ayrımı ağırlıktan gelir:
+  - **Başlık** — ekran başlığı, kart başlığı, buton metni, rakamlar: `FontWeight.bold` / `w700` (bazen `w600`/`w800`).
+  - **Gövde** — açıklama, alt satır, boş durum metni, hint: genelde `FontWeight.w500`.
 - **Ölçüler:** `AppSizes` sabitleri (`AppSizes.md`, `AppSizes.radiusLg`...). Mevcut kodda `AppSizes.sm + 4` gibi küçük aritmetik kabul; çıplak magic number (örn. `padding: EdgeInsets.all(13)`) yazma.
 - **Metin:** kullanıcıya görünen her string Türkçe. Uzun metinde `maxLines` + `TextOverflow.ellipsis`.
 - **Görsel:** Firestore `resim` alanı URL veya asset adı olabilir → network görsel her zaman `SafeNetworkImage` (`core/widgets/safe_network_image.dart`), çıplak `Image.network` yasak.
@@ -61,9 +62,9 @@ Container(
     // sol: 72x72 görsel, radius 12, ClipRRect + SafeNetworkImage
     // (badge gerekiyorsa Stack + Positioned(top:4, left:4))
     // orta: Expanded(Column(crossAxisAlignment: start)):
-    //   üst satır: marka/yazar UPPERCASE, sourceSans3 10px w700 letterSpacing .8, kOnSurfaceVariant
-    //   başlık: plusJakartaSans bold 15, maxLines 1, ellipsis, kOnSurface
-    //   alt satır: sourceSans3 12 w500 kOnSurfaceVariant (kategori/tarih)
+    //   üst satır: marka/yazar UPPERCASE, manrope 10px w700 letterSpacing .8, kOnSurfaceVariant
+    //   başlık: manrope bold 15, maxLines 1, ellipsis, kOnSurface
+    //   alt satır: manrope 12 w500 kOnSurfaceVariant (kategori/tarih)
     // sağ: aksiyon ikonu (kSecondary, 20-22px) veya chevron (kOutlineVariant)
   ]),
 )
@@ -102,9 +103,9 @@ Listelerde renk rotasyonu: `renkler[index % renkler.length]` (bkz. `home_screen.
 
 **Loading:** `Center(child: CircularProgressIndicator(color: kPrimary))`. Kart içi küçük varyant: 20x20 + `strokeWidth: 2`.
 
-**Empty — kısa (liste içi):** ortalanmış tek satır, `sourceSans3`, `kOnSurfaceVariant`, 14, w500. Örn: `'Henüz favori ürün eklemediniz.'`
+**Empty — kısa (liste içi):** ortalanmış tek satır, `manrope`, `kOnSurfaceVariant`, 14, w500. Örn: `'Henüz favori ürün eklemediniz.'`
 
-**Empty — açıklamalı (tam sekme):** ikon (`kOutlineVariant`, ~52px) + bold başlık (`plusJakartaSans` 16) + yönlendirici açıklama (`sourceSans3` 13, `height: 1.5`), hepsi `Center` + `Column(mainAxisSize: min)`. Birebir örnek: `favorites_screen.dart` `_buildVenuesList`.
+**Empty — açıklamalı (tam sekme):** ikon (`kOutlineVariant`, ~52px) + bold başlık (`manrope` bold 16) + yönlendirici açıklama (`manrope` w500 13, `height: 1.5`), hepsi `Center` + `Column(mainAxisSize: min)`. Birebir örnek: `favorites_screen.dart` `_buildVenuesList`.
 
 **Error:** kullanıcı diliyle Türkçe mesaj (+ mümkünse "Tekrar dene" aksiyonu). Teknik hata metni (`e.toString()`) kullanıcıya gösterilmez; `debugPrint` ile loglanır. Auth hataları `FirebaseErrorMapper.map(code)` üzerinden.
 
@@ -114,7 +115,7 @@ Listelerde renk rotasyonu: `renkler[index % renkler.length]` (bkz. `home_screen.
 
 - Hata: `showErrorSnackBar(context, mesaj)`; bilgi: `showInfoSnackBar(context, mesaj)` (`core/utils/snackbars.dart`). Elle `SnackBar` kurma (eski kodda kalanlar var; yeni kod util kullanır).
 - Butonlar: `AppButton` (loading parametreli dolu buton) / `AppOutlinedButton` (`core/widgets/custom_button.dart`). Async submit'te `loading: _saving` bağla — çift tıklamayı buton kendisi engeller.
-- Bölüm başlığı + "Tümü →" linki: `home_screen.dart` `_buildSectionHeader` tarifi (başlık `plusJakartaSans` bold, link `sourceSans3` w600 `kPrimary`).
+- Bölüm başlığı + "Tümü →" linki: `home_screen.dart` `_buildSectionHeader` tarifi (başlık `manrope` bold, link `manrope` w600 `kPrimary`).
 
 ## 7. Ekran davranış kuralları
 

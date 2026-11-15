@@ -3,10 +3,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTheme {
+  // textStyle ile sarmak şart: çıplak copyWith, google_fonts'un ağırlığa göre seçtiği font dosyasını kaybeder.
+  static TextTheme get _textTheme {
+    final base = GoogleFonts.manropeTextTheme();
+    TextStyle? body(TextStyle? style) =>
+        GoogleFonts.manrope(textStyle: style, fontWeight: FontWeight.w500);
+    return base.copyWith(
+      bodyLarge: body(base.bodyLarge),
+      bodyMedium: body(base.bodyMedium),
+      bodySmall: body(base.bodySmall),
+    );
+  }
+
   static ThemeData get light => ThemeData(
         brightness: Brightness.light,
         scaffoldBackgroundColor: kBackground,
-        textTheme: GoogleFonts.plusJakartaSansTextTheme(),
+        textTheme: _textTheme,
         colorScheme: const ColorScheme.light(
           primary: kPrimary,
           primaryContainer: kPrimaryContainer,
@@ -28,7 +40,7 @@ class AppTheme {
           backgroundColor: kBackground,
           elevation: 0,
           surfaceTintColor: Colors.transparent,
-          titleTextStyle: GoogleFonts.plusJakartaSans(
+          titleTextStyle: GoogleFonts.manrope(
             color: kOnSurface,
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -44,7 +56,7 @@ class AppTheme {
           ),
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             final selected = states.contains(WidgetState.selected);
-            return GoogleFonts.plusJakartaSans(
+            return GoogleFonts.manrope(
               color: selected ? kOnSurface : kOnSurfaceVariant,
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -53,9 +65,9 @@ class AppTheme {
         ),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: kInverseSurface,
-          contentTextStyle: GoogleFonts.sourceSans3(
+          contentTextStyle: GoogleFonts.manrope(
             color: kInverseOnSurface,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         chipTheme: ChipThemeData(

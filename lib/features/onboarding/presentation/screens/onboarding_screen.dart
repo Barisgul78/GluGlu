@@ -186,7 +186,7 @@ class _OnboardingPage extends StatelessWidget {
                     onPressed: onSkip,
                     child: Text(
                       'Atla',
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.manrope(
                         color: isDark
                             ? Colors.white.withValues(alpha: 0.8)
                             : kOnSurfaceVariant,
@@ -235,7 +235,7 @@ class _OnboardingPage extends StatelessWidget {
                 child: Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: textColor,
                     fontSize: 26,
                     fontWeight: FontWeight.w800,
@@ -252,9 +252,10 @@ class _OnboardingPage extends StatelessWidget {
                 child: Text(
                   subtitle,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: subColor,
                     fontSize: 14,
+                    fontWeight: FontWeight.w500,
                     height: 1.6,
                   ),
                 ),
@@ -346,7 +347,7 @@ class _PillButton extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           text,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: filled ? Colors.white : color,
             fontSize: 16,
             fontWeight: FontWeight.w700,

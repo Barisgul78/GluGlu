@@ -105,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Text(
           'Doğum Tarihi',
           textAlign: TextAlign.center,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             fontWeight: FontWeight.w700,
             fontSize: 16,
             color: kOnSurface,
@@ -176,7 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Hesap Oluştur',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     fontSize: 28,
                     fontWeight: FontWeight.w800,
                     color: kOnSurface,
@@ -186,10 +186,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 6),
                 Text(
                   'Glutensiz dünyaya adımını at.',
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontSize: 15,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     height: 1.5,
                   ),
                 ),
@@ -315,17 +315,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Text(
                         'Zaten hesabın var mı?  ',
-                        style: GoogleFonts.sourceSans3(
+                        style: GoogleFonts.manrope(
                           color: kOnSurfaceVariant,
                           fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       GestureDetector(
                         onTap: () => Navigator.of(context).pop(),
                         child: Text(
                           'Giriş Yap',
-                          style: GoogleFonts.plusJakartaSans(
+                          style: GoogleFonts.manrope(
                             color: kPrimary,
                             fontSize: 14,
                             fontWeight: FontWeight.w700,

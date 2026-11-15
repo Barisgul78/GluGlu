@@ -101,7 +101,7 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
             const SizedBox(height: 16),
             Text(
               'Tanı Tarihini Seç',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: 17,
@@ -121,7 +121,7 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
                           .map((m) => Center(
                                 child: Text(
                                   du.monthName(m),
-                                  style: GoogleFonts.plusJakartaSans(
+                                  style: GoogleFonts.manrope(
                                     color: kOnSurface,
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,
@@ -140,7 +140,7 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
                           .map((y) => Center(
                                 child: Text(
                                   '$y',
-                                  style: GoogleFonts.plusJakartaSans(
+                                  style: GoogleFonts.manrope(
                                     color: kOnSurface,
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,

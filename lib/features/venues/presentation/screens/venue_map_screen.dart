@@ -26,7 +26,7 @@ class VenueMapScreen extends StatelessWidget {
         ),
         title: Text(
           'Yakınındaki Mekanlar',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontSize: AppSizes.fontXl,
             fontWeight: FontWeight.w700,

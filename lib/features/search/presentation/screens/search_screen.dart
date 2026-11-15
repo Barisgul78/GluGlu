@@ -268,7 +268,7 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 Text(
                   'Ürün Ara',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -278,10 +278,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'Güvenilir glutensiz ürünleri keşfedin',
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -309,18 +309,18 @@ class _SearchScreenState extends State<SearchScreen> {
             Expanded(
               child: TextField(
                 controller: _searchController,
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontSize: 15,
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.w600),
                 onChanged: _onQueryChanged,
                 onSubmitted: _onSearchSubmitted,
                 decoration: InputDecoration(
                   hintText: 'Ürün, marka veya kategori...',
-                  hintStyle: GoogleFonts.sourceSans3(
+                  hintStyle: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: 15,
-                      fontWeight: FontWeight.w500),
+                      fontWeight: FontWeight.w600),
                   border: InputBorder.none,
                   isDense: true,
                   contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -370,7 +370,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     const SizedBox(width: 6),
                     Text(
                       'Kategoriler yüklenemedi, tekrar dene',
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.manrope(
                         color: kPrimary,
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
@@ -399,7 +399,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Center(
           child: Text(
             cat,
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: isSelected ? kOnPrimary : kOnSurface,
               fontWeight: FontWeight.w600,
               fontSize: 13,
@@ -421,7 +421,7 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               Text(
                 'Son Aramalar',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
@@ -429,7 +429,7 @@ class _SearchScreenState extends State<SearchScreen> {
               GestureDetector(
                 onTap: _clearSearches,
                 child: Text('Temizle',
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                         color: kPrimary,
                         fontSize: 13,
                         fontWeight: FontWeight.w600)),
@@ -467,10 +467,10 @@ class _SearchScreenState extends State<SearchScreen> {
             const Icon(Icons.history, color: kOnSurfaceVariant, size: 14),
             const SizedBox(width: 6),
             Text(text,
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontSize: 13,
-                    fontWeight: FontWeight.w500)),
+                    fontWeight: FontWeight.w600)),
           ],
         ),
       ),
@@ -485,7 +485,7 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           Text(
             'Popüler Ürünler',
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
                 color: kOnSurface, fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 12),
@@ -504,10 +504,10 @@ class _SearchScreenState extends State<SearchScreen> {
               if (products.isEmpty) {
                 return Text(
                   'Henüz ürün eklenmemiş.',
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: 14,
-                      fontWeight: FontWeight.w500),
+                      fontWeight: FontWeight.w600),
                 );
               }
               return Column(
@@ -577,7 +577,7 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 Text(
                   brand.toUpperCase(),
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
@@ -587,7 +587,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 const SizedBox(height: 2),
                 Text(
                   name,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
@@ -605,7 +605,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   child: Text(
                     category,
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
                         fontSize: 11,
                         fontWeight: FontWeight.w600),
@@ -639,10 +639,10 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             Text(
               'Ürünler yüklenirken bir hata oluştu.',
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
                   fontSize: 14,
-                  fontWeight: FontWeight.w500),
+                  fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
             TextButton(
@@ -655,7 +655,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               child: Text(
                 'Tekrar Dene',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                     fontWeight: FontWeight.w600, fontSize: 13),
               ),
             ),
@@ -677,10 +677,10 @@ class _SearchScreenState extends State<SearchScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Text(
           emptyText,
-          style: GoogleFonts.sourceSans3(
+          style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: 14,
-              fontWeight: FontWeight.w500),
+              fontWeight: FontWeight.w600),
         ),
       );
     }
@@ -692,10 +692,10 @@ class _SearchScreenState extends State<SearchScreen> {
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
           child: Text(
             '${results.length} sonuç',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
                 fontSize: 13,
-                fontWeight: FontWeight.w500),
+                fontWeight: FontWeight.w600),
           ),
         ),
         ListView.builder(
@@ -761,7 +761,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 children: [
                   Text(
                     product.brand.toUpperCase(),
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
@@ -771,7 +771,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   const SizedBox(height: 2),
                   Text(
                     product.name,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -782,10 +782,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   const SizedBox(height: 4),
                   Text(
                     product.category,
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
                         fontSize: 12,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w600),
                   ),
                 ],
               ),

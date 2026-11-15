@@ -36,7 +36,7 @@ class CategoryBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: GoogleFonts.plusJakartaSans(
+        style: GoogleFonts.manrope(
           color: fg,
           fontSize: fontSize,
           fontWeight: FontWeight.w600,

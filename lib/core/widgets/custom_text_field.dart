@@ -56,10 +56,10 @@ class AppTextField extends StatelessWidget {
       autofillHints: autofillHints,
       readOnly: readOnly,
       onTap: onTap,
-      style: GoogleFonts.sourceSans3(color: kOnSurface, fontSize: AppSizes.fontLg - 1, fontWeight: FontWeight.w500),
+      style: GoogleFonts.manrope(color: kOnSurface, fontSize: AppSizes.fontLg - 1, fontWeight: FontWeight.w600),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: GoogleFonts.sourceSans3(color: kOnSurfaceVariant, fontWeight: FontWeight.w500),
+        labelStyle: GoogleFonts.manrope(color: kOnSurfaceVariant, fontWeight: FontWeight.w600),
         prefixIcon: icon != null
             ? Icon(icon, color: kOnSurfaceVariant, size: AppSizes.iconSm + 4)
             : null,

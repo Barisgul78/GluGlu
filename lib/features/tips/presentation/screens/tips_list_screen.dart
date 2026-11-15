@@ -28,7 +28,7 @@ class TipsListScreen extends StatelessWidget {
         ),
         title: Text(
           'Günün Bilgisi',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontSize: AppSizes.fontXl,
             fontWeight: FontWeight.w700,
@@ -106,7 +106,7 @@ class _TipListCard extends StatelessWidget {
                     const SizedBox(height: AppSizes.xs),
                     Text(
                       tip.title,
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.manrope(
                         color: kOnSurface,
                         fontSize: AppSizes.fontMd,
                         fontWeight: FontWeight.w700,
@@ -118,10 +118,10 @@ class _TipListCard extends StatelessWidget {
                     const SizedBox(height: AppSizes.xs),
                     Text(
                       '${tip.author}  ·  $formattedDate',
-                      style: GoogleFonts.sourceSans3(
+                      style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
                         fontSize: AppSizes.fontXs + 1,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

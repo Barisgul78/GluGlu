@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Tekrar Hoş Geldin',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     fontSize: 28,
                     fontWeight: FontWeight.w800,
                     color: kOnSurface,
@@ -85,10 +85,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 6),
                 Text(
                   'Hesabına giriş yap ve kaldığın yerden devam et.',
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontSize: 15,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     height: 1.5,
                   ),
                 ),
@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Text(
                       'Şifremi Unuttum',
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.manrope(
                         color: kSecondary,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -163,17 +163,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(
                         'Hesabın yok mu?  ',
-                        style: GoogleFonts.sourceSans3(
+                        style: GoogleFonts.manrope(
                           color: kOnSurfaceVariant,
                           fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       GestureDetector(
                         onTap: () => Navigator.of(context).pop(),
                         child: Text(
                           'Kayıt Ol',
-                          style: GoogleFonts.plusJakartaSans(
+                          style: GoogleFonts.manrope(
                             color: kPrimary,
                             fontSize: 14,
                             fontWeight: FontWeight.w700,

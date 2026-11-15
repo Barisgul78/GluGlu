@@ -177,7 +177,7 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             'Çölyak Yolculuğun',
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: kOnSurface,
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -187,10 +187,10 @@ class _EmptyState extends StatelessWidget {
           Text(
             'Tanı yılını ekle, glutensiz yolculuğunun kaç gündür sürdüğünü birlikte görelim!',
             textAlign: TextAlign.center,
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: 13,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               height: 1.4,
             ),
           ),
@@ -207,7 +207,7 @@ class _EmptyState extends StatelessWidget {
             icon: const Icon(Icons.add, size: 18),
             label: Text(
               'Tanı Yılımı Ekle',
-              style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600),
+              style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -250,7 +250,7 @@ class _FilledState extends StatelessWidget {
         children: [
           Text(
             'GLUTENSİZ YAŞAM YOLCULUĞUM',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontXs + 1,
               fontWeight: FontWeight.w700,
@@ -262,7 +262,7 @@ class _FilledState extends StatelessWidget {
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: kOnSurface,
               fontWeight: FontWeight.bold,
               fontSize: AppSizes.fontXl + 2,
@@ -274,7 +274,7 @@ class _FilledState extends StatelessWidget {
             children: [
               Text(
                 '${stats.totalDays}',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                   color: kPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 48,
@@ -284,7 +284,7 @@ class _FilledState extends StatelessWidget {
               const SizedBox(width: AppSizes.sm + 4),
               Text(
                 'gün\nglutensiz',
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
                   fontSize: AppSizes.fontMd,
                   fontWeight: FontWeight.w600,
@@ -296,7 +296,7 @@ class _FilledState extends StatelessWidget {
           const SizedBox(height: AppSizes.md),
           Text(
             'Sıradaki dönüm noktası: $target gün',
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: kOnSurface,
               fontWeight: FontWeight.bold,
               fontSize: AppSizes.fontMd - 1,
@@ -317,15 +317,15 @@ class _FilledState extends StatelessWidget {
             children: [
               Text(
                 '${stats.totalDays} / $target gün',
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
                   fontSize: AppSizes.fontSm,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
                 '${stats.daysToNextYear} gün kaldı',
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                   color: kOnSurface,
                   fontSize: AppSizes.fontSm,
                   fontWeight: FontWeight.w700,
@@ -336,10 +336,10 @@ class _FilledState extends StatelessWidget {
           const SizedBox(height: AppSizes.md),
           Text(
             'Küçük adımlar, büyük bir yolculuk.',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontMd,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: AppSizes.sm + 4),
@@ -348,10 +348,10 @@ class _FilledState extends StatelessWidget {
               Expanded(
                 child: Text(
                   'Başlangıç: ${du.formatMonthYear(diagnosisDate)}',
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontSize: AppSizes.fontSm,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -367,7 +367,7 @@ class _FilledState extends StatelessWidget {
                 icon: const Icon(Icons.edit_outlined, size: AppSizes.iconSm),
                 label: Text(
                   'Düzenle',
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     fontSize: AppSizes.fontSm,
                     fontWeight: FontWeight.w700,
                   ),

@@ -199,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Spacer(),
           Text(
             'GluGlu',
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: kPrimary,
               fontWeight: FontWeight.bold,
               fontSize: 20,
@@ -218,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Text(
           '${_greeting()}, ${_firstName()}!',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontSize: 26,
             fontWeight: FontWeight.bold,
@@ -228,10 +228,10 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: AppSizes.xs),
         Text(
           'Bugün glutensiz ne yiyeceğiz?',
-          style: GoogleFonts.sourceSans3(
+          style: GoogleFonts.manrope(
             color: kOnSurfaceVariant,
             fontSize: AppSizes.fontLg - 1,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
@@ -273,18 +273,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: TextField(
                 controller: controller,
                 focusNode: focusNode,
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                   color: kOnSurface,
                   fontSize: AppSizes.fontMd,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Glutensiz ürün veya mekan ara...',
-                  hintStyle: GoogleFonts.sourceSans3(
+                  hintStyle: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontSize: AppSizes.fontMd,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                   isDense: true,
                   contentPadding: EdgeInsets.zero,
@@ -385,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     product.brand.toUpperCase(),
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: AppSizes.fontXs,
                       fontWeight: FontWeight.w700,
@@ -395,7 +395,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 2),
                   Text(
                     product.name,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontSize: AppSizes.fontMd,
                       fontWeight: FontWeight.w700,
@@ -406,10 +406,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 2),
                   Text(
                     product.category,
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: AppSizes.fontXs + 1,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -429,7 +429,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Text(
           title,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontSize: AppSizes.fontXl - 1,
             fontWeight: FontWeight.bold,
@@ -441,7 +441,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: onTap,
             child: Text(
               'Tümü →',
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                 color: kPrimary,
                 fontSize: AppSizes.fontMd,
                 fontWeight: FontWeight.w600,
@@ -548,7 +548,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     tip.title,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontSize: AppSizes.fontLg,
                       fontWeight: FontWeight.w700,
@@ -560,10 +560,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: AppSizes.xs),
                   Text(
                     tip.summary,
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: AppSizes.fontSm + 1,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       height: 1.5,
                     ),
                     maxLines: 2,
@@ -572,10 +572,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: AppSizes.xs),
                   Text(
                     '${tip.author}  |  ${du.formatDate(tip.date)}',
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: AppSizes.fontXs + 1,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -630,7 +630,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Spacer(),
           Text(
             topic.name,
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: kOnSurface,
               fontSize: AppSizes.fontMd,
               fontWeight: FontWeight.w700,
@@ -642,10 +642,10 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: AppSizes.xs - 1),
           Text(
             topic.articleCount,
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontXs + 1,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -710,10 +710,10 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(vertical: AppSizes.md),
         child: Text(
           'Henüz mekan eklenmedi',
-          style: GoogleFonts.sourceSans3(
+          style: GoogleFonts.manrope(
             color: kOnSurfaceVariant,
             fontSize: AppSizes.fontSm + 1,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
       );
@@ -794,7 +794,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text(
                   venue.title,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontSize: AppSizes.fontMd,
                     fontWeight: FontWeight.w700,
@@ -802,10 +802,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Text(
                   '${venue.location} · ${venue.distance}',
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontSize: AppSizes.fontXs + 1,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -813,7 +813,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Text(
             venue.rating,
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: kOnSurface,
               fontSize: AppSizes.fontMd,
               fontWeight: FontWeight.w700,

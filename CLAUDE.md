@@ -29,7 +29,7 @@ Bu bölüm dokümantasyonun değil **kodun** söylediğini yazar. Şüphede kald
 | Sağlık kartı | Gerçek: `users/{uid}.saglik_karti` map'i (`/saglik-karti` rotaları, `health_card_*` dosyaları). Paylaşım PNG, `share_plus` ile. Spec: `docs/superpowers/specs/2026-11-14-saglik-karti-design.md`. |
 | Barkod tarayıcı | **Asla eklenmeyecek.** Kamera izni/entegrasyonu planlanmıyor. Placeholder bile ekleme. |
 | Onboarding | Debug'da her açılışta gösterilir, release'te bir kez (`kReleaseMode` kontrolü `main.dart`'ta). Debug'da her seferinde onboarding görmek bug değil. |
-| Manrope fontu | pubspec'te bundle'lı ama UI'da kullanılmıyor (dead asset). Fontlar Google Fonts'tan geliyor. |
+| Manrope fontu | Tüm uygulamanın tek fontu: `GoogleFonts.manrope(...)`. `assets/fonts/` pubspec'te `assets:` altında; `google_fonts` bundle'lı `Manrope-<Ağırlık>.ttf` dosyalarını bulur, ağ isteği yapmaz (çevrimdışı çalışır). Başlık/gövde ayrımı aileden değil ağırlık ve boyuttan gelir. |
 
 ---
 
@@ -165,7 +165,7 @@ Her biri "zayıf modelin yapacağı hata → önleyen kural" formatında. Bunlar
 7. **Aramayı "düzeltmek" — server-side prefix/orderBy sorgusuna çevirmek.** Veri karışık harfli, sorgu boş döner. → *Kural: `SearchService.searchByName` client-side filtreler; ürün sayısı belirgin büyüyene kadar (>~500) dokunma.*
 8. **`await` sonrası `mounted` kontrolsüz `setState`/`context` kullanımı.** → *Kural: her await'ten sonra UI'a dokunmadan önce `if (!mounted) return;`. `finally` bloklarında da (`if (mounted) setState(...)`).*
 9. **Controller/Timer dispose unutmak.** → *Kural: `initState`'te oluşturulan her controller/focus node/timer `dispose()`'da kapatılır; PR'dan önce say: oluşturulan N, dispose edilen N.*
-10. **Renk/font'u elle yazmak** (`Colors.grey`, `Color(0xFF...)`, çıplak `TextStyle`). → *Kural: renkler `app_colors.dart` k-sabitlerinden; başlık `GoogleFonts.plusJakartaSans`, gövde `GoogleFonts.sourceSans3`; boşluk/radius/font boyutu `AppSizes`'tan. Mevcut istisnalar (`Colors.white`, `Colors.transparent`) kabul.*
+10. **Renk/font'u elle yazmak** (`Colors.grey`, `Color(0xFF...)`, çıplak `TextStyle`). → *Kural: renkler `app_colors.dart` k-sabitlerinden; tüm metin `GoogleFonts.manrope` (başlık bold/w700, gövde w500); boşluk/radius/font boyutu `AppSizes`'tan. Mevcut istisnalar (`Colors.white`, `Colors.transparent`) kabul.*
 11. **Ekranları Riverpod'a "modernize" etmek.** → *Kural: ekran state'i `setState` ile kalır; Riverpod yalnızca tema/dil. Genişletme ancak açık istekle.*
 12. **Tema paletini veya `AppTheme`'i değiştirmek.** → *Kural: `app_colors.dart` değerleri donmuş. Yeni renk gerekiyorsa mevcut sabitlerden seç; yoksa sor.*
 13. **`whereIn`'e 30'dan uzun liste vermek.** Sorgu runtime'da patlar. → *Kural: `FavoritesService.fetchProductsByIds`'teki chunk desenini kullan.*
@@ -188,7 +188,7 @@ Her biri "zayıf modelin yapacağı hata → önleyen kural" formatında. Bunlar
 - [ ] `Scaffold(backgroundColor: kBackground)` + içerik `SafeArea` içinde (CustomScrollView kullanan ekranlarda SliverAppBar deseni kabul).
 - [ ] Async veri için üç durum da render ediliyor: loading / error (Türkçe mesaj) / empty (Türkçe mesaj).
 - [ ] Her await sonrası `mounted` kontrolü var; oluşturulan tüm controller'lar dispose ediliyor.
-- [ ] Renkler yalnızca `app_colors.dart` sabitlerinden; fontlar `plusJakartaSans` (başlık) / `sourceSans3` (gövde); ölçüler `AppSizes`'tan.
+- [ ] Renkler yalnızca `app_colors.dart` sabitlerinden; tüm metin `GoogleFonts.manrope`; ölçüler `AppSizes`'tan.
 - [ ] Uzun metinlerde `maxLines` + `TextOverflow.ellipsis`; küçük ekranda taşma yok (klavye açıkken dahil — form varsa scroll edilebilir).
 - [ ] Rota `app_router.dart`'a eklendi; tam ekransa `parentNavigatorKey: rootNavigatorKey` var; navigasyon `context.go/push/pop`.
 - [ ] Firestore/Auth çağrısı ekranda yok — servis üzerinden.

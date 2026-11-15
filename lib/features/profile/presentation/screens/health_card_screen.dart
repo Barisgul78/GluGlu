@@ -123,9 +123,9 @@ class _HealthCardScreenState extends State<HealthCardScreen> {
                       Text(
                         text,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.sourceSans3(
+                        style: GoogleFonts.manrope(
                           color: kOnSurfaceVariant,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           fontSize: AppSizes.fontMd,
                           height: 1.5,
                         ),
@@ -136,7 +136,7 @@ class _HealthCardScreenState extends State<HealthCardScreen> {
                           onPressed: onRetry,
                           child: Text(
                             'Tekrar dene',
-                            style: GoogleFonts.plusJakartaSans(
+                            style: GoogleFonts.manrope(
                               color: kPrimary,
                               fontWeight: FontWeight.w700,
                             ),
@@ -191,7 +191,7 @@ class _HealthCardScreenState extends State<HealthCardScreen> {
                       padding: inset,
                       child: Text(
                         'İhtiyaçların, tek kartta.',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.manrope(
                           color: kOnSurface,
                           fontWeight: FontWeight.bold,
                           fontSize: AppSizes.fontXxl,
@@ -203,9 +203,9 @@ class _HealthCardScreenState extends State<HealthCardScreen> {
                       padding: inset,
                       child: Text(
                         'Mekânda göster, beslenme ihtiyaçlarını anlat.',
-                        style: GoogleFonts.sourceSans3(
+                        style: GoogleFonts.manrope(
                           color: kOnSurfaceVariant,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           fontSize: AppSizes.fontMd,
                         ),
                       ),
@@ -231,9 +231,9 @@ class _HealthCardScreenState extends State<HealthCardScreen> {
                           Expanded(
                             child: Text(
                               'Bu kart kullanıcı beyanına dayanır; tıbbi belge değildir. Paylaşmadan önce bilgilerini kontrol et.',
-                              style: GoogleFonts.sourceSans3(
+                              style: GoogleFonts.manrope(
                                 color: kOnSurfaceVariant,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                                 fontSize: AppSizes.fontSm + 1,
                                 height: 1.4,
                               ),
@@ -289,7 +289,7 @@ class _HealthCardScreenState extends State<HealthCardScreen> {
         icon: Icon(icon, size: AppSizes.iconMd - 2),
         label: Text(
           label,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             fontSize: AppSizes.fontLg,
             fontWeight: FontWeight.w700,
           ),
@@ -325,7 +325,7 @@ class _HealthCardScreenState extends State<HealthCardScreen> {
             : Icon(icon, size: AppSizes.iconMd - 4),
         label: Text(
           label,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             fontSize: AppSizes.fontLg,
             fontWeight: FontWeight.w700,
           ),

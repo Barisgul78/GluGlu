@@ -51,7 +51,7 @@ class _SignScreenState extends State<SignScreen> {
                   // ── Başlık ────────────────────────────────────────────
                   Text(
                     'GluGlu',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       fontSize: 34,
                       fontWeight: FontWeight.w800,
                       color: kPrimary,
@@ -65,9 +65,10 @@ class _SignScreenState extends State<SignScreen> {
                   Text(
                     'Glutensiz yaşamın en kolay yolu.\nÜrünleri keşfedin, restoranları bulun ve\nkendi listenizi oluşturun.',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: 14,
+                      fontWeight: FontWeight.w500,
                       height: 1.55,
                     ),
                   ),
@@ -95,8 +96,8 @@ class _SignScreenState extends State<SignScreen> {
                             const SizedBox(height: 8),
                             Text(
                               'Glutensiz Ürünler',
-                              style: GoogleFonts.plusJakartaSans(
-                                  color: kOnSurfaceVariant, fontSize: 13),
+                              style: GoogleFonts.manrope(
+                                  color: kOnSurfaceVariant, fontSize: 13, fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
@@ -123,7 +124,7 @@ class _SignScreenState extends State<SignScreen> {
                         children: [
                           Text(
                             'Giriş Yap',
-                            style: GoogleFonts.plusJakartaSans(
+                            style: GoogleFonts.manrope(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
@@ -153,7 +154,7 @@ class _SignScreenState extends State<SignScreen> {
                       ),
                       child: Text(
                         'Kayıt Ol',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.manrope(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: kPrimary,
@@ -186,8 +187,8 @@ class _SignScreenState extends State<SignScreen> {
                               ),
                               child: Text(
                                 'Hesap oluşturmadan devam et',
-                                style: GoogleFonts.plusJakartaSans(
-                                    color: kOnSurfaceVariant, fontSize: 13),
+                                style: GoogleFonts.manrope(
+                                    color: kOnSurfaceVariant, fontSize: 13, fontWeight: FontWeight.w600),
                               ),
                             ),
                       Text(
@@ -208,8 +209,8 @@ class _SignScreenState extends State<SignScreen> {
                         ),
                         child: Text(
                           'Gizlilik',
-                          style: GoogleFonts.plusJakartaSans(
-                              color: kOnSurfaceVariant, fontSize: 13),
+                          style: GoogleFonts.manrope(
+                              color: kOnSurfaceVariant, fontSize: 13, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],

@@ -47,10 +47,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-  fonts:
-    - family: Manrope
-      fonts:
-        - asset: assets/fonts/Manrope-Regular.ttf
-        - asset: assets/fonts/Manrope-ExtraBold.ttf
-        - asset: assets/fonts/Manrope-Bold.ttf
-          weight: 700
+    - assets/fonts/

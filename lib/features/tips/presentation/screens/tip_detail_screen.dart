@@ -97,7 +97,7 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
         ),
         title: Text(
           'Günün Bilgisi',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontSize: AppSizes.fontXl,
             fontWeight: FontWeight.w700,
@@ -113,7 +113,7 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
             ),
             child: Text(
               'Tümü',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 fontSize: AppSizes.fontMd,
                 fontWeight: FontWeight.w600,
               ),
@@ -173,7 +173,7 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
   Widget _buildTitle(Tip tip) {
     return Text(
       tip.title,
-      style: GoogleFonts.plusJakartaSans(
+      style: GoogleFonts.manrope(
         color: kOnSurface,
         fontSize: AppSizes.fontXxl - 2,
         fontWeight: FontWeight.w800,
@@ -190,7 +190,7 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
     widgets.add(
       Text(
         tip.summary,
-        style: GoogleFonts.sourceSans3(
+        style: GoogleFonts.manrope(
           color: kOnSurfaceVariant,
           fontSize: AppSizes.fontLg - 1,
           fontWeight: FontWeight.w500,
@@ -204,7 +204,7 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
       widgets.add(
         Text(
           section.heading,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontSize: AppSizes.fontXl - 1,
             fontWeight: FontWeight.w700,
@@ -215,7 +215,7 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
       widgets.add(
         Text(
           section.body,
-          style: GoogleFonts.sourceSans3(
+          style: GoogleFonts.manrope(
             color: kOnSurfaceVariant,
             fontSize: AppSizes.fontLg - 1,
             fontWeight: FontWeight.w500,
@@ -232,10 +232,10 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
   Widget _buildAuthorRow(Tip tip) {
     return Text(
       '${tip.author}  |  ${du.formatDate(tip.date)}',
-      style: GoogleFonts.sourceSans3(
+      style: GoogleFonts.manrope(
         color: kOnSurfaceVariant,
         fontSize: AppSizes.fontSm + 1,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -347,7 +347,7 @@ class _InteractionButton extends StatelessWidget {
           const SizedBox(width: AppSizes.xs),
           Text(
             '$count',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontMd,
               fontWeight: FontWeight.w600,

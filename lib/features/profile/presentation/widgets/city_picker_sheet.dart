@@ -34,7 +34,7 @@ Future<String?> showCityPickerSheet(BuildContext context, {String? selected}) {
               const SizedBox(height: AppSizes.md),
               Text(
                 'Şehir seç',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                   color: kOnSurface,
                   fontWeight: FontWeight.bold,
                   fontSize: AppSizes.fontXl,
@@ -55,10 +55,10 @@ Future<String?> showCityPickerSheet(BuildContext context, {String? selected}) {
                       contentPadding: EdgeInsets.zero,
                       title: Text(
                         city,
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.manrope(
                           color: isSelected ? kPrimary : kOnSurface,
                           fontWeight:
-                              isSelected ? FontWeight.w700 : FontWeight.w500,
+                              isSelected ? FontWeight.w700 : FontWeight.w600,
                           fontSize: 15,
                         ),
                       ),

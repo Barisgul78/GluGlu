@@ -268,7 +268,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       padding: const EdgeInsets.only(bottom: AppSizes.sm + 4),
       child: Text(
         title,
-        style: GoogleFonts.plusJakartaSans(
+        style: GoogleFonts.manrope(
           color: kOnSurface,
           fontWeight: FontWeight.bold,
           fontSize: 20,
@@ -324,7 +324,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     : const Icon(Icons.refresh, size: 16, color: kOnSurface),
                 label: Text(
                   'Yenile',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontWeight: FontWeight.w700,
                     fontSize: 13,
@@ -362,7 +362,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   Text(
                     'Şifre değiştir',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -373,10 +373,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     'Hesap güvenliğini güncelle',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: AppSizes.fontSm,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -417,7 +417,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               'Profili düzenle',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: AppSizes.fontXxl,
@@ -447,7 +447,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: Center(
                     child: Text(
                       initials(user?.displayName),
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.manrope(
                         color: Colors.white,
                         fontSize: AppSizes.fontXxl,
                         fontWeight: FontWeight.bold,
@@ -480,7 +480,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               onTap: () => showInfoSnackBar(context, 'Yakında'),
               child: Text(
                 'Fotoğrafı değiştir',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                   color: kPrimary,
                   fontWeight: FontWeight.w700,
                   fontSize: AppSizes.fontMd,
@@ -490,10 +490,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(height: 2),
             Text(
               'JPG veya PNG · En fazla 5 MB',
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
                 fontSize: AppSizes.fontSm,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -537,7 +537,7 @@ class _LabeledField extends StatelessWidget {
             readOnly: readOnly,
             keyboardType: keyboardType,
             maxLines: 1,
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: readOnly ? kOnSurfaceVariant : kOnSurface,
               fontWeight: FontWeight.w600,
               fontSize: AppSizes.fontMd + 1,
@@ -545,9 +545,9 @@ class _LabeledField extends StatelessWidget {
             decoration: InputDecoration(
               isDense: true,
               hintText: hint,
-              hintStyle: GoogleFonts.plusJakartaSans(
+              hintStyle: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 fontSize: AppSizes.fontMd + 1,
               ),
               border: InputBorder.none,
@@ -595,9 +595,9 @@ class _LabeledSelect extends StatelessWidget {
             value ?? hint,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: hasValue ? kOnSurface : kOnSurfaceVariant,
-              fontWeight: hasValue ? FontWeight.w600 : FontWeight.w500,
+              fontWeight: hasValue ? FontWeight.w600 : FontWeight.w600,
               fontSize: AppSizes.fontMd + 1,
             ),
           ),
@@ -622,7 +622,7 @@ class _FieldLabel extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontSm,
               fontWeight: FontWeight.w600,
@@ -678,10 +678,10 @@ class _OptionalLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       'İsteğe bağlı',
-      style: GoogleFonts.sourceSans3(
+      style: GoogleFonts.manrope(
         color: kOnSurfaceVariant,
         fontSize: AppSizes.fontSm,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -702,7 +702,7 @@ class _StatusPill extends StatelessWidget {
       ),
       child: Text(
         verified ? 'Doğrulandı' : 'Doğrulanmadı',
-        style: GoogleFonts.sourceSans3(
+        style: GoogleFonts.manrope(
           color: verified ? kPrimary : kOnErrorContainer,
           fontSize: AppSizes.fontSm - 1,
           fontWeight: FontWeight.w700,
@@ -755,7 +755,7 @@ class _VerificationButton extends StatelessWidget {
                       label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.manrope(
                         color: kPrimary,
                         fontWeight: FontWeight.w700,
                         fontSize: 13,

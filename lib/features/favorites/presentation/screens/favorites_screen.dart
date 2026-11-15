@@ -63,7 +63,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           const Spacer(),
           Text(
             'Favoriler',
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: kOnSurface,
               fontWeight: FontWeight.bold,
               fontSize: 18,
@@ -110,7 +110,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         child: Text(
           title,
           textAlign: TextAlign.center,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: isSelected ? kOnPrimary : kOnSurfaceVariant,
             fontWeight: FontWeight.w600,
             fontSize: 14,
@@ -130,10 +130,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           child: Text(
             'Favorilerinizi görmek için\ngiriş yapmanız gerekiyor.',
             textAlign: TextAlign.center,
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               height: 1.6,
             ),
           ),
@@ -158,10 +158,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           return Center(
             child: Text(
               'Henüz favori ürün eklemediniz.',
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
                   fontSize: 14,
-                  fontWeight: FontWeight.w500),
+                  fontWeight: FontWeight.w600),
             ),
           );
         }
@@ -179,8 +179,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             if (products.isEmpty) {
               return Center(
                 child: Text('Ürünler yüklenemedi.',
-                    style: GoogleFonts.sourceSans3(
-                        color: kOnSurfaceVariant, fontWeight: FontWeight.w500)),
+                    style: GoogleFonts.manrope(
+                        color: kOnSurfaceVariant, fontWeight: FontWeight.w600)),
               );
             }
 
@@ -207,7 +207,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             const SizedBox(height: 16),
             Text(
               'Favori mekan bulunamadı',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -217,10 +217,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             const SizedBox(height: 8),
             Text(
               'Mekanlar sekmesinden beğendiğiniz mekanlarda kalp ikonuna basarak favorilerinize ekleyebilirsiniz.',
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
                 fontSize: 13,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 height: 1.5,
               ),
               textAlign: TextAlign.center,
@@ -241,10 +241,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           child: Text(
             'Favorilerinizi görmek için\ngiriş yapmanız gerekiyor.',
             textAlign: TextAlign.center,
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               height: 1.6,
             ),
           ),
@@ -269,10 +269,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           return Center(
             child: Text(
               'Kayıtlı makale bulunamadı.',
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
                   fontSize: 14,
-                  fontWeight: FontWeight.w500),
+                  fontWeight: FontWeight.w600),
             ),
           );
         }
@@ -331,7 +331,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 children: [
                   Text(
                     tip.author.toUpperCase(),
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
@@ -341,7 +341,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   const SizedBox(height: 2),
                   Text(
                     tip.title,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -352,10 +352,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   const SizedBox(height: 4),
                   Text(
                     du.formatDate(tip.date),
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
                         fontSize: 12,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -406,7 +406,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 children: [
                   Text(
                     product.name,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -417,10 +417,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   const SizedBox(height: 2),
                   Text(
                     product.brand,
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
                         fontSize: 12,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 6),
                   _statusBadge(product.status),

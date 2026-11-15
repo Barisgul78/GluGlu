@@ -32,7 +32,7 @@ class HealthCardAppBar extends StatelessWidget {
               title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: AppSizes.fontXl,
@@ -91,7 +91,7 @@ class HealthCardView extends StatelessWidget {
             children: [
               Text(
                 'gluglu',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: _s(AppSizes.fontLg),
@@ -100,7 +100,7 @@ class HealthCardView extends StatelessWidget {
               const Spacer(),
               Text(
                 'BESLENME KARTI',
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                   color: Colors.white.withValues(alpha: 0.85),
                   fontWeight: FontWeight.w700,
                   fontSize: _s(AppSizes.fontXs + 1),
@@ -112,7 +112,7 @@ class HealthCardView extends StatelessWidget {
           SizedBox(height: _s(AppSizes.sm + 4)),
           Text(
             card.adSoyad,
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: _s(AppSizes.fontHeading),
@@ -122,9 +122,9 @@ class HealthCardView extends StatelessWidget {
           SizedBox(height: _s(AppSizes.xs + 2)),
           Text(
             card.needsLine,
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: Colors.white.withValues(alpha: 0.85),
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               fontSize: _s(AppSizes.fontMd),
             ),
           ),
@@ -141,7 +141,7 @@ class HealthCardView extends StatelessWidget {
         children: [
           Text(
             'Gluten tüketemiyorum.',
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: kPrimary,
               fontWeight: FontWeight.bold,
               fontSize: _s(AppSizes.fontXxl),
@@ -150,9 +150,9 @@ class HealthCardView extends StatelessWidget {
           SizedBox(height: _s(AppSizes.sm + 4)),
           Text(
             card.avoidSentence,
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurface,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               fontSize: _s(AppSizes.fontLg + 1),
               height: 1.4,
             ),
@@ -173,9 +173,9 @@ class HealthCardView extends StatelessWidget {
                   TextSpan(text: card.note.trim()),
                 ],
               ),
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 fontSize: _s(AppSizes.fontMd),
                 height: 1.4,
               ),
@@ -184,7 +184,7 @@ class HealthCardView extends StatelessWidget {
           SizedBox(height: _s(AppSizes.md + 4)),
           Text(
             'Desteğiniz için teşekkür ederim.',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kPrimary,
               fontWeight: FontWeight.w600,
               fontSize: _s(AppSizes.fontMd),
@@ -214,7 +214,7 @@ class HealthCardView extends StatelessWidget {
               children: [
                 Text(
                   'Çapraz temasa dikkat',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: kSecondary,
                     fontWeight: FontWeight.bold,
                     fontSize: _s(AppSizes.fontMd + 1),
@@ -223,9 +223,9 @@ class HealthCardView extends StatelessWidget {
                 SizedBox(height: _s(AppSizes.xs)),
                 Text(
                   'Ayrı ve temiz ekipman kullanılması, ortak yağ ve yüzeylerden kaçınılması önemlidir.',
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     fontSize: _s(AppSizes.fontSm + 1),
                     height: 1.4,
                   ),

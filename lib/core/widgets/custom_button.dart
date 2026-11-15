@@ -63,7 +63,7 @@ class AppButton extends StatelessWidget {
                   ],
                   Text(
                     label,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       fontSize: AppSizes.fontLg,
                       fontWeight: FontWeight.w700,
                       color: fg,
@@ -115,7 +115,7 @@ class AppOutlinedButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             fontSize: AppSizes.fontLg,
             fontWeight: FontWeight.w700,
             color: fgColor,

@@ -64,7 +64,7 @@ class NextBadgeCard extends StatelessWidget {
                 kalan > 0
                     ? 'Bir sonraki rozete $kalan ürün kaldı!'
                     : 'Rozet tamamlandı!',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                   color: kOnSurface,
                   fontWeight: FontWeight.bold,
                   fontSize: AppSizes.fontLg,
@@ -73,10 +73,10 @@ class NextBadgeCard extends StatelessWidget {
               const SizedBox(height: AppSizes.xs),
               Text(
                 'Keşfetmeye devam et, yeni rozetin yaklaşsın.',
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
                   fontSize: AppSizes.fontMd - 1,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: AppSizes.md),
@@ -96,10 +96,10 @@ class NextBadgeCard extends StatelessWidget {
                       '$incelenen / $nextBadge ürün incelendi',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.sourceSans3(
+                      style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
                         fontSize: AppSizes.fontSm,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -119,7 +119,7 @@ class NextBadgeCard extends StatelessWidget {
                     ),
                     child: Text(
                       'Ürün keşfet →',
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.manrope(
                         fontWeight: FontWeight.w700,
                         fontSize: AppSizes.fontSm + 1,
                       ),
@@ -194,7 +194,7 @@ class _SummaryItem extends StatelessWidget {
       children: [
         Text(
           '$value',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kPrimary,
             fontWeight: FontWeight.bold,
             fontSize: AppSizes.fontXxl + 4,
@@ -206,10 +206,10 @@ class _SummaryItem extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
-          style: GoogleFonts.sourceSans3(
+          style: GoogleFonts.manrope(
             color: kOnSurfaceVariant,
             fontSize: AppSizes.fontSm,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],

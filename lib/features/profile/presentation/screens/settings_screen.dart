@@ -26,7 +26,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           'Hesabı silmek istediğine emin misin?',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontWeight: FontWeight.bold,
             fontSize: 17,
@@ -34,19 +34,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         content: Text(
           'Bu işlem geri alınamaz. Tüm ürün/mekan/makale favorilerin ve profil bilgilerin kalıcı olarak silinir.',
-          style: GoogleFonts.sourceSans3(color: kOnSurfaceVariant, fontSize: 14),
+          style: GoogleFonts.manrope(
+            color: kOnSurfaceVariant,
+            fontSize: 14,
+            fontWeight: FontWeight.w500),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
             child: Text('Vazgeç',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant, fontWeight: FontWeight.w600)),
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
             child: Text('Sil',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                     color: kError, fontWeight: FontWeight.w700)),
           ),
         ],
@@ -161,7 +164,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               child: Text(
                 'v1.0.0',
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                   color: kOnSurface,
                   fontSize: AppSizes.fontSm - 1,
                   fontWeight: FontWeight.w700,
@@ -313,7 +316,7 @@ class _SettingsRow extends StatelessWidget {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: titleColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -325,10 +328,10 @@ class _SettingsRow extends StatelessWidget {
                       subtitle!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.sourceSans3(
+                      style: GoogleFonts.manrope(
                         color: subtitleColor,
                         fontSize: AppSizes.fontSm,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -388,7 +391,7 @@ class _LanguageSegments extends StatelessWidget {
                     const SizedBox(width: AppSizes.sm - 2),
                     Text(
                       'Türkçe',
-                      style: GoogleFonts.plusJakartaSans(
+                      style: GoogleFonts.manrope(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
                         fontSize: AppSizes.fontMd,
@@ -402,7 +405,7 @@ class _LanguageSegments extends StatelessWidget {
               child: Center(
                 child: Text(
                   'English',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontWeight: FontWeight.w600,
                     fontSize: AppSizes.fontMd,
@@ -447,7 +450,7 @@ class _SocialTile extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
                 fontSize: AppSizes.fontSm - 1,
                 fontWeight: FontWeight.w600,

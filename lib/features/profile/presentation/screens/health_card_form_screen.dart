@@ -186,10 +186,10 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         '${_noteCtrl.text.length} / ${HealthCard.maxNoteLength}',
-                        style: GoogleFonts.sourceSans3(
+                        style: GoogleFonts.manrope(
                           color: kOnSurfaceVariant,
                           fontSize: AppSizes.fontSm,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -208,9 +208,9 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
     );
   }
 
-  TextStyle get _inputStyle => GoogleFonts.sourceSans3(
+  TextStyle get _inputStyle => GoogleFonts.manrope(
         color: kOnSurface,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
         fontSize: AppSizes.fontLg - 1,
       );
 
@@ -222,9 +222,9 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
         );
     return InputDecoration(
       hintText: hint,
-      hintStyle: GoogleFonts.sourceSans3(
+      hintStyle: GoogleFonts.manrope(
         color: kOnSurfaceVariant.withValues(alpha: 0.8),
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
         fontSize: AppSizes.fontLg - 1,
       ),
       counterText: '',
@@ -242,7 +242,7 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
 
   Widget _label(String text) => Text(
         text,
-        style: GoogleFonts.plusJakartaSans(
+        style: GoogleFonts.manrope(
           color: kOnSurface,
           fontWeight: FontWeight.bold,
           fontSize: AppSizes.fontLg,
@@ -251,9 +251,9 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
 
   Widget _hint(String text) => Text(
         text,
-        style: GoogleFonts.sourceSans3(
+        style: GoogleFonts.manrope(
           color: kOnSurfaceVariant,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           fontSize: AppSizes.fontMd - 1,
         ),
       );
@@ -264,7 +264,7 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
       children: [
         Text(
           'İhtiyaçlarını birlikte anlatalım.',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontWeight: FontWeight.bold,
             fontSize: AppSizes.fontXxl,
@@ -274,9 +274,9 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
         const SizedBox(height: AppSizes.sm),
         Text(
           'Beslenme bilgilerini ekle, mekânlarda kolayca gösterebileceğin kartını oluştur.',
-          style: GoogleFonts.sourceSans3(
+          style: GoogleFonts.manrope(
             color: kOnSurfaceVariant,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
             fontSize: AppSizes.fontMd,
             height: 1.4,
           ),
@@ -284,9 +284,9 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
         const SizedBox(height: AppSizes.sm),
         Text(
           '* Zorunlu alanlar',
-          style: GoogleFonts.sourceSans3(
+          style: GoogleFonts.manrope(
             color: kOnSurfaceVariant,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
             fontSize: AppSizes.fontSm,
           ),
         ),
@@ -344,7 +344,7 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
                 need.label,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                   color: kOnSurface,
                   fontWeight: FontWeight.w600,
                   fontSize: AppSizes.fontMd - 1,
@@ -393,7 +393,7 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
                 children: [
                   Text(
                     'Çapraz temas uyarısı ekle',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: kPrimary,
                       fontWeight: FontWeight.bold,
                       fontSize: AppSizes.fontMd + 1,
@@ -402,9 +402,9 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
                   const SizedBox(height: AppSizes.xs),
                   Text(
                     'Kartında ayrı ve temiz ekipman, yağ ve yüzey kullanılması gerektiği belirtilir.',
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       fontSize: AppSizes.fontMd - 1,
                       height: 1.4,
                     ),
@@ -427,9 +427,9 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
         Expanded(
           child: Text(
             'Bilgilerin kartında görünür. Bu kart senin beyanına dayanır; tıbbi belge değildir. Daha sonra düzenleyebilirsin.',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               fontSize: AppSizes.fontSm + 1,
               height: 1.4,
             ),
@@ -463,7 +463,7 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
               )
             : Text(
                 _isEdit ? 'Değişiklikleri kaydet' : 'Kartımı oluştur',
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                   fontSize: AppSizes.fontLg,
                   fontWeight: FontWeight.w700,
                 ),

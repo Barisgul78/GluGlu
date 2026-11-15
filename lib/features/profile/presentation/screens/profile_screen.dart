@@ -132,7 +132,7 @@ class ProfileScreen extends StatelessWidget {
           Expanded(
             child: Text(
               'Profil',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: AppSizes.fontHeading,
@@ -177,7 +177,7 @@ class ProfileScreen extends StatelessWidget {
           child: Center(
             child: Text(
               initials(displayName),
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: Colors.white,
                 fontSize: AppSizes.fontHeading,
                 fontWeight: FontWeight.bold,
@@ -194,7 +194,7 @@ class ProfileScreen extends StatelessWidget {
                 displayName,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.plusJakartaSans(
+                style: GoogleFonts.manrope(
                   color: kOnSurface,
                   fontSize: AppSizes.fontXxl,
                   fontWeight: FontWeight.bold,
@@ -204,10 +204,10 @@ class ProfileScreen extends StatelessWidget {
                 sub,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
                   fontSize: AppSizes.fontMd,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: AppSizes.xs),
@@ -221,7 +221,7 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Profili düzenle',
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.manrope(
                           color: kOnSurface,
                           fontSize: AppSizes.fontMd - 1,
                           fontWeight: FontWeight.w700,
@@ -278,7 +278,7 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Sağlık kartım',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: GoogleFonts.manrope(
                       color: kOnPrimary,
                       fontWeight: FontWeight.bold,
                       fontSize: AppSizes.fontXl,
@@ -289,10 +289,10 @@ class ProfileScreen extends StatelessWidget {
                     'Beslenme ihtiyaçlarını kolayca paylaş.',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.sourceSans3(
+                    style: GoogleFonts.manrope(
                       color: kOnPrimary.withValues(alpha: 0.85),
                       fontSize: AppSizes.fontMd - 1,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       height: 1.3,
                     ),
                   ),
@@ -313,7 +313,7 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontWeight: FontWeight.bold,
             fontSize: AppSizes.fontXxl - 4,
@@ -327,7 +327,7 @@ class ProfileScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: AppSizes.xs),
               child: Text(
                 actionLabel,
-                style: GoogleFonts.sourceSans3(
+                style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
                   fontWeight: FontWeight.w700,
                   fontSize: AppSizes.fontMd,
@@ -384,7 +384,7 @@ class ProfileScreen extends StatelessWidget {
         icon: const Icon(Icons.logout, size: AppSizes.iconMd - 4),
         label: Text(
           'Çıkış yap',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             fontWeight: FontWeight.w700,
             fontSize: AppSizes.fontLg,
           ),
@@ -431,7 +431,7 @@ class _BadgeCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: GoogleFonts.plusJakartaSans(
+            style: GoogleFonts.manrope(
               color: unlocked ? kOnSurface : kOnSurfaceVariant,
               fontWeight: FontWeight.bold,
               fontSize: AppSizes.fontMd - 1,
@@ -440,7 +440,7 @@ class _BadgeCard extends StatelessWidget {
           const SizedBox(height: AppSizes.xs),
           Text(
             unlocked ? '✓ Kazanıldı' : 'Kilitli',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: unlocked ? kPrimary : kOnSurfaceVariant,
               fontSize: AppSizes.fontSm,
               fontWeight: FontWeight.w600,
@@ -451,10 +451,10 @@ class _BadgeCard extends StatelessWidget {
               badge.hint!,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
                 fontSize: AppSizes.fontSm - 1,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
         ],

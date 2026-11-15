@@ -42,7 +42,7 @@ Widget sectionTitle(String title) {
       alignment: Alignment.centerLeft,
       child: Text(
         title,
-        style: GoogleFonts.plusJakartaSans(
+        style: GoogleFonts.manrope(
           color: kOnSurfaceVariant,
           fontWeight: FontWeight.bold,
           fontSize: 12,
@@ -88,7 +88,7 @@ class ProfileHeader extends StatelessWidget {
               title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: AppSizes.fontXxl,
@@ -109,7 +109,7 @@ Widget sectionHeading(String title) {
       alignment: Alignment.centerLeft,
       child: Text(
         title,
-        style: GoogleFonts.plusJakartaSans(
+        style: GoogleFonts.manrope(
           color: kOnSurface,
           fontWeight: FontWeight.bold,
           fontSize: 20,
@@ -162,7 +162,7 @@ class IconRow extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: titleColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
@@ -172,8 +172,8 @@ class IconRow extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle!,
-                    style: GoogleFonts.sourceSans3(
-                        color: subtitleColor, fontSize: 12, fontWeight: FontWeight.w500),
+                    style: GoogleFonts.manrope(
+                        color: subtitleColor, fontSize: 12, fontWeight: FontWeight.w600),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

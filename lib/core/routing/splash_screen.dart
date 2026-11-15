@@ -32,7 +32,7 @@ class SplashScreen extends StatelessWidget {
             const SizedBox(height: AppSizes.lg),
             Text(
               AppStrings.appName,
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 fontSize: AppSizes.fontDisplay,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,
@@ -42,9 +42,9 @@ class SplashScreen extends StatelessWidget {
             const SizedBox(height: AppSizes.xs),
             Text(
               AppStrings.appSlogan,
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                 fontSize: AppSizes.fontMd,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 color: Colors.white.withValues(alpha: 0.8),
               ),
             ),

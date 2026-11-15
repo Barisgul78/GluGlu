@@ -6,7 +6,7 @@ import '../theme/app_colors.dart';
 void showErrorSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(message, style: GoogleFonts.plusJakartaSans()),
+      content: Text(message, style: GoogleFonts.manrope(fontWeight: FontWeight.w600)),
       backgroundColor: kError,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -20,7 +20,8 @@ void showInfoSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(message,
-          style: GoogleFonts.plusJakartaSans(color: kOnSurface)),
+          style: GoogleFonts.manrope(
+              color: kOnSurface, fontWeight: FontWeight.w600)),
       backgroundColor: kSurfaceContainerHigh,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

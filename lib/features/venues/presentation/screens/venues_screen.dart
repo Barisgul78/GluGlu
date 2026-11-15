@@ -125,7 +125,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
           children: [
             Text(
               'Mekanlar yüklenirken bir hata oluştu.',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: 15,
@@ -138,7 +138,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
               style: TextButton.styleFrom(foregroundColor: kPrimary),
               child: Text(
                 'Tekrar Dene',
-                style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600),
+                style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
               ),
             ),
           ],
@@ -156,7 +156,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
             const SizedBox(height: 16),
             Text(
               'Henüz mekan eklenmemiş',
-              style: GoogleFonts.plusJakartaSans(
+              style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -166,10 +166,10 @@ class _VenuesScreenState extends State<VenuesScreen> {
             const SizedBox(height: 8),
             Text(
               'Yakında glutensiz dostu mekanlar burada görünecek.',
-              style: GoogleFonts.sourceSans3(
+              style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
                 fontSize: 13,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 height: 1.5,
               ),
               textAlign: TextAlign.center,
@@ -218,7 +218,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
               children: [
                 Text(
                   'Glutensiz Mekanları\nKeşfet',
-                  style: GoogleFonts.plusJakartaSans(
+                  style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -228,10 +228,10 @@ class _VenuesScreenState extends State<VenuesScreen> {
                 const SizedBox(height: 6),
                 Text(
                   'Bütünsel yaşam tarzınıza hitap eden güvenilir yerel mekanları keşfedin.',
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     height: 1.4,
                   ),
                 ),
@@ -268,7 +268,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
           decoration: InputDecoration(
             icon: const Icon(Icons.search, color: kOnSurfaceVariant, size: 20),
             hintText: 'Kafe, fırın veya bölge ara...',
-            hintStyle: GoogleFonts.sourceSans3(color: kOnSurfaceVariant, fontSize: 14, fontWeight: FontWeight.w500),
+            hintStyle: GoogleFonts.manrope(color: kOnSurfaceVariant, fontSize: 14, fontWeight: FontWeight.w600),
             suffixIcon: const Icon(Icons.tune_rounded, color: kOnSurfaceVariant, size: 20),
             border: InputBorder.none,
           ),
@@ -399,7 +399,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
                     Expanded(
                       child: Text(
                         title,
-                        style: GoogleFonts.plusJakartaSans(
+                        style: GoogleFonts.manrope(
                           color: kOnSurface,
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
@@ -413,7 +413,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
                         const SizedBox(width: 2),
                         Text(
                           rating,
-                          style: GoogleFonts.plusJakartaSans(
+                          style: GoogleFonts.manrope(
                             color: kOnSurface,
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
@@ -426,10 +426,10 @@ class _VenuesScreenState extends State<VenuesScreen> {
                 const SizedBox(height: 6),
                 Text(
                   description,
-                  style: GoogleFonts.sourceSans3(
+                  style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
                     fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     height: 1.4,
                   ),
                   maxLines: 2,
@@ -459,7 +459,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
                     const SizedBox(width: 4),
                     Text(
                       '$distance • $location',
-                      style: GoogleFonts.sourceSans3(color: kOnSurfaceVariant, fontSize: 12, fontWeight: FontWeight.w500),
+                      style: GoogleFonts.manrope(color: kOnSurfaceVariant, fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -477,7 +477,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
                         ),
                         child: Text(
                           'Detayları Gör',
-                          style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600),
+                          style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),

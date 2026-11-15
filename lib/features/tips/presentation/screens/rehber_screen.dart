@@ -166,7 +166,7 @@ class _RehberScreenState extends State<RehberScreen> {
         titleSpacing: AppSizes.screenPaddingH,
         title: Text(
           'Rehber',
-          style: GoogleFonts.plusJakartaSans(
+          style: GoogleFonts.manrope(
             color: kOnSurface,
             fontSize: AppSizes.fontXxl,
             fontWeight: FontWeight.w800,
@@ -234,15 +234,15 @@ class _RehberScreenState extends State<RehberScreen> {
             child: TextField(
               controller: _searchCtrl,
               onChanged: (v) => setState(() => _query = v),
-              style: GoogleFonts.sourceSans3(
-                  color: kOnSurface, fontSize: AppSizes.fontMd, fontWeight: FontWeight.w500),
+              style: GoogleFonts.manrope(
+                  color: kOnSurface, fontSize: AppSizes.fontMd, fontWeight: FontWeight.w600),
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Konularda ara...',
-                hintStyle: GoogleFonts.sourceSans3(
+                hintStyle: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
                   fontSize: AppSizes.fontMd,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
@@ -270,7 +270,7 @@ class _RehberScreenState extends State<RehberScreen> {
         const SizedBox(height: AppSizes.lg),
         Text(
           group.title,
-          style: GoogleFonts.sourceSans3(
+          style: GoogleFonts.manrope(
             color: kOnSurfaceVariant,
             fontSize: AppSizes.fontXs + 1,
             fontWeight: FontWeight.w700,
@@ -331,7 +331,7 @@ class _RehberScreenState extends State<RehberScreen> {
                             Expanded(
                               child: Text(
                                 item.name,
-                                style: GoogleFonts.plusJakartaSans(
+                                style: GoogleFonts.manrope(
                                   color: kOnSurface,
                                   fontSize: AppSizes.fontLg - 1,
                                   fontWeight: FontWeight.w700,
@@ -354,10 +354,10 @@ class _RehberScreenState extends State<RehberScreen> {
                         const SizedBox(height: AppSizes.xs - 1),
                         Text(
                           '${item.articleCount} · ${item.subtitle}',
-                          style: GoogleFonts.sourceSans3(
+                          style: GoogleFonts.manrope(
                             color: kOnSurfaceVariant,
                             fontSize: AppSizes.fontXs + 2,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             height: 1.4,
                           ),
                           maxLines: 2,
@@ -388,10 +388,10 @@ class _RehberScreenState extends State<RehberScreen> {
           const SizedBox(height: AppSizes.sm),
           Text(
             '"$_query" için sonuç bulunamadı',
-            style: GoogleFonts.sourceSans3(
+            style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
               fontSize: AppSizes.fontMd,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
