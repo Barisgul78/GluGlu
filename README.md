@@ -128,10 +128,10 @@ Her özellik klasöründe: `data/models` (değişmez modeller), `data/services` 
 
 ```bash
 # Repoyu klonla
-git clone https://github.com/Barisgul78/GlutensizizBiz.git
+git clone https://github.com/Barisgul78/GluGlu.git
 
 # Proje dizinine gir
-cd GlutensizizBiz
+cd GluGlu
 
 # Bağımlılıkları yükle
 flutter pub get
