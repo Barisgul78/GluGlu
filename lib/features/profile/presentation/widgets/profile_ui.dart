@@ -35,24 +35,6 @@ Widget sectionDivider() => Divider(
       color: kOutlineVariant.withValues(alpha: 0.6),
     );
 
-Widget sectionTitle(String title) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 4),
-    child: Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        title,
-        style: GoogleFonts.manrope(
-          color: kOnSurfaceVariant,
-          fontWeight: FontWeight.bold,
-          fontSize: 12,
-          letterSpacing: 0.6,
-        ),
-      ),
-    ),
-  );
-}
-
 // Tam ekran alt sayfaların üst çubuğu: yuvarlak beyaz geri butonu + büyük başlık.
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key, required this.title});
@@ -188,25 +170,4 @@ class IconRow extends StatelessWidget {
       ),
     );
   }
-}
-
-// Ayarlar ekranındaki tıklanabilir (Yakında) satırlar için sarmalayıcı
-Widget tappableIconRow(
-  BuildContext context, {
-  required IconData icon,
-  required Color iconBgColor,
-  required String title,
-  String? subtitle,
-  required VoidCallback onTap,
-}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: IconRow(
-      icon: icon,
-      iconBgColor: iconBgColor,
-      title: title,
-      subtitle: subtitle,
-      showChevron: true,
-    ),
-  );
 }

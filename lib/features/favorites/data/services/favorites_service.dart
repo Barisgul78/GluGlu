@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../auth/data/services/auth_service.dart';
 import '../../../search/data/models/product.dart';
 
 class FavoritesService {
   FavoritesService._();
 
-  static const _col = 'favoriler';
   static const _field = 'urun_idleri';
   static const _articleField = 'makale_idleri';
 
   static Future<bool> isProductFavorite(String productId) async {
     final userId = AuthService.currentUserId;
     if (userId == null) return false;
-    final doc = await FirebaseFirestore.instance.collection(_col).doc(userId).get();
+    final doc = await FirebaseFirestore.instance.collection(kFavorilerCollection).doc(userId).get();
     if (!doc.exists) return false;
     final List ids = doc.data()?[_field] ?? [];
     return ids.contains(productId);
@@ -21,7 +21,7 @@ class FavoritesService {
   static Future<void> toggleProductFavorite(String productId, {required bool isFavorite}) async {
     final userId = AuthService.currentUserId;
     if (userId == null) return;
-    final docRef = FirebaseFirestore.instance.collection(_col).doc(userId);
+    final docRef = FirebaseFirestore.instance.collection(kFavorilerCollection).doc(userId);
     if (isFavorite) {
       await docRef.update({_field: FieldValue.arrayRemove([productId])});
     } else {
@@ -32,19 +32,19 @@ class FavoritesService {
   static Future<void> addProductFavorite(String productId) async {
     final userId = AuthService.currentUserId;
     if (userId == null) return;
-    await FirebaseFirestore.instance.collection(_col).doc(userId).set(
+    await FirebaseFirestore.instance.collection(kFavorilerCollection).doc(userId).set(
       {_field: FieldValue.arrayUnion([productId])},
       SetOptions(merge: true),
     );
   }
 
   static Stream<DocumentSnapshot> favoritesStream(String userId) =>
-      FirebaseFirestore.instance.collection(_col).doc(userId).snapshots();
+      FirebaseFirestore.instance.collection(kFavorilerCollection).doc(userId).snapshots();
 
   static Future<bool> isArticleFavorite(String tipId) async {
     final userId = AuthService.currentUserId;
     if (userId == null) return false;
-    final doc = await FirebaseFirestore.instance.collection(_col).doc(userId).get();
+    final doc = await FirebaseFirestore.instance.collection(kFavorilerCollection).doc(userId).get();
     if (!doc.exists) return false;
     final List ids = doc.data()?[_articleField] ?? [];
     return ids.contains(tipId);
@@ -53,7 +53,7 @@ class FavoritesService {
   static Future<void> toggleArticleFavorite(String tipId, {required bool isFavorite}) async {
     final userId = AuthService.currentUserId;
     if (userId == null) return;
-    final docRef = FirebaseFirestore.instance.collection(_col).doc(userId);
+    final docRef = FirebaseFirestore.instance.collection(kFavorilerCollection).doc(userId);
     if (isFavorite) {
       await docRef.update({_articleField: FieldValue.arrayRemove([tipId])});
     } else {

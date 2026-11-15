@@ -33,15 +33,9 @@ class AppSizes {
 
   // Bileşen Yükseklikleri
   static const double buttonHeight = 56;
-  static const double inputHeight = 56;
-  static const double bottomNavHeight = 72;
 
   // Kart Boyutları
-  static const double productCardHeight = 220;
-  static const double productCardWidth = 160;
-  static const double venueCardHeight = 280;
   static const double heroBannerHeight = 200;
-  static const double tipsCardHeight = 140;
 
   // Yatay dolgu
   static const double screenPaddingH = 20;

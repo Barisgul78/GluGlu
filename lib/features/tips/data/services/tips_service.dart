@@ -6,8 +6,6 @@ class TipsService {
 
   static List<Tip> getAll() => _tips;
 
-  static Tip getDailyTip() => _tips.first;
-
   static final List<Tip> _tips = [
     Tip(
       id: 'tip_colyak',

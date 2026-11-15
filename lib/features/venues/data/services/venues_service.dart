@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/paginated.dart';
 import '../models/venue.dart';
 
@@ -10,7 +11,7 @@ class VenuesService {
     DocumentSnapshot? startAfter,
   }) async {
     Query<Map<String, dynamic>> ref =
-        FirebaseFirestore.instance.collection('mekanlar').limit(limit);
+        FirebaseFirestore.instance.collection(kMekanlarCollection).limit(limit);
     if (startAfter != null) {
       ref = ref.startAfterDocument(startAfter);
     }

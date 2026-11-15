@@ -40,7 +40,7 @@ Bu bölüm dokümantasyonun değil **kodun** söylediğini yazar. Şüphede kald
 ```text
 lib/
   core/
-    routing/        app_router.dart (createAppRouter), main_shell.dart, splash_screen.dart
+    routing/        app_router.dart (createAppRouter), main_shell.dart
     theme/          app_colors.dart (k-sabitleri), app_theme.dart (AppTheme.light)
     widgets/        custom_button.dart (AppButton/AppOutlinedButton), custom_text_field.dart,
                     safe_network_image.dart, bubble_background.dart

@@ -5,7 +5,6 @@ import '../../../search/data/models/product.dart';
 import '../../../auth/data/services/auth_service.dart';
 import '../../data/services/favorites_service.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/utils/string_utils.dart';
 import '../../../../../core/widgets/safe_network_image.dart';
 import '../../../tips/data/models/tip.dart';
 import '../../../tips/data/services/tips_service.dart';
