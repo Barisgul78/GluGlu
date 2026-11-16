@@ -61,26 +61,18 @@ class FavoritesService {
     }
   }
 
-  // Firestore whereIn sorgusu tek seferde en fazla 30 eleman kabul eder,
-  // bu yuzden liste 30'luk parcalara bolunup paralel sorgulanir.
-  static const _whereInLimit = 30;
-
+  // collectionGroup('marka_urunleri') üzerinde where('id') için indeks yok
+  // (sorgu failed-precondition verir); arama gibi hepsi çekilip Dart'ta
+  // filtrelenir. Sonuç, favori listesinin (ids) sırasındadır.
   static Future<List<Product>> fetchProductsByIds(List<String> ids) async {
     if (ids.isEmpty) return [];
-    final chunks = _chunk(ids, _whereInLimit);
-    final results = await Future.wait(chunks.map((chunk) =>
-        FirebaseFirestore.instance
-            .collectionGroup('marka_urunleri')
-            .where('id', whereIn: chunk)
-            .get()));
-    return results
-        .expand((snap) => snap.docs)
-        .map((d) => Product.fromFirestore(d.data()))
-        .toList();
+    final snap =
+        await FirebaseFirestore.instance.collectionGroup('marka_urunleri').get();
+    final byId = <String, Product>{};
+    for (final d in snap.docs) {
+      final product = Product.fromFirestore(d.data());
+      byId[product.id] = product;
+    }
+    return ids.map((id) => byId[id]).whereType<Product>().toList();
   }
-
-  static List<List<T>> _chunk<T>(List<T> list, int size) => [
-        for (var i = 0; i < list.length; i += size)
-          list.sublist(i, i + size > list.length ? list.length : i + size),
-      ];
 }

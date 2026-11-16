@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,10 +26,46 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   String selectedTab = 'Ürünler';
   final TextEditingController _searchController = TextEditingController();
 
+  // Ürün listesi yalnızca favori kimlikleri değişince yeniden okunur;
+  // eski cevabı reddetmek için artan istek numarası (search_screen deseni).
+  List<String>? _loadedIds;
+  List<Product> _products = const [];
+  bool _productsLoading = false;
+  bool _productsError = false;
+  int _productsRequestId = 0;
+
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  // StreamBuilder içinden çağrılır; ilk senkron kısımda setState yoktur.
+  Future<void> _loadProducts(List<String> ids) async {
+    final requestId = ++_productsRequestId;
+    _loadedIds = ids;
+    _productsLoading = true;
+    _productsError = false;
+    try {
+      final products = await FavoritesService.fetchProductsByIds(ids);
+      if (!mounted || requestId != _productsRequestId) return;
+      if (products.length < ids.length) {
+        final found = products.map((p) => p.id).toSet();
+        debugPrint(
+            'Bulunamayan favori ürün kimlikleri: ${ids.where((id) => !found.contains(id)).toList()}');
+      }
+      setState(() {
+        _products = products;
+        _productsLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Favori ürünler yüklenemedi: $e');
+      if (!mounted || requestId != _productsRequestId) return;
+      setState(() {
+        _productsError = true;
+        _productsLoading = false;
+      });
+    }
   }
 
   @override
@@ -165,33 +202,67 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           );
         }
 
-        return FutureBuilder<List<Product>>(
-          future:
-              FavoritesService.fetchProductsByIds(productIds.take(10).toList()),
-          builder: (context, productSnapshot) {
-            if (productSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                  child: CircularProgressIndicator(color: kPrimary));
-            }
+        if (!listEquals(_loadedIds, productIds)) _loadProducts(productIds);
 
-            final products = productSnapshot.data ?? [];
-            if (products.isEmpty) {
-              return Center(
-                child: Text('Ürünler yüklenemedi.',
-                    style: GoogleFonts.manrope(
-                        color: kOnSurfaceVariant, fontWeight: FontWeight.w600)),
-              );
-            }
+        if (_productsLoading) {
+          return const Center(child: CircularProgressIndicator(color: kPrimary));
+        }
 
-            return ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemCount: products.length,
-              itemBuilder: (context, index) =>
-                  _buildProductCard(products[index]),
-            );
-          },
+        if (_productsError) return _buildProductsError();
+
+        if (_products.isEmpty) {
+          return Center(
+            child: Text(
+              'Favori ürünleriniz bulunamadı.',
+              style: GoogleFonts.manrope(
+                  color: kOnSurfaceVariant,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600),
+            ),
+          );
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          itemCount: _products.length,
+          itemBuilder: (context, index) => _buildProductCard(_products[index]),
         );
       },
+    );
+  }
+
+  Widget _buildProductsError() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Ürünler yüklenemedi.\nBağlantınızı kontrol edip tekrar deneyin.',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: kOnSurfaceVariant,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextButton(
+              // _loadedIds sıfırlanınca bir sonraki build ürünleri yeniden yükler.
+              onPressed: () => setState(() => _loadedIds = null),
+              child: Text(
+                'Tekrar dene',
+                style: GoogleFonts.manrope(
+                  color: kPrimary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

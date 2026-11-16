@@ -125,7 +125,7 @@ Alan adları **Türkçe snake_case**. İngilizce alan adı üretmek bu repodaki 
 ### Koleksiyonlar ve gerçek alanlar
 
 **`markalar/{marka}/marka_urunleri/{docId}`** — ürünlerin gerçek kaynağı (collectionGroup ile sorgulanır):
-`id` (String — doküman içinde ayrıca tutulur, `whereIn('id', ...)` sorguları buna dayanır), `urun_adi`, `marka`, `resim` (URL **veya** asset adı — bkz. SafeNetworkImage), `icindekiler`, `barkod`, `durum` (`"GUVENLI" | "RISKLI" | "BILINMIYOR"`), `kategori`, `kalori`, `protein`, `karbonhidrat`.
+`id` (String — doküman içinde ayrıca tutulur, favoriler bu `id` ile eşleşir), `urun_adi`, `marka`, `resim` (URL **veya** asset adı — bkz. SafeNetworkImage), `icindekiler`, `barkod`, `durum` (`"GUVENLI" | "RISKLI" | "BILINMIYOR"`), `kategori`, `kalori`, `protein`, `karbonhidrat`.
 
 **`mekanlar/{id}`**: `ad`, `aciklama`, `resim`, `puan` (num → UI'da string'e çevrilir), `mesafe` (String), `adres`, `rozet`, `etiketler` (List).
 
@@ -143,7 +143,8 @@ Alan adları **Türkçe snake_case**. İngilizce alan adı üretmek bu repodaki 
 
 ### Sorgu desenleri
 
-- `whereIn` limiti 30 → liste `FavoritesService._chunk` gibi parçalanıp `Future.wait` ile paralel sorgulanır.
+- `whereIn` limiti 30 → uzun liste 30'luk parçalanıp `Future.wait` ile paralel sorgulanır.
+- **Ürün sorgularında `where()`/`whereIn` kullanma:** `collectionGroup('marka_urunleri')` üzerinde filtre için indeks yok (`firestore.indexes.json`'da yalnızca `urun_adi` var), sorgu `failed-precondition` verir. İndekssiz `get()` + Dart'ta filtre (`SearchService._fetchAll`, `FavoritesService.fetchProductsByIds`).
 - Sayfalama → `Paginated<T>` (`core/utils/paginated.dart`) + `startAfterDocument` (`VenuesService.fetchPage` örnek).
 - Sayaç/streak yazımı → `runTransaction` + `SetOptions(merge: true)` (`StatsService` örnek). Sayaç eklerken bu deseni kullan, read-modify-write'ı transaction dışında yapma.
 - Tarih alanları **her zaman** `Timestamp` (`Timestamp.fromDate`), asla string.
@@ -168,7 +169,7 @@ Her biri "zayıf modelin yapacağı hata → önleyen kural" formatında. Bunlar
 10. **Renk/font'u elle yazmak** (`Colors.grey`, `Color(0xFF...)`, çıplak `TextStyle`). → *Kural: renkler `app_colors.dart` k-sabitlerinden; tüm metin `GoogleFonts.manrope` (başlık bold/w700, gövde w500); boşluk/radius/font boyutu `AppSizes`'tan. Mevcut istisnalar (`Colors.white`, `Colors.transparent`) kabul.*
 11. **Ekranları Riverpod'a "modernize" etmek.** → *Kural: ekran state'i `setState` ile kalır; Riverpod yalnızca tema/dil. Genişletme ancak açık istekle.*
 12. **Tema paletini veya `AppTheme`'i değiştirmek.** → *Kural: `app_colors.dart` değerleri donmuş. Yeni renk gerekiyorsa mevcut sabitlerden seç; yoksa sor.*
-13. **`whereIn`'e 30'dan uzun liste vermek.** Sorgu runtime'da patlar. → *Kural: `FavoritesService.fetchProductsByIds`'teki chunk desenini kullan.*
+13. **`whereIn`'e 30'dan uzun liste vermek.** Sorgu runtime'da patlar. → *Kural: 30'dan uzun `whereIn` listesini parçala. Ürün sorgularında ise hiç `where` kullanma (indeks yok), `FavoritesService.fetchProductsByIds` gibi indekssiz çekip Dart'ta filtrele.*
 14. **"Testler geçti" demek.** Test yok. → *Kural: doğrulama iddiası yalnızca `flutter analyze` çıktısı + manuel smoke listesiyle kurulur.*
 15. **Client'tan `mekanlar`/`marka_urunleri`'ne yazan özellik tasarlamak.** Rules sessizce reddeder (permission-denied). → *Kural: bu koleksiyonlara yazma isteği geldiğinde dur, §6'ya git.*
 16. **Barkod tarayıcı önermek/eklemek.** → *Kural: kapsam dışı, kalıcı karar. Öneri olarak bile getirme.*
