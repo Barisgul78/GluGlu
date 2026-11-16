@@ -10,6 +10,7 @@ import '../../../auth/data/services/auth_service.dart';
 import '../../../favorites/data/services/favorites_service.dart';
 import '../../../profile/data/services/stats_service.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/utils/snackbars.dart';
 import '../../../../../core/widgets/safe_network_image.dart';
 import '../widgets/product_status_badge.dart';
 
@@ -37,6 +38,10 @@ class _SearchScreenState extends State<SearchScreen> {
   Timer? _debounce;
   int _searchRequestId = 0;
 
+  // Favori kalbi için canlı kimlik kümesi; detay/Favoriler'deki değişiklik de yansır.
+  Set<String> _favoriteIds = {};
+  StreamSubscription? _favoritesSub;
+
   // Çipler Firestore'daki ürünlerin `kategori` alanından gelir ('Tümü' hariç).
   List<String> _categories = [];
   bool _categoriesLoading = true;
@@ -51,11 +56,25 @@ class _SearchScreenState extends State<SearchScreen> {
     _popularProductsFuture = SearchService.fetchFeatured();
     _loadCategories();
     _loadRecentSearches();
+    _listenFavorites();
     if (widget.initialQuery != null && widget.initialQuery!.isNotEmpty) {
       _searchController.text = widget.initialQuery!;
       query = widget.initialQuery!.trim().toLowerCase();
       _startNewSearch(query);
     }
+  }
+
+  void _listenFavorites() {
+    final userId = AuthService.currentUserId;
+    if (userId == null) return;
+    _favoritesSub = FavoritesService.favoritesStream(userId).listen(
+      (snap) {
+        if (!mounted) return;
+        final ids = (snap.data() as Map?)?['urun_idleri'] ?? [];
+        setState(() => _favoriteIds = Set<String>.from(ids));
+      },
+      onError: (Object e) => debugPrint('Favori akışı hatası: $e'),
+    );
   }
 
   Future<void> _loadCategories() async {
@@ -161,6 +180,7 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchController.dispose();
     _scrollController.dispose();
     _debounce?.cancel();
+    _favoritesSub?.cancel();
     super.dispose();
   }
 
@@ -178,12 +198,24 @@ class _SearchScreenState extends State<SearchScreen> {
       return;
     }
 
-    await FavoritesService.addProductFavorite(product.id);
+    final wasFavorite = _favoriteIds.contains(product.id);
+    try {
+      await FavoritesService.toggleProductFavorite(product.id,
+          isFavorite: wasFavorite);
+    } catch (e) {
+      debugPrint('Favori güncellenemedi: $e');
+      if (mounted) {
+        showErrorSnackBar(context, 'Favori güncellenemedi. Lütfen tekrar deneyin.');
+      }
+      return;
+    }
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${product.name} favorilere eklendi!'),
+          content: Text(wasFavorite
+              ? '${product.name} favorilerden çıkarıldı.'
+              : '${product.name} favorilere eklendi!'),
           duration: const Duration(seconds: 1),
           backgroundColor: kPrimary,
         ),
@@ -792,9 +824,15 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             GestureDetector(
               onTap: () => _toggleFavoriteFromSearch(product),
-              child: const Padding(
-                padding: EdgeInsets.all(6),
-                child: Icon(Icons.favorite_border, color: kSecondary, size: 20),
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Icon(
+                  _favoriteIds.contains(product.id)
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: kSecondary,
+                  size: 20,
+                ),
               ),
             ),
           ],
