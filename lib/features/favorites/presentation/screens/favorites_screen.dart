@@ -14,9 +14,7 @@ import '../../../tips/presentation/widgets/tip_image.dart';
 import '../../../../../core/utils/date_utils.dart' as du;
 
 class FavoritesScreen extends StatefulWidget {
-  final Function(Product) onProductSelect;
-
-  const FavoritesScreen({super.key, required this.onProductSelect});
+  const FavoritesScreen({super.key});
 
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
@@ -449,7 +447,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   Widget _buildProductCard(Product product) {
     return GestureDetector(
-      onTap: () => widget.onProductSelect(product),
+      onTap: () => context.push('/urun', extra: product),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
@@ -498,7 +496,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               ),
             ),
             const SizedBox(width: 8),
-            const Icon(Icons.favorite_border, color: kSecondary, size: 22),
+            const Icon(Icons.favorite, color: kSecondary, size: 22),
           ],
         ),
       ),

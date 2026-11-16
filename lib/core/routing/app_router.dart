@@ -173,9 +173,7 @@ GoRouter createAppRouter({required bool showOnboarding}) {
           StatefulShellBranch(routes: [
             GoRoute(
               path: _branchPaths[3],
-              builder: (context, state) => FavoritesScreen(
-                onProductSelect: (_) {},
-              ),
+              builder: (context, state) => const FavoritesScreen(),
             ),
           ]),
           StatefulShellBranch(routes: [
