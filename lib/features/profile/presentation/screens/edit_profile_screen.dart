@@ -321,13 +321,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           color: kOnSurfaceVariant,
                         ),
                       )
-                    : const Icon(Icons.refresh, size: 16, color: kOnSurface),
+                    : const Icon(Icons.refresh, size: AppSizes.iconSm, color: kOnSurface),
                 label: Text(
                   'Yenile',
                   style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontWeight: FontWeight.w700,
-                    fontSize: 13,
+                    fontSize: AppSizes.font13,
                   ),
                 ),
               ),
@@ -353,7 +353,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 color: kPastelOrange,
                 borderRadius: BorderRadius.circular(AppSizes.radiusMd),
               ),
-              child: const Icon(Icons.lock_outline, color: kSecondary, size: 22),
+              child: const Icon(Icons.lock_outline, color: kSecondary, size: AppSizes.icon22),
             ),
             const SizedBox(width: AppSizes.sm + 4),
             Expanded(
@@ -365,10 +365,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: AppSizes.font15,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: AppSizes.space2),
                   Text(
                     'Hesap güvenliğini güncelle',
                     maxLines: 1,
@@ -382,7 +382,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: kOnSurfaceVariant, size: 22),
+            const Icon(Icons.chevron_right, color: kOnSurfaceVariant, size: AppSizes.icon22),
           ],
         ),
       ),
@@ -393,7 +393,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSizes.screenPaddingH,
-        AppSizes.sm + 4,
+        AppSizes.sm + AppSizes.xs,
         AppSizes.screenPaddingH,
         AppSizes.sm,
       ),
@@ -408,7 +408,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.arrow_back, color: kOnSurface, size: 22),
+              child: const Icon(Icons.arrow_back, color: kOnSurface, size: AppSizes.icon22),
             ),
           ),
           const SizedBox(width: AppSizes.md),
@@ -487,7 +487,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: AppSizes.space2),
             Text(
               'JPG veya PNG · En fazla 5 MB',
               style: GoogleFonts.manrope(
@@ -590,7 +590,7 @@ class _LabeledSelect extends StatelessWidget {
           icon: icon,
           onTap: onTap,
           suffix: const Icon(Icons.keyboard_arrow_down,
-              color: kOnSurfaceVariant, size: 20),
+              color: kOnSurfaceVariant, size: AppSizes.icon20),
           child: Text(
             value ?? hint,
             maxLines: 1,
@@ -651,7 +651,7 @@ class _FieldBox extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: Container(
         constraints: const BoxConstraints(minHeight: 48),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: AppSizes.sm + 4),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.space14, vertical: AppSizes.sm + 4),
         decoration: BoxDecoration(
           color: kPastelGray,
           borderRadius: BorderRadius.circular(AppSizes.radiusMd),
@@ -659,7 +659,7 @@ class _FieldBox extends StatelessWidget {
         child: Row(
           children: [
             if (icon != null) ...[
-              Icon(icon, color: kOnSurfaceVariant, size: 20),
+              Icon(icon, color: kOnSurfaceVariant, size: AppSizes.icon20),
               const SizedBox(width: AppSizes.sm + 4),
             ],
             Expanded(child: child),
@@ -695,7 +695,7 @@ class _StatusPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.space10, vertical: AppSizes.xs),
       decoration: BoxDecoration(
         color: verified ? kPrimaryFixed : kErrorContainer,
         borderRadius: BorderRadius.circular(AppSizes.radiusFull),
@@ -748,7 +748,7 @@ class _VerificationButton extends StatelessWidget {
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(icon, size: 16, color: kPrimary),
+                  Icon(icon, size: AppSizes.iconSm, color: kPrimary),
                   const SizedBox(width: AppSizes.sm),
                   Flexible(
                     child: Text(
@@ -758,7 +758,7 @@ class _VerificationButton extends StatelessWidget {
                       style: GoogleFonts.manrope(
                         color: kPrimary,
                         fontWeight: FontWeight.w700,
-                        fontSize: 13,
+                        fontSize: AppSizes.font13,
                       ),
                     ),
                   ),

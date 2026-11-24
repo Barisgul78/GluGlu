@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(
           children: [
             const Icon(Icons.search_rounded,
-                color: kOnSurfaceVariant, size: 20),
+                color: kOnSurfaceVariant, size: AppSizes.icon20),
             const SizedBox(width: AppSizes.sm),
             Expanded(
               child: TextField(
@@ -300,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     focusNode.unfocus();
                   },
                   child: const Icon(Icons.close_rounded,
-                      color: kOnSurfaceVariant, size: 20),
+                      color: kOnSurfaceVariant, size: AppSizes.icon20),
                 );
               },
             ),
@@ -344,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () => context.push('/urun', extra: product),
       child: Container(
         margin: const EdgeInsets.only(bottom: AppSizes.sm + 2),
-        padding: const EdgeInsets.all(AppSizes.sm + 4),
+        padding: const EdgeInsets.all(AppSizes.sm + AppSizes.xs),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(AppSizes.radiusLg),
@@ -391,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       letterSpacing: 0.8,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: AppSizes.space2),
                   Text(
                     product.name,
                     style: GoogleFonts.manrope(
@@ -402,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: AppSizes.space2),
                   Text(
                     product.category,
                     style: GoogleFonts.manrope(
@@ -784,7 +784,7 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius: BorderRadius.circular(AppSizes.radiusSm + 2),
             ),
             child: const Icon(Icons.restaurant_rounded,
-                color: kOnSurfaceVariant, size: 20),
+                color: kOnSurfaceVariant, size: AppSizes.icon20),
           ),
           const SizedBox(width: AppSizes.sm + 4),
           Expanded(

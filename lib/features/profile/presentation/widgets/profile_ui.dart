@@ -46,7 +46,7 @@ class ProfileHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSizes.screenPaddingH,
-        AppSizes.sm + 4,
+        AppSizes.sm + AppSizes.xs,
         AppSizes.screenPaddingH,
         AppSizes.sm,
       ),
@@ -61,7 +61,7 @@ class ProfileHeader extends StatelessWidget {
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.arrow_back, color: kOnSurface, size: 22),
+              child: const Icon(Icons.arrow_back, color: kOnSurface, size: AppSizes.icon22),
             ),
           ),
           const SizedBox(width: AppSizes.md),
@@ -127,7 +127,7 @@ class IconRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.space14),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -135,9 +135,9 @@ class IconRow extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(color: iconBgColor, shape: BoxShape.circle),
-            child: Icon(icon, color: kPrimary, size: 20),
+            child: Icon(icon, color: kPrimary, size: AppSizes.icon20),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: AppSizes.space14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,15 +147,15 @@ class IconRow extends StatelessWidget {
                   style: GoogleFonts.manrope(
                     color: titleColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                    fontSize: AppSizes.font15,
                   ),
                 ),
                 if (subtitle != null) ...[
-                  const SizedBox(height: 2),
+                  const SizedBox(height: AppSizes.space2),
                   Text(
                     subtitle!,
                     style: GoogleFonts.manrope(
-                        color: subtitleColor, fontSize: 12, fontWeight: FontWeight.w600),
+                        color: subtitleColor, fontSize: AppSizes.fontSm, fontWeight: FontWeight.w600),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -165,7 +165,7 @@ class IconRow extends StatelessWidget {
             ),
           ),
           if (showChevron)
-            const Icon(Icons.chevron_right, color: kOutlineVariant, size: 20),
+            const Icon(Icons.chevron_right, color: kOutlineVariant, size: AppSizes.icon20),
         ],
       ),
     );

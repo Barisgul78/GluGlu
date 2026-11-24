@@ -7,6 +7,7 @@ import '../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/utils/snackbars.dart';
 import '../../data/services/auth_service.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -66,28 +67,28 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingHWide),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSizes.sm),
                 Text(
                   'Tekrar Hoş Geldin',
                   style: GoogleFonts.manrope(
-                    fontSize: 28,
+                    fontSize: AppSizes.fontHeading,
                     fontWeight: FontWeight.w800,
                     color: kOnSurface,
                     letterSpacing: -0.3,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: AppSizes.space6),
                 Text(
                   'Hesabına giriş yap ve kaldığın yerden devam et.',
                   style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
-                    fontSize: 15,
+                    fontSize: AppSizes.font15,
                     fontWeight: FontWeight.w600,
                     height: 1.5,
                   ),
@@ -105,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSizes.space14),
 
                 // Şifre
                 AppTextField(
@@ -122,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSizes.sm),
 
                 // Şifremi unuttum
                 Align(
@@ -140,13 +141,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Şifremi Unuttum',
                       style: GoogleFonts.manrope(
                         color: kSecondary,
-                        fontSize: 13,
+                        fontSize: AppSizes.font13,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: AppSizes.space28),
 
                 // Giriş Yap butonu
                 AppButton(
@@ -154,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: _loading ? null : _login,
                   loading: _loading,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSizes.lg),
 
                 // Hesap oluştur
                 Center(
@@ -165,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Hesabın yok mu?  ',
                         style: GoogleFonts.manrope(
                           color: kOnSurfaceVariant,
-                          fontSize: 14,
+                          fontSize: AppSizes.fontMd,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -175,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Kayıt Ol',
                           style: GoogleFonts.manrope(
                             color: kPrimary,
-                            fontSize: 14,
+                            fontSize: AppSizes.fontMd,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -183,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: AppSizes.xl),
               ],
             ),
           ),

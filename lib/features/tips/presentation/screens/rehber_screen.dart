@@ -145,7 +145,8 @@ class _RehberScreenState extends State<RehberScreen> {
         .map((g) => _GuideGroup(
               g.title,
               g.items
-                  .where((i) => i.name.toLowerCase().contains(q) ||
+                  .where((i) =>
+                      i.name.toLowerCase().contains(q) ||
                       i.subtitle.toLowerCase().contains(q))
                   .toList(),
             ))
@@ -172,21 +173,6 @@ class _RehberScreenState extends State<RehberScreen> {
             fontWeight: FontWeight.w800,
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: AppSizes.md),
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: kOutlineVariant, width: 1.5),
-              ),
-              child: const Icon(Icons.tune_rounded,
-                  color: kOnSurfaceVariant, size: 18),
-            ),
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -227,15 +213,16 @@ class _RehberScreenState extends State<RehberScreen> {
       padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
       child: Row(
         children: [
-          const Icon(Icons.search_rounded,
-              color: kOnSurfaceVariant, size: 20),
+          const Icon(Icons.search_rounded, color: kOnSurfaceVariant, size: 20),
           const SizedBox(width: AppSizes.sm),
           Expanded(
             child: TextField(
               controller: _searchCtrl,
               onChanged: (v) => setState(() => _query = v),
               style: GoogleFonts.manrope(
-                  color: kOnSurface, fontSize: AppSizes.fontMd, fontWeight: FontWeight.w600),
+                  color: kOnSurface,
+                  fontSize: AppSizes.fontMd,
+                  fontWeight: FontWeight.w600),
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Konularda ara...',
@@ -317,8 +304,7 @@ class _RehberScreenState extends State<RehberScreen> {
                           BorderRadius.circular(AppSizes.radiusSm + 4),
                     ),
                     child: Icon(item.icon,
-                        color: kOnSurfaceVariant,
-                        size: AppSizes.iconMd),
+                        color: kOnSurfaceVariant, size: AppSizes.iconMd),
                   ),
                   const SizedBox(width: AppSizes.sm + 4),
                   // İçerik

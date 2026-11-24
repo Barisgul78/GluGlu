@@ -11,6 +11,7 @@ import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/utils/snackbars.dart';
 import '../../../../../core/utils/validators.dart';
 import '../../data/services/auth_service.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 enum _UsernameStatus { idle, invalid, checking, available, taken }
 
@@ -80,7 +81,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     switch (_usernameStatus) {
       case _UsernameStatus.checking:
         return const Padding(
-          padding: EdgeInsets.all(14),
+          padding: EdgeInsets.all(AppSizes.space14),
           child: SizedBox(
             width: 18,
             height: 18,
@@ -101,13 +102,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final now = DateTime.now();
     BottomPicker<DateTime>.date(
       headerBuilder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: AppSizes.space12),
         child: Text(
           'Doğum Tarihi',
           textAlign: TextAlign.center,
           style: GoogleFonts.manrope(
             fontWeight: FontWeight.w700,
-            fontSize: 16,
+            fontSize: AppSizes.fontLg,
             color: kOnSurface,
           ),
         ),
@@ -167,33 +168,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingHWide),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSizes.sm),
                 Text(
                   'Hesap Oluştur',
                   style: GoogleFonts.manrope(
-                    fontSize: 28,
+                    fontSize: AppSizes.fontHeading,
                     fontWeight: FontWeight.w800,
                     color: kOnSurface,
                     letterSpacing: -0.3,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: AppSizes.space6),
                 Text(
                   'Glutensiz dünyaya adımını at.',
                   style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
-                    fontSize: 15,
+                    fontSize: AppSizes.font15,
                     fontWeight: FontWeight.w600,
                     height: 1.5,
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: AppSizes.xl),
 
                 // Ad
                 AppTextField(
@@ -202,7 +203,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   icon: Icons.person_outline_rounded,
                   validator: (v) => Validators.required(v, label: 'Ad'),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSizes.space14),
 
                 // Soyad
                 AppTextField(
@@ -211,7 +212,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   icon: Icons.person_outline_rounded,
                   validator: (v) => Validators.required(v, label: 'Soyad'),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSizes.space14),
 
                 // Kullanıcı Adı
                 AppTextField(
@@ -235,7 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSizes.space14),
 
                 // E-posta
                 AppTextField(
@@ -249,7 +250,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSizes.space14),
 
                 // Şifre
                 AppTextField(
@@ -267,7 +268,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSizes.space14),
 
                 // Şifre tekrar
                 AppTextField(
@@ -284,7 +285,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSizes.space14),
 
                 // Doğum tarihi
                 AppTextField(
@@ -298,7 +299,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: AppSizes.xl),
 
                 // Kayıt Ol butonu
                 AppButton(
@@ -306,7 +307,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: _loading ? null : _register,
                   loading: _loading,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSizes.lg),
 
                 // Zaten hesabın var mı?
                 Center(
@@ -317,7 +318,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         'Zaten hesabın var mı?  ',
                         style: GoogleFonts.manrope(
                           color: kOnSurfaceVariant,
-                          fontSize: 14,
+                          fontSize: AppSizes.fontMd,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -327,7 +328,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           'Giriş Yap',
                           style: GoogleFonts.manrope(
                             color: kPrimary,
-                            fontSize: 14,
+                            fontSize: AppSizes.fontMd,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -335,7 +336,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: AppSizes.xl),
               ],
             ),
           ),

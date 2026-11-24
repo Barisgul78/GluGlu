@@ -8,6 +8,7 @@ import '../../../auth/data/services/auth_service.dart';
 import '../../../profile/data/services/stats_service.dart';
 import '../../data/models/venue.dart';
 import '../../data/services/venues_service.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 class VenuesScreen extends StatefulWidget {
   const VenuesScreen({super.key});
@@ -101,7 +102,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
             SliverToBoxAdapter(child: _buildHeader()),
             SliverToBoxAdapter(child: _buildSearchBar()),
             SliverToBoxAdapter(child: _buildFilterChips()),
-            const SliverPadding(padding: EdgeInsets.only(top: 8)),
+            const SliverPadding(padding: EdgeInsets.only(top: AppSizes.sm)),
             SliverToBoxAdapter(child: _buildVenuesBody()),
           ],
         ),
@@ -120,7 +121,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
     if (_error != null) {
       debugPrint('Mekan yükleme hatası: $_error');
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 60),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl, vertical: 60),
         child: Column(
           children: [
             Text(
@@ -128,11 +129,11 @@ class _VenuesScreenState extends State<VenuesScreen> {
               style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
-                fontSize: 15,
+                fontSize: AppSizes.font15,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSizes.space12),
             TextButton(
               onPressed: _loadInitial,
               style: TextButton.styleFrom(foregroundColor: kPrimary),
@@ -148,27 +149,27 @@ class _VenuesScreenState extends State<VenuesScreen> {
 
     if (_venues.isEmpty) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 60),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl, vertical: 60),
         child: Column(
           children: [
             const Icon(Icons.location_off_outlined,
                 color: kOutlineVariant, size: 52),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSizes.md),
             Text(
               'Henüz mekan eklenmemiş',
               style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: AppSizes.fontLg,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSizes.sm),
             Text(
               'Yakında glutensiz dostu mekanlar burada görünecek.',
               style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
-                fontSize: 13,
+                fontSize: AppSizes.font13,
                 fontWeight: FontWeight.w600,
                 height: 1.5,
               ),
@@ -180,7 +181,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH),
       child: Column(
         children: [
           ..._venues.map((v) => _buildVenueCard(
@@ -197,10 +198,10 @@ class _VenuesScreenState extends State<VenuesScreen> {
               )),
           if (_loadingMore)
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: EdgeInsets.symmetric(vertical: AppSizes.space20),
               child: Center(child: CircularProgressIndicator(color: kPrimary)),
             ),
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSizes.space20),
         ],
       ),
     );
@@ -208,7 +209,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
+      padding: const EdgeInsets.fromLTRB(AppSizes.space20, AppSizes.space20, AppSizes.space20, AppSizes.xs),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -225,12 +226,12 @@ class _VenuesScreenState extends State<VenuesScreen> {
                     height: 1.2,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: AppSizes.space6),
                 Text(
                   'Bütünsel yaşam tarzınıza hitap eden güvenilir yerel mekanları keşfedin.',
                   style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
-                    fontSize: 13,
+                    fontSize: AppSizes.font13,
                     fontWeight: FontWeight.w600,
                     height: 1.4,
                   ),
@@ -238,7 +239,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
               ],
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSizes.space12),
           Container(
             width: 36,
             height: 36,
@@ -246,7 +247,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
               shape: BoxShape.circle,
               color: kSurfaceContainerHigh,
             ),
-            child: const Icon(Icons.notifications_outlined, color: kOnSurfaceVariant, size: 20),
+            child: const Icon(Icons.notifications_outlined, color: kOnSurfaceVariant, size: AppSizes.icon20),
           ),
         ],
       ),
@@ -255,21 +256,21 @@ class _VenuesScreenState extends State<VenuesScreen> {
 
   Widget _buildSearchBar() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+      padding: const EdgeInsets.fromLTRB(AppSizes.space20, AppSizes.md, AppSizes.space20, AppSizes.space12),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
         decoration: BoxDecoration(
           color: kSurfaceContainerHigh,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(AppSizes.radius30),
           border: Border.all(color: kOutlineVariant),
         ),
         child: TextField(
           style: const TextStyle(color: kOnSurface),
           decoration: InputDecoration(
-            icon: const Icon(Icons.search, color: kOnSurfaceVariant, size: 20),
+            icon: const Icon(Icons.search, color: kOnSurfaceVariant, size: AppSizes.icon20),
             hintText: 'Kafe, fırın veya bölge ara...',
-            hintStyle: GoogleFonts.manrope(color: kOnSurfaceVariant, fontSize: 14, fontWeight: FontWeight.w600),
-            suffixIcon: const Icon(Icons.tune_rounded, color: kOnSurfaceVariant, size: 20),
+            hintStyle: GoogleFonts.manrope(color: kOnSurfaceVariant, fontSize: AppSizes.fontMd, fontWeight: FontWeight.w600),
+            suffixIcon: const Icon(Icons.tune_rounded, color: kOnSurfaceVariant, size: AppSizes.icon20),
             border: InputBorder.none,
           ),
         ),
@@ -283,19 +284,19 @@ class _VenuesScreenState extends State<VenuesScreen> {
       height: 48,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH),
         itemCount: filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, __) => const SizedBox(width: AppSizes.sm),
         itemBuilder: (context, index) {
           final filter = filters[index];
           final isSelected = filter == selectedFilter;
           return GestureDetector(
             onTap: () => setState(() => selectedFilter = filter),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.sm),
               decoration: BoxDecoration(
                 color: isSelected ? kPrimary : kSurfaceContainerHigh,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(AppSizes.radius20),
                 border: Border.all(color: isSelected ? kPrimary : kOutlineVariant),
               ),
               child: Text(
@@ -303,7 +304,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
                 style: TextStyle(
                   color: isSelected ? kOnPrimary : kOnSurface,
                   fontWeight: FontWeight.w600,
-                  fontSize: 13,
+                  fontSize: AppSizes.font13,
                 ),
               ),
             ),
@@ -334,10 +335,10 @@ class _VenuesScreenState extends State<VenuesScreen> {
     required List<String> tags,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: AppSizes.md),
       decoration: BoxDecoration(
         color: kSurface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSizes.radius20),
         border: Border.all(color: kOutlineVariant),
       ),
       child: Column(
@@ -347,7 +348,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.radius20)),
                 child: SafeNetworkImage(
                   imageUrl: imageUrl,
                   height: 180,
@@ -375,10 +376,10 @@ class _VenuesScreenState extends State<VenuesScreen> {
                 bottom: 10,
                 left: 10,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: AppSizes.space10, vertical: AppSizes.xs),
                   decoration: BoxDecoration(
                     color: badgeColor,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(AppSizes.radius20),
                   ),
                   child: Text(
                     badgeText,
@@ -390,7 +391,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
           ),
           // İçerik
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSizes.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -401,34 +402,34 @@ class _VenuesScreenState extends State<VenuesScreen> {
                         title,
                         style: GoogleFonts.manrope(
                           color: kOnSurface,
-                          fontSize: 17,
+                          fontSize: AppSizes.font17,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppSizes.sm),
                     Row(
                       children: [
-                        const Icon(Icons.star_rounded, color: Colors.amber, size: 16),
-                        const SizedBox(width: 2),
+                        const Icon(Icons.star_rounded, color: kStar, size: AppSizes.iconSm),
+                        const SizedBox(width: AppSizes.space2),
                         Text(
                           rating,
                           style: GoogleFonts.manrope(
                             color: kOnSurface,
                             fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                            fontSize: AppSizes.font13,
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: AppSizes.space6),
                 Text(
                   description,
                   style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
-                    fontSize: 13,
+                    fontSize: AppSizes.font13,
                     fontWeight: FontWeight.w600,
                     height: 1.4,
                   ),
@@ -436,14 +437,14 @@ class _VenuesScreenState extends State<VenuesScreen> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (tags.isNotEmpty) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSizes.sm),
                   Wrap(
                     spacing: 6,
                     children: tags.map((tag) => Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: AppSizes.space10, vertical: AppSizes.xs),
                       decoration: BoxDecoration(
                         color: kPrimaryFixed,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(AppSizes.radius20),
                       ),
                       child: Text(
                         tag,
@@ -452,18 +453,18 @@ class _VenuesScreenState extends State<VenuesScreen> {
                     )).toList(),
                   ),
                 ],
-                const SizedBox(height: 10),
+                const SizedBox(height: AppSizes.space10),
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined, color: kOnSurfaceVariant, size: 14),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: AppSizes.xs),
                     Text(
                       '$distance • $location',
-                      style: GoogleFonts.manrope(color: kOnSurfaceVariant, fontSize: 12, fontWeight: FontWeight.w600),
+                      style: GoogleFonts.manrope(color: kOnSurfaceVariant, fontSize: AppSizes.fontSm, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSizes.space12),
                 Row(
                   children: [
                     Expanded(
@@ -472,8 +473,8 @@ class _VenuesScreenState extends State<VenuesScreen> {
                         style: FilledButton.styleFrom(
                           backgroundColor: kPrimary,
                           foregroundColor: kOnPrimary,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.radiusMd)),
+                          padding: const EdgeInsets.symmetric(vertical: AppSizes.space12),
                         ),
                         child: Text(
                           'Detayları Gör',
@@ -481,7 +482,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppSizes.sm),
                     Container(
                       width: 44,
                       height: 44,
@@ -490,7 +491,7 @@ class _VenuesScreenState extends State<VenuesScreen> {
                         border: Border.all(color: kOutlineVariant),
                         color: kSurfaceContainerHigh,
                       ),
-                      child: const Icon(Icons.map_outlined, color: kPrimary, size: 20),
+                      child: const Icon(Icons.map_outlined, color: kPrimary, size: AppSizes.icon20),
                     ),
                   ],
                 ),

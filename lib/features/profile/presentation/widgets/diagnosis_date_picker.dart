@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/date_utils.dart' as du;
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 // Tanı ayı+yılı seçimi için alttan açılan iki tekerlekli seçici (3. parti paket yok).
 // initialDate verilirse seçici o ay/yılla açılır (düzenleme); yoksa bugünle açılır.
@@ -14,7 +15,7 @@ Future<DateTime?> showDiagnosisDatePicker(BuildContext context, {DateTime? initi
     context: context,
     backgroundColor: kOnPrimary,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(AppSizes.radius20)),
     ),
     builder: (sheetContext) => _DiagnosisDatePickerSheet(initialDate: initialDate),
   );
@@ -86,7 +87,7 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(top: 12, bottom: 24),
+        padding: const EdgeInsets.only(top: AppSizes.space12, bottom: AppSizes.lg),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -98,13 +99,13 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSizes.md),
             Text(
               'Tanı Tarihini Seç',
               style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
-                fontSize: 17,
+                fontSize: AppSizes.font17,
               ),
             ),
             SizedBox(
@@ -123,7 +124,7 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
                                   du.monthName(m),
                                   style: GoogleFonts.manrope(
                                     color: kOnSurface,
-                                    fontSize: 17,
+                                    fontSize: AppSizes.font17,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -142,7 +143,7 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
                                   '$y',
                                   style: GoogleFonts.manrope(
                                     color: kOnSurface,
-                                    fontSize: 17,
+                                    fontSize: AppSizes.font17,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -154,7 +155,7 @@ class _DiagnosisDatePickerSheetState extends State<_DiagnosisDatePickerSheet> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH),
               child: AppButton(
                 label: 'Kaydet',
                 onPressed: () => Navigator.of(context)

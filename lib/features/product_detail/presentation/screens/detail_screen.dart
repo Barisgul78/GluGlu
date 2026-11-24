@@ -172,7 +172,7 @@ class _DetailScreenState extends State<DetailScreen> {
       backgroundColor: kBackground,
       surfaceTintColor: Colors.transparent,
       leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new, color: kOnSurface, size: 20),
+        icon: const Icon(Icons.arrow_back_ios_new, color: kOnSurface, size: AppSizes.icon20),
         onPressed: widget.onBack,
       ),
       title: Text(
@@ -186,7 +186,7 @@ class _DetailScreenState extends State<DetailScreen> {
       centerTitle: true,
       actions: [
         IconButton(
-          icon: const Icon(Icons.ios_share, color: kOnSurface, size: 22),
+          icon: const Icon(Icons.ios_share, color: kOnSurface, size: AppSizes.icon22),
           tooltip: 'Paylaş',
           onPressed: _share,
         ),
@@ -296,7 +296,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSizes.md + 4),
+      padding: const EdgeInsets.all(AppSizes.md + AppSizes.xs),
       decoration: BoxDecoration(
         color: style.background,
         borderRadius: BorderRadius.circular(AppSizes.radiusXl),

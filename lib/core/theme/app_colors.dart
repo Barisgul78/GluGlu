@@ -45,6 +45,9 @@ const Color kPastelPink   = Color(0xFFFCE4EC);
 const Color kPastelGray   = Color(0xFFF5F5F0);
 const Color kMapBackground = Color(0xFFDDE8D8);
 
+// Puan yıldızı / vurgu (Colors.amber ile aynı ton)
+const Color kStar = Color(0xFFFFC107);
+
 // Badge renkleri
 const Color kBadgeSuccess = Color(0xFF2E7D32);
 const Color kBadgeDanger  = Color(0xFFE53935);

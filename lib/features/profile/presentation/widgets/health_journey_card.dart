@@ -83,7 +83,7 @@ class HealthJourneyCard extends StatelessWidget {
 
   BoxDecoration get _decoration => BoxDecoration(
         color: kOnPrimary,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSizes.radiusLg),
         boxShadow: [
           BoxShadow(
             color: kOnSurface.withValues(alpha: 0.04),
@@ -161,7 +161,7 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppSizes.lg),
       decoration: decoration.copyWith(
         border: Border.all(color: kOutlineVariant),
       ),
@@ -174,22 +174,22 @@ class _EmptyState extends StatelessWidget {
                 color: kPastelGreen, shape: BoxShape.circle),
             child: const Icon(Icons.eco_outlined, color: kPrimary, size: 28),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: AppSizes.space14),
           Text(
             'Çölyak Yolculuğun',
             style: GoogleFonts.manrope(
               color: kOnSurface,
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: AppSizes.fontLg,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: AppSizes.space6),
           Text(
             'Tanı yılını ekle, glutensiz yolculuğunun kaç gündür sürdüğünü birlikte görelim!',
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
-              fontSize: 13,
+              fontSize: AppSizes.font13,
               fontWeight: FontWeight.w600,
               height: 1.4,
             ),
@@ -201,8 +201,8 @@ class _EmptyState extends StatelessWidget {
               backgroundColor: kPrimary,
               foregroundColor: kOnPrimary,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  borderRadius: BorderRadius.circular(AppSizes.radius30)),
+              padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH, vertical: AppSizes.space12),
             ),
             icon: const Icon(Icons.add, size: 18),
             label: Text(
@@ -239,7 +239,7 @@ class _FilledState extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSizes.md + 4),
+      padding: const EdgeInsets.all(AppSizes.md + AppSizes.xs),
       decoration: BoxDecoration(
         color: kPrimaryFixed.withValues(alpha: 0.45),
         borderRadius: BorderRadius.circular(AppSizes.radiusXl),

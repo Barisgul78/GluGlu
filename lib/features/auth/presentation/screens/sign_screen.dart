@@ -6,6 +6,7 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/widgets/bubble_background.dart';
 import '../../../../../core/utils/snackbars.dart';
 import '../../data/services/auth_service.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 class SignScreen extends StatefulWidget {
   const SignScreen({super.key});
@@ -42,7 +43,7 @@ class _SignScreenState extends State<SignScreen> {
           SafeArea(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 28),
+              padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingHWide),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -60,24 +61,24 @@ class _SignScreenState extends State<SignScreen> {
                     textAlign: TextAlign.center,
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: AppSizes.space10),
 
                   Text(
                     'Glutensiz yaşamın en kolay yolu.\nÜrünleri keşfedin, restoranları bulun ve\nkendi listenizi oluşturun.',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
-                      fontSize: 14,
+                      fontSize: AppSizes.fontMd,
                       fontWeight: FontWeight.w500,
                       height: 1.55,
                     ),
                   ),
 
-                  const SizedBox(height: 28),
+                  const SizedBox(height: AppSizes.space28),
 
                   // ── Görsel kart ──────────────────────────────────────
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(AppSizes.radius20),
                     child: Image.asset(
                       'assets/images/sign.icon.jpg',
                       width: double.infinity,
@@ -93,11 +94,11 @@ class _SignScreenState extends State<SignScreen> {
                             Icon(Icons.grain,
                                 size: 52,
                                 color: kSecondary.withValues(alpha: 0.4)),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: AppSizes.sm),
                             Text(
                               'Glutensiz Ürünler',
                               style: GoogleFonts.manrope(
-                                  color: kOnSurfaceVariant, fontSize: 13, fontWeight: FontWeight.w600),
+                                  color: kOnSurfaceVariant, fontSize: AppSizes.font13, fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
@@ -116,7 +117,7 @@ class _SignScreenState extends State<SignScreen> {
                       style: FilledButton.styleFrom(
                         backgroundColor: kPrimary,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(AppSizes.radius30),
                         ),
                       ),
                       child: Row(
@@ -125,12 +126,12 @@ class _SignScreenState extends State<SignScreen> {
                           Text(
                             'Giriş Yap',
                             style: GoogleFonts.manrope(
-                              fontSize: 16,
+                              fontSize: AppSizes.fontLg,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: AppSizes.sm),
                           const Icon(Icons.arrow_forward,
                               color: Colors.white, size: 18),
                         ],
@@ -138,7 +139,7 @@ class _SignScreenState extends State<SignScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSizes.space12),
 
                   // ── Kayıt Ol butonu ──────────────────────────────────
                   SizedBox(
@@ -149,13 +150,13 @@ class _SignScreenState extends State<SignScreen> {
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: kPrimary, width: 1.5),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(AppSizes.radius30),
                         ),
                       ),
                       child: Text(
                         'Kayıt Ol',
                         style: GoogleFonts.manrope(
-                          fontSize: 16,
+                          fontSize: AppSizes.fontLg,
                           fontWeight: FontWeight.w700,
                           color: kPrimary,
                         ),
@@ -163,7 +164,7 @@ class _SignScreenState extends State<SignScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 28),
+                  const SizedBox(height: AppSizes.space28),
 
                   // ── Alt linkler ──────────────────────────────────────
                   Row(
@@ -180,7 +181,7 @@ class _SignScreenState extends State<SignScreen> {
                               onPressed: _continueAsGuest,
                               style: TextButton.styleFrom(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
+                                    const EdgeInsets.symmetric(horizontal: AppSizes.xs),
                                 minimumSize: Size.zero,
                                 tapTargetSize:
                                     MaterialTapTargetSize.shrinkWrap,
@@ -188,14 +189,14 @@ class _SignScreenState extends State<SignScreen> {
                               child: Text(
                                 'Hesap oluşturmadan devam et',
                                 style: GoogleFonts.manrope(
-                                    color: kOnSurfaceVariant, fontSize: 13, fontWeight: FontWeight.w600),
+                                    color: kOnSurfaceVariant, fontSize: AppSizes.font13, fontWeight: FontWeight.w600),
                               ),
                             ),
                       Text(
                         '  |  ',
                         style: TextStyle(
                             color: kOutlineVariant.withValues(alpha: 0.7),
-                            fontSize: 13),
+                            fontSize: AppSizes.font13),
                       ),
                       TextButton(
                         onPressed: () {
@@ -203,20 +204,20 @@ class _SignScreenState extends State<SignScreen> {
                         },
                         style: TextButton.styleFrom(
                           padding:
-                              const EdgeInsets.symmetric(horizontal: 4),
+                              const EdgeInsets.symmetric(horizontal: AppSizes.xs),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         child: Text(
                           'Gizlilik',
                           style: GoogleFonts.manrope(
-                              color: kOnSurfaceVariant, fontSize: 13, fontWeight: FontWeight.w600),
+                              color: kOnSurfaceVariant, fontSize: AppSizes.font13, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSizes.lg),
                 ],
               ),
             ),

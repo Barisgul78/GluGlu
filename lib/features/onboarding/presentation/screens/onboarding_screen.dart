@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/widgets/bubble_background.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, required this.onCompleted});
@@ -62,7 +63,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               isDark: false,
               onSkip: _completeOnboarding,
               buttons: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
+                padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingHWide),
                 child: _PillButton(
                   text: 'Devam',
                   onTap: () => _goToPage(1),
@@ -79,7 +80,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               isDark: false,
               onSkip: _completeOnboarding,
               buttons: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
+                padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingHWide),
                 child: Row(
                   children: [
                     Expanded(
@@ -90,7 +91,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         filled: false,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppSizes.space12),
                     Expanded(
                       child: _PillButton(
                         text: 'Devam',
@@ -111,7 +112,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               isDark: true,
               onSkip: _completeOnboarding,
               buttons: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
+                padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingHWide),
                 child: Row(
                   children: [
                     Expanded(
@@ -123,7 +124,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         isDark: true,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppSizes.space12),
                     Expanded(
                       child: _PillButton(
                         text: 'İleri',
@@ -181,7 +182,7 @@ class _OnboardingPage extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 8, top: 4),
+                  padding: const EdgeInsets.only(right: AppSizes.sm, top: AppSizes.xs),
                   child: TextButton(
                     onPressed: onSkip,
                     child: Text(
@@ -191,7 +192,7 @@ class _OnboardingPage extends StatelessWidget {
                             ? Colors.white.withValues(alpha: 0.8)
                             : kOnSurfaceVariant,
                         fontWeight: FontWeight.w600,
-                        fontSize: 15,
+                        fontSize: AppSizes.font15,
                       ),
                     ),
                   ),
@@ -219,7 +220,7 @@ class _OnboardingPage extends StatelessWidget {
                         child: Icon(Icons.image_outlined,
                             size: 56,
                             color: isDark
-                                ? Colors.white38
+                                ? Colors.white.withValues(alpha: 0.38)
                                 : kOnSurfaceVariant),
                       ),
                     ),
@@ -227,11 +228,11 @@ class _OnboardingPage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: AppSizes.space28),
 
               // Başlık
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
+                padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
                 child: Text(
                   title,
                   textAlign: TextAlign.center,
@@ -244,7 +245,7 @@ class _OnboardingPage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSizes.space12),
 
               // Alt başlık
               Padding(
@@ -254,19 +255,19 @@ class _OnboardingPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.manrope(
                     color: subColor,
-                    fontSize: 14,
+                    fontSize: AppSizes.fontMd,
                     fontWeight: FontWeight.w500,
                     height: 1.6,
                   ),
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSizes.lg),
 
               // Nokta göstergesi
               _DotsIndicator(activeIndex: activeIndex, isDark: isDark),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: AppSizes.xl),
 
               // Butonlar
               buttons,
@@ -301,7 +302,7 @@ class _DotsIndicator extends StatelessWidget {
             : kOutlineVariant;
         return AnimatedContainer(
           duration: const Duration(milliseconds: 250),
-          margin: const EdgeInsets.symmetric(horizontal: 4),
+          margin: const EdgeInsets.symmetric(horizontal: AppSizes.xs),
           width: isActive ? 22 : 8,
           height: 8,
           decoration: BoxDecoration(
@@ -341,7 +342,7 @@ class _PillButton extends StatelessWidget {
         height: 54,
         decoration: BoxDecoration(
           color: filled ? color : Colors.transparent,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(AppSizes.radius30),
           border: filled ? null : Border.all(color: color, width: 1.5),
         ),
         alignment: Alignment.center,
@@ -349,7 +350,7 @@ class _PillButton extends StatelessWidget {
           text,
           style: GoogleFonts.manrope(
             color: filled ? Colors.white : color,
-            fontSize: 16,
+            fontSize: AppSizes.fontLg,
             fontWeight: FontWeight.w700,
           ),
         ),

@@ -12,6 +12,7 @@ import '../../../tips/data/services/tips_service.dart';
 import '../../../tips/presentation/widgets/category_badge.dart';
 import '../../../tips/presentation/widgets/tip_image.dart';
 import '../../../../../core/utils/date_utils.dart' as du;
+import '../../../../core/constants/app_sizes.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -75,7 +76,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           children: [
             _buildHeader(),
             _buildTabSwitcher(),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSizes.space12),
             Expanded(
               child: selectedTab == 'Ürünler'
                   ? _buildProductsList()
@@ -91,7 +92,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+      padding: const EdgeInsets.fromLTRB(AppSizes.space20, AppSizes.md, AppSizes.space20, AppSizes.space12),
       child: Row(
         children: [
           const Spacer(),
@@ -100,7 +101,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             style: GoogleFonts.manrope(
               color: kOnSurface,
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: AppSizes.fontXl,
             ),
           ),
           const Spacer(),
@@ -111,12 +112,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   Widget _buildTabSwitcher() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH),
       child: Container(
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(AppSizes.xs),
         decoration: BoxDecoration(
           color: kSurfaceContainerHigh,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(AppSizes.radius30),
           border: Border.all(color: kOutlineVariant),
         ),
         child: Row(
@@ -136,7 +137,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       onTap: () => setState(() => selectedTab = title),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: AppSizes.space10),
         decoration: BoxDecoration(
           color: isSelected ? kPrimary : Colors.transparent,
           borderRadius: BorderRadius.circular(26),
@@ -147,7 +148,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           style: GoogleFonts.manrope(
             color: isSelected ? kOnPrimary : kOnSurfaceVariant,
             fontWeight: FontWeight.w600,
-            fontSize: 14,
+            fontSize: AppSizes.fontMd,
           ),
         ),
       ),
@@ -160,13 +161,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     if (userId == null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(AppSizes.lg),
           child: Text(
             'Favorilerinizi görmek için\ngiriş yapmanız gerekiyor.',
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
-              fontSize: 14,
+              fontSize: AppSizes.fontMd,
               fontWeight: FontWeight.w600,
               height: 1.6,
             ),
@@ -194,7 +195,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               'Henüz favori ürün eklemediniz.',
               style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
-                  fontSize: 14,
+                  fontSize: AppSizes.fontMd,
                   fontWeight: FontWeight.w600),
             ),
           );
@@ -214,14 +215,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               'Favori ürünleriniz bulunamadı.',
               style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
-                  fontSize: 14,
+                  fontSize: AppSizes.fontMd,
                   fontWeight: FontWeight.w600),
             ),
           );
         }
 
         return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH),
           itemCount: _products.length,
           itemBuilder: (context, index) => _buildProductCard(_products[index]),
         );
@@ -232,7 +233,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget _buildProductsError() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSizes.lg),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -241,12 +242,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
-                fontSize: 14,
+                fontSize: AppSizes.fontMd,
                 fontWeight: FontWeight.w600,
                 height: 1.5,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSizes.space12),
             TextButton(
               // _loadedIds sıfırlanınca bir sonraki build ürünleri yeniden yükler.
               onPressed: () => setState(() => _loadedIds = null),
@@ -267,27 +268,27 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget _buildVenuesList() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl, vertical: 40),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(Icons.store_outlined, color: kOutlineVariant, size: 52),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSizes.md),
             Text(
               'Favori mekan bulunamadı',
               style: GoogleFonts.manrope(
                 color: kOnSurface,
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: AppSizes.fontLg,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSizes.sm),
             Text(
               'Mekanlar sekmesinden beğendiğiniz mekanlarda kalp ikonuna basarak favorilerinize ekleyebilirsiniz.',
               style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
-                fontSize: 13,
+                fontSize: AppSizes.font13,
                 fontWeight: FontWeight.w600,
                 height: 1.5,
               ),
@@ -305,13 +306,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     if (userId == null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(AppSizes.lg),
           child: Text(
             'Favorilerinizi görmek için\ngiriş yapmanız gerekiyor.',
             textAlign: TextAlign.center,
             style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
-              fontSize: 14,
+              fontSize: AppSizes.fontMd,
               fontWeight: FontWeight.w600,
               height: 1.6,
             ),
@@ -339,7 +340,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               'Kayıtlı makale bulunamadı.',
               style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
-                  fontSize: 14,
+                  fontSize: AppSizes.fontMd,
                   fontWeight: FontWeight.w600),
             ),
           );
@@ -349,7 +350,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             TipsService.getAll().where((t) => tipIds.contains(t.id)).toList();
 
         return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH),
           itemCount: tips.length,
           itemBuilder: (context, index) => _buildArticleCard(tips[index]),
         );
@@ -361,11 +362,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     return GestureDetector(
       onTap: () => context.push('/tips/detay', extra: tip),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: AppSizes.space12),
+        padding: const EdgeInsets.all(AppSizes.space12),
         decoration: BoxDecoration(
           color: kSurface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
           border: Border.all(color: kOutlineVariant),
         ),
         child: Row(
@@ -373,7 +374,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMd),
                   child: SizedBox(
                     width: 72,
                     height: 72,
@@ -386,13 +387,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   child: CategoryBadge(
                     label: tip.category,
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        const EdgeInsets.symmetric(horizontal: AppSizes.space6, vertical: AppSizes.space2),
                     fontSize: 9,
                   ),
                 ),
               ],
             ),
-            const SizedBox(width: 14),
+            const SizedBox(width: AppSizes.space14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -401,28 +402,28 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     tip.author.toUpperCase(),
                     style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
-                      fontSize: 10,
+                      fontSize: AppSizes.fontXs,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.8,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: AppSizes.space2),
                   Text(
                     tip.title,
                     style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: AppSizes.font15,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSizes.xs),
                   Text(
                     du.formatDate(tip.date),
                     style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
-                        fontSize: 12,
+                        fontSize: AppSizes.fontSm,
                         fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -434,9 +435,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     isFavorite: true);
               },
               child: const Padding(
-                padding: EdgeInsets.all(6),
+                padding: EdgeInsets.all(AppSizes.space6),
                 child:
-                    Icon(Icons.bookmark_rounded, color: kSecondary, size: 20),
+                    Icon(Icons.bookmark_rounded, color: kSecondary, size: AppSizes.icon20),
               ),
             ),
           ],
@@ -449,17 +450,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     return GestureDetector(
       onTap: () => context.push('/urun', extra: product),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: AppSizes.space12),
+        padding: const EdgeInsets.all(AppSizes.space12),
         decoration: BoxDecoration(
           color: kSurface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
           border: Border.all(color: kOutlineVariant),
         ),
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSizes.radiusMd),
               child: SafeNetworkImage(
                 imageUrl: product.imageUrl,
                 width: 72,
@@ -467,7 +468,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 fallbackIcon: Icons.fastfood,
               ),
             ),
-            const SizedBox(width: 14),
+            const SizedBox(width: AppSizes.space14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -477,26 +478,26 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: AppSizes.font15,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: AppSizes.space2),
                   Text(
                     product.brand,
                     style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
-                        fontSize: 12,
+                        fontSize: AppSizes.fontSm,
                         fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: AppSizes.space6),
                   _statusBadge(product.status),
                 ],
               ),
             ),
-            const SizedBox(width: 8),
-            const Icon(Icons.favorite, color: kSecondary, size: 22),
+            const SizedBox(width: AppSizes.sm),
+            const Icon(Icons.favorite, color: kSecondary, size: AppSizes.icon22),
           ],
         ),
       ),
@@ -522,9 +523,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         text = 'Bilinmiyor';
     }
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.sm, vertical: 3),
       decoration:
-          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(8)),
+          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(AppSizes.radiusSm)),
       child: Text(text,
           style:
               TextStyle(color: fg, fontSize: 11, fontWeight: FontWeight.w600)),

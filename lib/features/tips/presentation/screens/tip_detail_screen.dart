@@ -252,7 +252,7 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
           icon: Icons.thumb_up_outlined,
           activeIcon: Icons.thumb_up_rounded,
           count: likeCount,
-          activeColor: Colors.amber.shade600,
+          activeColor: kStar,
           borderColor: kPrimary,
           isActive: liked,
           onTap: () => _setReaction(_Reaction.liked),

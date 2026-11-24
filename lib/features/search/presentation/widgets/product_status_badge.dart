@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/product.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 /// Ürün güvenlik durumunu gösteren küçük rozet (GÜVENLİ / RİSKLİ / ?).
 class ProductStatusBadge extends StatelessWidget {
@@ -13,7 +14,7 @@ class ProductStatusBadge extends StatelessWidget {
   const ProductStatusBadge({
     super.key,
     required this.status,
-    this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+    this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: AppSizes.space2),
     this.borderRadius = 4,
     this.fontSize = 8,
     this.letterSpacing = 0,

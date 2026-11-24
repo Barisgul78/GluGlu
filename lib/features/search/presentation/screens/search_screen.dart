@@ -13,6 +13,7 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/utils/snackbars.dart';
 import '../../../../../core/widgets/safe_network_image.dart';
 import '../widgets/product_status_badge.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 class SearchScreen extends StatefulWidget {
   final String? initialQuery;
@@ -277,7 +278,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       if (recentSearches.isNotEmpty) _buildRecentSearches(),
                       _buildPopularSection(),
                     ],
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSizes.lg),
                   ],
                 ),
               ),
@@ -290,7 +291,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+      padding: const EdgeInsets.fromLTRB(AppSizes.space20, AppSizes.space20, AppSizes.space20, AppSizes.sm),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -302,17 +303,17 @@ class _SearchScreenState extends State<SearchScreen> {
                   'Ürün Ara',
                   style: GoogleFonts.manrope(
                     color: kOnSurface,
-                    fontSize: 28,
+                    fontSize: AppSizes.fontHeading,
                     fontWeight: FontWeight.bold,
                     height: 1.1,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppSizes.xs),
                 Text(
                   'Güvenilir glutensiz ürünleri keşfedin',
                   style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
-                    fontSize: 13,
+                    fontSize: AppSizes.font13,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -326,24 +327,24 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildSearchBar() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+      padding: const EdgeInsets.fromLTRB(AppSizes.space20, AppSizes.xs, AppSizes.space20, AppSizes.space12),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
         decoration: BoxDecoration(
           color: kSurfaceContainerHigh,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
           border: Border.all(color: kOutlineVariant),
         ),
         child: Row(
           children: [
-            const Icon(Icons.search, color: kOnSurfaceVariant, size: 20),
-            const SizedBox(width: 8),
+            const Icon(Icons.search, color: kOnSurfaceVariant, size: AppSizes.icon20),
+            const SizedBox(width: AppSizes.sm),
             Expanded(
               child: TextField(
                 controller: _searchController,
                 style: GoogleFonts.manrope(
                     color: kOnSurface,
-                    fontSize: 15,
+                    fontSize: AppSizes.font15,
                     fontWeight: FontWeight.w600),
                 onChanged: _onQueryChanged,
                 onSubmitted: _onSearchSubmitted,
@@ -351,11 +352,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   hintText: 'Ürün, marka veya kategori...',
                   hintStyle: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
-                      fontSize: 15,
+                      fontSize: AppSizes.font15,
                       fontWeight: FontWeight.w600),
                   border: InputBorder.none,
                   isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                  contentPadding: const EdgeInsets.symmetric(vertical: AppSizes.space14),
                 ),
               ),
             ),
@@ -370,11 +371,11 @@ class _SearchScreenState extends State<SearchScreen> {
       height: 44,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH),
         children: [
           for (final cat in [_allCategory, ..._categories])
             Padding(
-              padding: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: AppSizes.sm),
               child: _categoryChip(cat),
             ),
           if (_categoriesLoading)
@@ -391,21 +392,21 @@ class _SearchScreenState extends State<SearchScreen> {
               onTap: _loadCategories,
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: AppSizes.space14, vertical: AppSizes.sm),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppSizes.radius20),
                   border: Border.all(color: kOutlineVariant),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.refresh, color: kPrimary, size: 16),
-                    const SizedBox(width: 6),
+                    const Icon(Icons.refresh, color: kPrimary, size: AppSizes.iconSm),
+                    const SizedBox(width: AppSizes.space6),
                     Text(
                       'Kategoriler yüklenemedi, tekrar dene',
                       style: GoogleFonts.manrope(
                         color: kPrimary,
                         fontWeight: FontWeight.w600,
-                        fontSize: 13,
+                        fontSize: AppSizes.font13,
                       ),
                     ),
                   ],
@@ -422,10 +423,10 @@ class _SearchScreenState extends State<SearchScreen> {
     return GestureDetector(
       onTap: () => _onCategorySelected(cat),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.sm),
         decoration: BoxDecoration(
           color: isSelected ? kPrimary : kSurfaceContainerHigh,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppSizes.radius20),
           border: Border.all(color: isSelected ? kPrimary : kOutlineVariant),
         ),
         child: Center(
@@ -434,7 +435,7 @@ class _SearchScreenState extends State<SearchScreen> {
             style: GoogleFonts.manrope(
               color: isSelected ? kOnPrimary : kOnSurface,
               fontWeight: FontWeight.w600,
-              fontSize: 13,
+              fontSize: AppSizes.font13,
             ),
           ),
         ),
@@ -444,7 +445,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildRecentSearches() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      padding: const EdgeInsets.fromLTRB(AppSizes.space20, AppSizes.space20, AppSizes.space20, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -456,19 +457,19 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16),
+                    fontSize: AppSizes.fontLg),
               ),
               GestureDetector(
                 onTap: _clearSearches,
                 child: Text('Temizle',
                     style: GoogleFonts.manrope(
                         color: kPrimary,
-                        fontSize: 13,
+                        fontSize: AppSizes.font13,
                         fontWeight: FontWeight.w600)),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: AppSizes.space10),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(children: recentSearches.map(_recentSearchTag).toList()),
@@ -487,21 +488,21 @@ class _SearchScreenState extends State<SearchScreen> {
         _startNewSearch(query);
       },
       child: Container(
-        margin: const EdgeInsets.only(right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: const EdgeInsets.only(right: AppSizes.sm),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.space12, vertical: AppSizes.sm),
         decoration: BoxDecoration(
           color: kSurfaceContainerHigh,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSizes.radiusMd),
           border: Border.all(color: kOutlineVariant),
         ),
         child: Row(
           children: [
             const Icon(Icons.history, color: kOnSurfaceVariant, size: 14),
-            const SizedBox(width: 6),
+            const SizedBox(width: AppSizes.space6),
             Text(text,
                 style: GoogleFonts.manrope(
                     color: kOnSurface,
-                    fontSize: 13,
+                    fontSize: AppSizes.font13,
                     fontWeight: FontWeight.w600)),
           ],
         ),
@@ -511,23 +512,23 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildPopularSection() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      padding: const EdgeInsets.fromLTRB(AppSizes.space20, AppSizes.space20, AppSizes.space20, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Popüler Ürünler',
             style: GoogleFonts.manrope(
-                color: kOnSurface, fontWeight: FontWeight.bold, fontSize: 16),
+                color: kOnSurface, fontWeight: FontWeight.bold, fontSize: AppSizes.fontLg),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSizes.space12),
           FutureBuilder<List<Product>>(
             future: _popularProductsFuture,
             builder: (context, snap) {
               if (snap.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
+                    padding: EdgeInsets.symmetric(vertical: AppSizes.lg),
                     child: CircularProgressIndicator(color: kPrimary),
                   ),
                 );
@@ -538,7 +539,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   'Henüz ürün eklenmemiş.',
                   style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
-                      fontSize: 14,
+                      fontSize: AppSizes.fontMd,
                       fontWeight: FontWeight.w600),
                 );
               }
@@ -571,11 +572,11 @@ class _SearchScreenState extends State<SearchScreen> {
     required String imageUrl,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: AppSizes.space12),
+      padding: const EdgeInsets.all(AppSizes.space12),
       decoration: BoxDecoration(
         color: kSurface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSizes.radiusLg),
         border: Border.all(color: kOutlineVariant),
       ),
       child: Row(
@@ -583,7 +584,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
                 child: SafeNetworkImage(
                   imageUrl: imageUrl,
                   width: 80,
@@ -602,7 +603,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ],
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: AppSizes.space14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -611,26 +612,26 @@ class _SearchScreenState extends State<SearchScreen> {
                   brand.toUpperCase(),
                   style: GoogleFonts.manrope(
                     color: kOnSurfaceVariant,
-                    fontSize: 10,
+                    fontSize: AppSizes.fontXs,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.8,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: AppSizes.space2),
                 Text(
                   name,
                   style: GoogleFonts.manrope(
                     color: kOnSurface,
                     fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                    fontSize: AppSizes.font15,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: AppSizes.space6),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      const EdgeInsets.symmetric(horizontal: AppSizes.sm, vertical: 3),
                   decoration: BoxDecoration(
                     color: kSurfaceContainerHigh,
                     borderRadius: BorderRadius.circular(6),
@@ -646,7 +647,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: kOutlineVariant, size: 20),
+          const Icon(Icons.chevron_right, color: kOutlineVariant, size: AppSizes.icon20),
         ],
       ),
     );
@@ -656,7 +657,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if (_searchLoading) {
       return const Center(
         child: Padding(
-          padding: EdgeInsets.all(32),
+          padding: EdgeInsets.all(AppSizes.xl),
           child: CircularProgressIndicator(color: kPrimary),
         ),
       );
@@ -665,7 +666,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if (_searchError != null) {
       debugPrint('Ürün yükleme hatası: $_searchError');
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH, vertical: AppSizes.space20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -673,10 +674,10 @@ class _SearchScreenState extends State<SearchScreen> {
               'Ürünler yüklenirken bir hata oluştu.',
               style: GoogleFonts.manrope(
                   color: kOnSurfaceVariant,
-                  fontSize: 14,
+                  fontSize: AppSizes.fontMd,
                   fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSizes.sm),
             TextButton(
               onPressed: _retrySearch,
               style: TextButton.styleFrom(
@@ -688,7 +689,7 @@ class _SearchScreenState extends State<SearchScreen> {
               child: Text(
                 'Tekrar Dene',
                 style: GoogleFonts.manrope(
-                    fontWeight: FontWeight.w600, fontSize: 13),
+                    fontWeight: FontWeight.w600, fontSize: AppSizes.font13),
               ),
             ),
           ],
@@ -706,12 +707,12 @@ class _SearchScreenState extends State<SearchScreen> {
               ? '"$query" ile "$selectedCategory" kategorisinde eşleşen ürün bulunamadı.'
               : '"$query" ile eşleşen ürün bulunamadı.';
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH, vertical: AppSizes.space20),
         child: Text(
           emptyText,
           style: GoogleFonts.manrope(
               color: kOnSurfaceVariant,
-              fontSize: 14,
+              fontSize: AppSizes.fontMd,
               fontWeight: FontWeight.w600),
         ),
       );
@@ -721,19 +722,19 @@ class _SearchScreenState extends State<SearchScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+          padding: const EdgeInsets.fromLTRB(AppSizes.space20, AppSizes.md, AppSizes.space20, AppSizes.sm),
           child: Text(
             '${results.length} sonuç',
             style: GoogleFonts.manrope(
                 color: kOnSurfaceVariant,
-                fontSize: 13,
+                fontSize: AppSizes.font13,
                 fontWeight: FontWeight.w600),
           ),
         ),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.screenPaddingH),
           itemCount: results.length,
           itemBuilder: (context, index) =>
               _buildSearchResultCard(context, results[index]),
@@ -749,11 +750,11 @@ class _SearchScreenState extends State<SearchScreen> {
         context.push('/urun', extra: product);
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(bottom: AppSizes.space12),
+        padding: const EdgeInsets.all(AppSizes.space12),
         decoration: BoxDecoration(
           color: kOnPrimary,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
           boxShadow: [
             BoxShadow(
               color: kOnSurface.withValues(alpha: 0.04),
@@ -767,7 +768,7 @@ class _SearchScreenState extends State<SearchScreen> {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMd),
                   child: SafeNetworkImage(
                     imageUrl: product.imageUrl,
                     width: 72,
@@ -786,7 +787,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ],
             ),
-            const SizedBox(width: 14),
+            const SizedBox(width: AppSizes.space14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -795,28 +796,28 @@ class _SearchScreenState extends State<SearchScreen> {
                     product.brand.toUpperCase(),
                     style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
-                      fontSize: 10,
+                      fontSize: AppSizes.fontXs,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.8,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: AppSizes.space2),
                   Text(
                     product.name,
                     style: GoogleFonts.manrope(
                       color: kOnSurface,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: AppSizes.font15,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSizes.xs),
                   Text(
                     product.category,
                     style: GoogleFonts.manrope(
                         color: kOnSurfaceVariant,
-                        fontSize: 12,
+                        fontSize: AppSizes.fontSm,
                         fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -825,13 +826,13 @@ class _SearchScreenState extends State<SearchScreen> {
             GestureDetector(
               onTap: () => _toggleFavoriteFromSearch(product),
               child: Padding(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(AppSizes.space6),
                 child: Icon(
                   _favoriteIds.contains(product.id)
                       ? Icons.favorite
                       : Icons.favorite_border,
                   color: kSecondary,
-                  size: 20,
+                  size: AppSizes.icon20,
                 ),
               ),
             ),

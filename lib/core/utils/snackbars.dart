@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
+import '../constants/app_sizes.dart';
 
 // Hata mesajı için standart snackbar
 void showErrorSnackBar(BuildContext context, String message) {
@@ -9,8 +10,8 @@ void showErrorSnackBar(BuildContext context, String message) {
       content: Text(message, style: GoogleFonts.manrope(fontWeight: FontWeight.w600)),
       backgroundColor: kError,
       behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      margin: const EdgeInsets.all(16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.radiusMd)),
+      margin: const EdgeInsets.all(AppSizes.md),
     ),
   );
 }
@@ -24,8 +25,8 @@ void showInfoSnackBar(BuildContext context, String message) {
               color: kOnSurface, fontWeight: FontWeight.w600)),
       backgroundColor: kSurfaceContainerHigh,
       behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      margin: const EdgeInsets.all(16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.radiusMd)),
+      margin: const EdgeInsets.all(AppSizes.md),
     ),
   );
 }

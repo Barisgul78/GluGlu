@@ -254,7 +254,7 @@ class ProfileScreen extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(AppSizes.md + 4),
+        padding: const EdgeInsets.all(AppSizes.md + AppSizes.xs),
         decoration: BoxDecoration(
           color: kPrimary,
           borderRadius: BorderRadius.circular(AppSizes.radiusXl),
@@ -284,7 +284,7 @@ class ProfileScreen extends StatelessWidget {
                       fontSize: AppSizes.fontXl,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: AppSizes.space2),
                   Text(
                     'Beslenme ihtiyaçlarını kolayca paylaş.',
                     maxLines: 2,

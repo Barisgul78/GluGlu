@@ -92,7 +92,7 @@ class AuthFieldToggleVisibility extends StatelessWidget {
       icon: Icon(
         show ? Icons.visibility_off_outlined : Icons.visibility_outlined,
         color: kOnSurfaceVariant,
-        size: 20,
+        size: AppSizes.icon20,
       ),
       onPressed: onTap,
     );

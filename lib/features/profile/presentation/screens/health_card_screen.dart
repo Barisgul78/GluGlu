@@ -174,7 +174,7 @@ class _HealthCardScreenState extends State<HealthCardScreen> {
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.edit_outlined, color: kPrimary, size: 20),
+                  child: const Icon(Icons.edit_outlined, color: kPrimary, size: AppSizes.icon20),
                 ),
               ),
             ),
@@ -226,7 +226,7 @@ class _HealthCardScreenState extends State<HealthCardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Icon(Icons.info_outline,
-                              color: kOnSurfaceVariant, size: 20),
+                              color: kOnSurfaceVariant, size: AppSizes.icon20),
                           const SizedBox(width: AppSizes.sm + 4),
                           Expanded(
                             child: Text(

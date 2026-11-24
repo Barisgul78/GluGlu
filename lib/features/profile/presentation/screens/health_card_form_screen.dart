@@ -422,7 +422,7 @@ class _HealthCardFormScreenState extends State<HealthCardFormScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(Icons.info_outline, color: kOnSurfaceVariant, size: 20),
+        const Icon(Icons.info_outline, color: kOnSurfaceVariant, size: AppSizes.icon20),
         const SizedBox(width: AppSizes.sm + 4),
         Expanded(
           child: Text(

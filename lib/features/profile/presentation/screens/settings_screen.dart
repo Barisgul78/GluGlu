@@ -23,20 +23,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: kOnPrimary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.radiusLg)),
         title: Text(
           'Hesabı silmek istediğine emin misin?',
           style: GoogleFonts.manrope(
             color: kOnSurface,
             fontWeight: FontWeight.bold,
-            fontSize: 17,
+            fontSize: AppSizes.font17,
           ),
         ),
         content: Text(
           'Bu işlem geri alınamaz. Tüm ürün/mekan/makale favorilerin ve profil bilgilerin kalıcı olarak silinir.',
           style: GoogleFonts.manrope(
             color: kOnSurfaceVariant,
-            fontSize: 14,
+            fontSize: AppSizes.fontMd,
             fontWeight: FontWeight.w500),
         ),
         actions: [
@@ -157,7 +157,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: 'GluGlu',
             subtitle: 'Çölyak yaşam rehberi',
             trailing: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: AppSizes.space10, vertical: AppSizes.xs),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(AppSizes.radiusSm),
@@ -305,7 +305,7 @@ class _SettingsRow extends StatelessWidget {
                 color: iconBg,
                 borderRadius: BorderRadius.circular(AppSizes.radiusMd),
               ),
-              child: Icon(icon, color: iconColor, size: 22),
+              child: Icon(icon, color: iconColor, size: AppSizes.icon22),
             ),
             const SizedBox(width: AppSizes.sm + 4),
             Expanded(
@@ -319,11 +319,11 @@ class _SettingsRow extends StatelessWidget {
                     style: GoogleFonts.manrope(
                       color: titleColor,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: AppSizes.font15,
                     ),
                   ),
                   if (subtitle != null) ...[
-                    const SizedBox(height: 2),
+                    const SizedBox(height: AppSizes.space2),
                     Text(
                       subtitle!,
                       maxLines: 1,
@@ -356,7 +356,7 @@ class _Chevron extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Icon(Icons.chevron_right, color: color, size: 22);
+      Icon(Icons.chevron_right, color: color, size: AppSizes.icon22);
 }
 
 // Türkçe / English seçici — dil geçişi henüz bağlı değil, Türkçe seçili sabit.
@@ -387,7 +387,7 @@ class _LanguageSegments extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.check, color: Colors.white, size: 16),
+                    const Icon(Icons.check, color: Colors.white, size: AppSizes.iconSm),
                     const SizedBox(width: AppSizes.sm - 2),
                     Text(
                       'Türkçe',
@@ -444,7 +444,7 @@ class _SocialTile extends StatelessWidget {
         decoration: cardDecoration(radius: AppSizes.radiusLg),
         child: Column(
           children: [
-            Icon(icon, color: kOnSurfaceVariant, size: 22),
+            Icon(icon, color: kOnSurfaceVariant, size: AppSizes.icon22),
             const SizedBox(height: AppSizes.sm),
             Text(
               label,

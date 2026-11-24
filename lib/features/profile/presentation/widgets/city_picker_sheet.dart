@@ -59,11 +59,11 @@ Future<String?> showCityPickerSheet(BuildContext context, {String? selected}) {
                           color: isSelected ? kPrimary : kOnSurface,
                           fontWeight:
                               isSelected ? FontWeight.w700 : FontWeight.w600,
-                          fontSize: 15,
+                          fontSize: AppSizes.font15,
                         ),
                       ),
                       trailing: isSelected
-                          ? const Icon(Icons.check, color: kPrimary, size: 20)
+                          ? const Icon(Icons.check, color: kPrimary, size: AppSizes.icon20)
                           : null,
                       onTap: () => Navigator.of(sheetContext).pop(city),
                     );
