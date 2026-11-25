@@ -13,13 +13,43 @@ class MainShell extends StatefulWidget {
   State<MainShell> createState() => _MainShellState();
 }
 
-class _MainShellState extends State<MainShell> {
+class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
+  // Aynı gün için tekrar transaction açmamak için; sadece bellekte tutulur.
+  DateTime? _lastVisitDay;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _registerVisit();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // Uygulama arka planda canlı kalıp gün değişirse shell yeniden kurulmaz.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _registerVisit();
+  }
+
+  Future<void> _registerVisit() async {
     final userId = AuthService.currentUserId;
-    if (userId != null) {
-      StatsService.registerDailyVisit(userId);
+    if (userId == null) return;
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    if (_lastVisitDay == today) return;
+
+    try {
+      await StatsService.registerDailyVisit(userId);
+      _lastVisitDay = today;
+    } catch (e) {
+      // Başarısızsa _lastVisitDay set edilmez; sonraki resume'da tekrar denenir.
+      debugPrint('registerDailyVisit hata: $e');
     }
   }
 

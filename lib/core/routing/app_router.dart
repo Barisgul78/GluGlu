@@ -28,6 +28,7 @@ import '../../features/tips/presentation/screens/tips_list_screen.dart';
 import '../../features/venues/presentation/screens/venue_map_screen.dart';
 import '../../features/venues/presentation/screens/venues_screen.dart';
 import 'main_shell.dart';
+import 'route_error_screen.dart';
 
 // Sekme sırası MainShell'deki NavigationBar destinations sırasıyla aynı olmalı.
 const _branchPaths = ['/home', '/search', '/rehber', '/favorites', '/profile'];
@@ -42,6 +43,7 @@ GoRouter createAppRouter({required bool showOnboarding}) {
     navigatorKey: rootNavigatorKey,
     initialLocation: showOnboarding ? '/onboarding' : '/home',
     refreshListenable: GoRouterRefreshStream(AuthService.authStateChanges),
+    errorBuilder: (context, state) => const RouteErrorScreen(),
     redirect: (context, state) {
       final loc = state.matchedLocation;
       if (!onboardingDone) {
@@ -84,8 +86,11 @@ GoRouter createAppRouter({required bool showOnboarding}) {
           GoRoute(
             path: 'detay',
             parentNavigatorKey: rootNavigatorKey,
-            builder: (context, state) =>
-                TipDetailScreen(tip: state.extra as Tip),
+            builder: (context, state) {
+              final tip = state.extra;
+              if (tip is! Tip) return const RouteErrorScreen();
+              return TipDetailScreen(tip: tip);
+            },
           ),
         ],
       ),
@@ -98,10 +103,16 @@ GoRouter createAppRouter({required bool showOnboarding}) {
             path: 'map',
             parentNavigatorKey: rootNavigatorKey,
             builder: (context, state) {
-              final args = state.extra as Map<String, Object?>;
+              final args = state.extra;
+              if (args is! Map<String, Object?>) return const RouteErrorScreen();
+              final center = args['center'];
+              final hasUserLocation = args['hasUserLocation'];
+              if (center is! LatLng || hasUserLocation is! bool) {
+                return const RouteErrorScreen();
+              }
               return VenueMapScreen(
-                center: args['center'] as LatLng,
-                hasUserLocation: args['hasUserLocation'] as bool,
+                center: center,
+                hasUserLocation: hasUserLocation,
               );
             },
           ),
@@ -110,10 +121,14 @@ GoRouter createAppRouter({required bool showOnboarding}) {
       GoRoute(
         path: '/urun',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => DetailScreen(
-          product: state.extra as Product,
-          onBack: () => context.pop(),
-        ),
+        builder: (context, state) {
+          final product = state.extra;
+          if (product is! Product) return const RouteErrorScreen();
+          return DetailScreen(
+            product: product,
+            onBack: () => context.pop(),
+          );
+        },
       ),
       GoRoute(
         path: '/settings',
@@ -133,16 +148,20 @@ GoRouter createAppRouter({required bool showOnboarding}) {
           GoRoute(
             path: 'duzenle',
             parentNavigatorKey: rootNavigatorKey,
-            builder: (context, state) => HealthCardFormScreen(
-              initial: state.extra as HealthCard,
-              popOnSave: true,
-            ),
+            builder: (context, state) {
+              final card = state.extra;
+              if (card is! HealthCard) return const RouteErrorScreen();
+              return HealthCardFormScreen(initial: card, popOnSave: true);
+            },
           ),
           GoRoute(
             path: 'tam-ekran',
             parentNavigatorKey: rootNavigatorKey,
-            builder: (context, state) =>
-                HealthCardFullscreenScreen(card: state.extra as HealthCard),
+            builder: (context, state) {
+              final card = state.extra;
+              if (card is! HealthCard) return const RouteErrorScreen();
+              return HealthCardFullscreenScreen(card: card);
+            },
           ),
         ],
       ),
