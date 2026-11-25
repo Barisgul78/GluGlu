@@ -8,4 +8,5 @@ String formatDate(DateTime date) =>
 
 String formatMonthYear(DateTime date) => '${_months[date.month]} ${date.year}';
 
-String monthName(int month) => _months[month];
+String monthName(int month) =>
+    (month < 1 || month > 12) ? '' : _months[month];

@@ -4,7 +4,7 @@ class Validators {
 
   static String? email(String? v) {
     if (v == null || v.trim().isEmpty) return 'E-posta gerekli.';
-    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(v.trim())) {
+    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v.trim())) {
       return 'Geçersiz e-posta adresi.';
     }
     return null;
@@ -19,6 +19,9 @@ class Validators {
   static String? name(String? v) {
     if (v == null || v.trim().isEmpty) return 'Ad soyad gerekli.';
     if (v.trim().length < 2) return 'Ad soyad en az 2 karakter olmalı.';
+    if (!RegExp(r'\p{L}', unicode: true).hasMatch(v)) {
+      return 'Ad soyad harf içermeli.';
+    }
     return null;
   }
 
@@ -67,6 +70,8 @@ class Validators {
   static String? normalizePhone(String? v) {
     final s = _stripPhone(v);
     if (s.isEmpty) return null;
+    // substring RangeError atmasın; çağıran zaten phone() ile doğruladığı için sigorta.
+    if (s.length < 10) return null;
     return '+90${s.substring(s.length - 10)}';
   }
 }
