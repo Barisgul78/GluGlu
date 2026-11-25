@@ -5,6 +5,16 @@ class LocationService {
   LocationService._();
 
   static Future<Position?> getCurrentPosition() async {
+    try {
+      return await _fetchPosition();
+    } catch (e) {
+      // Platform/izin ve yedek konum hataları dahil: konum yokluğu normaldir → null
+      debugPrint('Konum alınamadı: $e');
+      return null;
+    }
+  }
+
+  static Future<Position?> _fetchPosition() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       debugPrint('Konum servisi kapalı.');

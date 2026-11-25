@@ -85,7 +85,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadUserLocation() async {
     debugPrint('Konum yükleme başladı');
-    final pos = await LocationService.getCurrentPosition();
+    Position? pos;
+    try {
+      pos = await LocationService.getCurrentPosition();
+    } catch (e) {
+      debugPrint('Konum yüklenemedi: $e');
+    }
     if (!mounted) return;
     setState(() {
       _userPosition = pos;
