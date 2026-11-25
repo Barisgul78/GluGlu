@@ -61,12 +61,16 @@ class AppButton extends StatelessWidget {
                     Icon(icon, color: fg, size: AppSizes.iconMd - 4),
                     const SizedBox(width: AppSizes.sm),
                   ],
-                  Text(
-                    label,
-                    style: GoogleFonts.manrope(
-                      fontSize: AppSizes.fontLg,
-                      fontWeight: FontWeight.w700,
-                      color: fg,
+                  Flexible(
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.manrope(
+                        fontSize: AppSizes.fontLg,
+                        fontWeight: FontWeight.w700,
+                        color: fg,
+                      ),
                     ),
                   ),
                 ],
@@ -87,6 +91,7 @@ class AppOutlinedButton extends StatelessWidget {
     this.borderColor,
     this.textColor,
     this.borderRadius = AppSizes.radiusFull,
+    this.loading = false,
   });
 
   final String label;
@@ -96,31 +101,46 @@ class AppOutlinedButton extends StatelessWidget {
   final Color? borderColor;
   final Color? textColor;
   final double borderRadius;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
-    final color = borderColor ?? kPrimary;
-    final fgColor = textColor ?? kPrimary;
+    final enabled = onPressed != null && !loading;
+    final baseColor = borderColor ?? kPrimary;
+    final baseFg = textColor ?? kPrimary;
+    final color = enabled ? baseColor : baseColor.withValues(alpha: 0.5);
+    final fgColor = enabled ? baseFg : baseFg.withValues(alpha: 0.5);
 
     return SizedBox(
       width: width,
       height: height,
       child: OutlinedButton(
-        onPressed: onPressed,
+        onPressed: enabled ? onPressed : null,
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: color, width: 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
-        child: Text(
-          label,
-          style: GoogleFonts.manrope(
-            fontSize: AppSizes.fontLg,
-            fontWeight: FontWeight.w700,
-            color: fgColor,
-          ),
-        ),
+        child: loading
+            ? SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  color: fgColor,
+                  strokeWidth: 2.5,
+                ),
+              )
+            : Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.manrope(
+                  fontSize: AppSizes.fontLg,
+                  fontWeight: FontWeight.w700,
+                  color: fgColor,
+                ),
+              ),
       ),
     );
   }

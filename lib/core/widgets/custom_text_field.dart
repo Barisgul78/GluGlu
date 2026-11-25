@@ -48,6 +48,8 @@ class AppTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscure,
+      autocorrect: !obscure,
+      enableSuggestions: !obscure,
       keyboardType: keyboardType,
       validator: validator,
       onChanged: onChanged,
@@ -89,6 +91,7 @@ class AuthFieldToggleVisibility extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      tooltip: show ? 'Şifreyi gizle' : 'Şifreyi göster',
       icon: Icon(
         show ? Icons.visibility_off_outlined : Icons.visibility_outlined,
         color: kOnSurfaceVariant,
