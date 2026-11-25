@@ -41,10 +41,10 @@ class AuthService {
       email: email,
       password: password,
     );
-    await cred.user!.updateDisplayName(_fullName(ad, soyad));
-    // Firestore profil belgesi ve kullanıcı adı rezervasyonu — başarısız olursa
-    // yarım kalmış Auth hesabını geri al (rollback), hatayı yutma.
+    // Görünen ad, Firestore profil belgesi ve kullanıcı adı rezervasyonu —
+    // biri başarısız olursa yarım kalmış Auth hesabını geri al (rollback), hatayı yutma.
     try {
+      await cred.user!.updateDisplayName(_fullName(ad, soyad));
       await _db.collection(kUsersCollection).doc(cred.user!.uid).set({
         'ad': ad,
         'soyad': soyad,

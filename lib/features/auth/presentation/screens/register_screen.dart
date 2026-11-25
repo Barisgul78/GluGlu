@@ -68,7 +68,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _checkUsername(String username) async {
-    final taken = await AuthService.isUsernameTaken(username);
+    final bool taken;
+    try {
+      taken = await AuthService.isUsernameTaken(username);
+    } catch (e) {
+      // checking'te takılı kalırsa validator kaydı kilitler; idle'a dön.
+      debugPrint('Kullanıcı adı kontrolü başarısız: $e');
+      if (!mounted) return;
+      if (_usernameCtrl.text.trim().toLowerCase() != username) return;
+      setState(() => _usernameStatus = _UsernameStatus.idle);
+      return;
+    }
     if (!mounted) return;
     // Kullanıcı bu arada yazmaya devam ettiyse eski sonucu uygulama
     if (_usernameCtrl.text.trim().toLowerCase() != username) return;
@@ -163,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded, color: kOnSurface),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
       ),
       body: SafeArea(
@@ -323,7 +333,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
+                        onTap: () => context.pushReplacement('/sign/login'),
                         child: Text(
                           'Giriş Yap',
                           style: GoogleFonts.manrope(
