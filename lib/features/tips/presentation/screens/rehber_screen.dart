@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
-import '../widgets/category_badge.dart';
+import '../../../../../core/utils/snackbars.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Veri modelleri
@@ -10,23 +10,15 @@ import '../widgets/category_badge.dart';
 
 class _GuideItem {
   final String name;
-  final String articleCount;
   final String subtitle;
   final Color iconBg;
   final IconData icon;
-  final String? badge;
-  final Color? badgeBg;
-  final Color? badgeText;
 
   const _GuideItem({
     required this.name,
-    required this.articleCount,
     required this.subtitle,
     required this.iconBg,
     required this.icon,
-    this.badge,
-    this.badgeBg,
-    this.badgeText,
   });
 }
 
@@ -37,82 +29,84 @@ class _GuideGroup {
 }
 
 const _groups = [
-  _GuideGroup('SAĞLIK & HASTALIK', [
+  _GuideGroup('BAŞLANGIÇ', [
     _GuideItem(
-      name: 'Çölyak Hastalığı',
-      articleCount: '12 makale',
-      subtitle: 'Tanı, belirtiler, tedavi',
+      name: 'Çölyak Nedir?',
+      subtitle: 'Belirtiler, tanı, kimlerde görülür',
       iconBg: kPastelGreen,
-      icon: Icons.eco_rounded,
+      icon: Icons.info_outline_rounded,
     ),
     _GuideItem(
-      name: 'Sağlık İpuçları',
-      articleCount: '10 makale',
-      subtitle: 'Vitamin, takviye, eksiklik',
+      name: 'Yeni Tanı Aldım',
+      subtitle: 'İlk hafta, doktor, ilk alışveriş',
       iconBg: kPastelBlue,
-      icon: Icons.health_and_safety_outlined,
+      icon: Icons.assignment_turned_in_outlined,
     ),
     _GuideItem(
-      name: 'Çocuklarda Çölyak',
-      articleCount: '8 makale',
-      subtitle: 'Ebeveyn rehberi, okul, tarifler',
-      iconBg: kPastelPink,
-      icon: Icons.child_care_rounded,
-      badge: 'Yeni',
-      badgeBg: kPastelRed,
-      badgeText: kBadgeDanger,
+      name: 'Gluten Nerede Saklı?',
+      subtitle: 'Tahıllar ve gizli kaynaklar',
+      iconBg: kPastelYellow,
+      icon: Icons.grain_rounded,
     ),
   ]),
-  _GuideGroup('BESLENME & TARİFLER', [
+  _GuideGroup('GÜNLÜK YAŞAM', [
     _GuideItem(
-      name: 'Glutensiz Tarifler',
-      articleCount: '6 makale',
-      subtitle: 'Kullanıcı tarifleri, pratik öneriler',
-      iconBg: kPastelOrange,
-      icon: Icons.restaurant_menu_rounded,
+      name: 'Mutfak ve Çapraz Bulaşma',
+      subtitle: 'Ayrı ekipman, güvenli hazırlık',
+      iconBg: kPastelRed,
+      icon: Icons.kitchen_outlined,
     ),
     _GuideItem(
-      name: 'Diyet Listeleri',
-      articleCount: '8 makale',
-      subtitle: 'Haftalık planlar, öğün önerileri',
-      iconBg: kPastelGreen,
-      icon: Icons.checklist_rounded,
-    ),
-    _GuideItem(
-      name: 'Etiket Okuma Rehberi',
-      articleCount: '7 makale',
-      subtitle: 'Gizli gluten, E kodları',
+      name: 'Etiket Okuma',
+      subtitle: 'Glutensiz ibaresi, E kodları',
       iconBg: kPastelGray,
       icon: Icons.label_outlined,
     ),
-  ]),
-  _GuideGroup('YAŞAM & DESTEK', [
-    _GuideItem(
-      name: 'Belediye Destekleri',
-      articleCount: '9 makale',
-      subtitle: 'Konuma göre yardımlar',
-      iconBg: kPastelGreen,
-      icon: Icons.account_balance_rounded,
-      badge: 'Lokasyon',
-      badgeBg: kPastelGreen,
-      badgeText: kBadgeSuccess,
-    ),
     _GuideItem(
       name: 'Alışveriş Rehberi',
-      articleCount: '11 makale',
-      subtitle: 'Market, marka önerileri',
+      subtitle: 'Market, marka, hazır ürünler',
       iconBg: kPastelYellow,
       icon: Icons.shopping_cart_outlined,
     ),
     _GuideItem(
-      name: 'Güncel Haberler',
-      articleCount: '11 makale',
-      subtitle: 'Araştırmalar, yeni ürünler',
+      name: 'Dışarıda Yemek ve Seyahat',
+      subtitle: 'Restoran, otel, yurt dışı',
       iconBg: kPastelBlue,
-      icon: Icons.newspaper_rounded,
-      badge: 'Güncellendi',
-      badgeBg: kPastelBlue,
-      badgeText: kBadgeInfo,
+      icon: Icons.flight_takeoff_rounded,
+    ),
+    _GuideItem(
+      name: 'Glutensiz Tarifler',
+      subtitle: 'Pratik, evde yapılabilen',
+      iconBg: kPastelOrange,
+      icon: Icons.restaurant_menu_rounded,
+    ),
+  ]),
+  _GuideGroup('AİLE VE ÖZEL DURUMLAR', [
+    _GuideItem(
+      name: 'Çocuklarda Çölyak',
+      subtitle: 'Ebeveyn rehberi, okul, kreş',
+      iconBg: kPastelPink,
+      icon: Icons.child_care_rounded,
+    ),
+    _GuideItem(
+      name: 'Hamilelik ve Emzirme',
+      subtitle: 'Beslenme ve dikkat edilecekler',
+      iconBg: kPastelPink,
+      icon: Icons.pregnant_woman_rounded,
+    ),
+  ]),
+  _GuideGroup('SAĞLIK VE DESTEK', [
+    _GuideItem(
+      name: 'Beslenme ve Eksiklikler',
+      subtitle: 'Demir, B12, kalsiyum, D vitamini',
+      iconBg: kPastelGreen,
+      icon: Icons.medication_outlined,
+    ),
+    _GuideItem(
+      name: 'Haklar ve Destekler',
+      subtitle: 'Sağlık raporu, SGK, belediye',
+      iconBg: kPastelGreen,
+      icon: Icons.account_balance_rounded,
     ),
   ]),
 ];
@@ -289,7 +283,8 @@ class _RehberScreenState extends State<RehberScreen> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-            onTap: () {}, // ileride kategori detay sayfasına gidecek
+            // Makaleler henüz yazılmadı; içerik gelince kategori detay sayfasına gidecek
+            onTap: () => showInfoSnackBar(context, 'Bu başlık yakında'),
             child: Padding(
               padding: const EdgeInsets.all(AppSizes.md),
               child: Row(
@@ -312,34 +307,19 @@ class _RehberScreenState extends State<RehberScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                item.name,
-                                style: GoogleFonts.manrope(
-                                  color: kOnSurface,
-                                  fontSize: AppSizes.fontLg - 1,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                            if (item.badge != null) ...[
-                              const SizedBox(width: AppSizes.xs),
-                              CategoryBadge(
-                                label: item.badge!,
-                                bgColor: item.badgeBg!,
-                                fgColor: item.badgeText!,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: AppSizes.sm, vertical: 2),
-                                fontSize: AppSizes.fontXs,
-                              ),
-                            ],
-                          ],
+                        Text(
+                          item.name,
+                          style: GoogleFonts.manrope(
+                            color: kOnSurface,
+                            fontSize: AppSizes.fontLg - 1,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: AppSizes.xs - 1),
                         Text(
-                          '${item.articleCount} · ${item.subtitle}',
+                          item.subtitle,
                           style: GoogleFonts.manrope(
                             color: kOnSurfaceVariant,
                             fontSize: AppSizes.fontXs + 2,
