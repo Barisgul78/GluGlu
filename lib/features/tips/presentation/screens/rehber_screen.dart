@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
-import '../../../../../core/utils/snackbars.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Veri modelleri
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _GuideItem {
+  final String id; // Firestore'daki konu_id ile eşleşir
   final String name;
   final String subtitle;
   final Color iconBg;
   final IconData icon;
 
   const _GuideItem({
+    required this.id,
     required this.name,
     required this.subtitle,
     required this.iconBg,
@@ -31,18 +33,21 @@ class _GuideGroup {
 const _groups = [
   _GuideGroup('BAŞLANGIÇ', [
     _GuideItem(
+      id: 'colyak-nedir',
       name: 'Çölyak Nedir?',
       subtitle: 'Belirtiler, tanı, kimlerde görülür',
       iconBg: kPastelGreen,
       icon: Icons.info_outline_rounded,
     ),
     _GuideItem(
+      id: 'yeni-tani',
       name: 'Yeni Tanı Aldım',
       subtitle: 'İlk hafta, doktor, ilk alışveriş',
       iconBg: kPastelBlue,
       icon: Icons.assignment_turned_in_outlined,
     ),
     _GuideItem(
+      id: 'gluten-nerede-sakli',
       name: 'Gluten Nerede Saklı?',
       subtitle: 'Tahıllar ve gizli kaynaklar',
       iconBg: kPastelYellow,
@@ -51,30 +56,35 @@ const _groups = [
   ]),
   _GuideGroup('GÜNLÜK YAŞAM', [
     _GuideItem(
+      id: 'mutfak-capraz-bulasma',
       name: 'Mutfak ve Çapraz Bulaşma',
       subtitle: 'Ayrı ekipman, güvenli hazırlık',
       iconBg: kPastelRed,
       icon: Icons.kitchen_outlined,
     ),
     _GuideItem(
+      id: 'etiket-okuma',
       name: 'Etiket Okuma',
       subtitle: 'Glutensiz ibaresi, E kodları',
       iconBg: kPastelGray,
       icon: Icons.label_outlined,
     ),
     _GuideItem(
+      id: 'alisveris',
       name: 'Alışveriş Rehberi',
       subtitle: 'Market, marka, hazır ürünler',
       iconBg: kPastelYellow,
       icon: Icons.shopping_cart_outlined,
     ),
     _GuideItem(
+      id: 'disarida-yemek-seyahat',
       name: 'Dışarıda Yemek ve Seyahat',
       subtitle: 'Restoran, otel, yurt dışı',
       iconBg: kPastelBlue,
       icon: Icons.flight_takeoff_rounded,
     ),
     _GuideItem(
+      id: 'glutensiz-tarifler',
       name: 'Glutensiz Tarifler',
       subtitle: 'Pratik, evde yapılabilen',
       iconBg: kPastelOrange,
@@ -83,12 +93,14 @@ const _groups = [
   ]),
   _GuideGroup('AİLE VE ÖZEL DURUMLAR', [
     _GuideItem(
+      id: 'cocuklarda-colyak',
       name: 'Çocuklarda Çölyak',
       subtitle: 'Ebeveyn rehberi, okul, kreş',
       iconBg: kPastelPink,
       icon: Icons.child_care_rounded,
     ),
     _GuideItem(
+      id: 'hamilelik-emzirme',
       name: 'Hamilelik ve Emzirme',
       subtitle: 'Beslenme ve dikkat edilecekler',
       iconBg: kPastelPink,
@@ -97,12 +109,14 @@ const _groups = [
   ]),
   _GuideGroup('SAĞLIK VE DESTEK', [
     _GuideItem(
+      id: 'beslenme-eksiklikler',
       name: 'Beslenme ve Eksiklikler',
       subtitle: 'Demir, B12, kalsiyum, D vitamini',
       iconBg: kPastelGreen,
       icon: Icons.medication_outlined,
     ),
     _GuideItem(
+      id: 'haklar-destekler',
       name: 'Haklar ve Destekler',
       subtitle: 'Sağlık raporu, SGK, belediye',
       iconBg: kPastelGreen,
@@ -283,8 +297,8 @@ class _RehberScreenState extends State<RehberScreen> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-            // Makaleler henüz yazılmadı; içerik gelince kategori detay sayfasına gidecek
-            onTap: () => showInfoSnackBar(context, 'Bu başlık yakında'),
+            onTap: () => context.push('/tips',
+                extra: {'topicId': item.id, 'title': item.name}),
             child: Padding(
               padding: const EdgeInsets.all(AppSizes.md),
               child: Row(

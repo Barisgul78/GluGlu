@@ -575,7 +575,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: AppSizes.xs),
                   Text(
-                    '${tip.author}  |  ${du.formatDate(tip.date)}',
+                    du.formatDate(tip.date),
                     style: GoogleFonts.manrope(
                       color: kOnSurfaceVariant,
                       fontSize: AppSizes.fontXs + 1,

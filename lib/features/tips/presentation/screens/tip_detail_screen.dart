@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
-import '../../../../../core/utils/date_utils.dart' as du;
 import '../../../../../core/widgets/bubble_background.dart';
 import '../../data/models/tip.dart';
 import '../widgets/category_badge.dart';
@@ -21,10 +20,7 @@ class TipDetailScreen extends StatefulWidget {
   State<TipDetailScreen> createState() => _TipDetailScreenState();
 }
 
-enum _Reaction { none, liked, disliked }
-
 class _TipDetailScreenState extends State<TipDetailScreen> {
-  _Reaction _reaction = _Reaction.none;
   bool _saved = false;
   bool _readRegistered = false;
   final _scrollController = ScrollController();
@@ -32,7 +28,8 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _checkIfSaved();
+    // Rehber bilgileri Firestore'dan geliyor; kaydetme yalnızca Günün Bilgisi'nde
+    if (widget.tip.topicId == null) _checkIfSaved();
     _scrollController.addListener(_maybeRegisterRead);
     WidgetsBinding.instance.addPostFrameCallback((_) => _maybeRegisterRead());
   }
@@ -43,8 +40,8 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
     super.dispose();
   }
 
-  // Kısa makalede scroll hiç mümkün değilse direkt okundu say; değilse
-  // like/dislike/kaydet satırına (son gerçek içerik) yaklaşınca say.
+  // Kısa içerikte scroll hiç mümkün değilse direkt okundu say; değilse
+  // sayfa sonuna (uyarı notu/kaydet satırı) yaklaşınca say.
   void _maybeRegisterRead() {
     if (_readRegistered) return;
     if (!_scrollController.hasClients) return;
@@ -75,10 +72,6 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
     }
     await FavoritesService.toggleArticleFavorite(widget.tip.id, isFavorite: _saved);
     if (mounted) setState(() => _saved = !_saved);
-  }
-
-  void _setReaction(_Reaction r) {
-    setState(() => _reaction = _reaction == r ? _Reaction.none : r);
   }
 
   @override
@@ -138,10 +131,8 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
                 _buildTitle(tip),
                 const SizedBox(height: AppSizes.lg),
                 ..._buildSections(tip),
-                const SizedBox(height: AppSizes.md),
-                _buildAuthorRow(tip),
                 const Divider(height: AppSizes.xl, color: kOutlineVariant),
-                _buildInteractionRow(tip),
+                _buildFooter(tip),
                 const SizedBox(height: AppSizes.xxl + AppSizes.xxl),
               ],
             ),
@@ -229,55 +220,24 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
     return widgets;
   }
 
-  Widget _buildAuthorRow(Tip tip) {
-    return Text(
-      '${tip.author}  |  ${du.formatDate(tip.date)}',
+  Widget _buildFooter(Tip tip) {
+    final warning = Text(
+      'Bilgilendirme amaçlıdır. Tanı ve tedavi için doktorunuza danışın.',
       style: GoogleFonts.manrope(
         color: kOnSurfaceVariant,
         fontSize: AppSizes.fontSm + 1,
         fontWeight: FontWeight.w600,
+        height: 1.5,
       ),
     );
-  }
 
-  Widget _buildInteractionRow(Tip tip) {
-    final liked = _reaction == _Reaction.liked;
-    final disliked = _reaction == _Reaction.disliked;
-    final likeCount = tip.likes + (liked ? 1 : 0);
-    final dislikeCount = tip.dislikes + (disliked ? 1 : 0);
+    // Rehber bilgilerinde kaydet düğmesi yok (Favoriler entegrasyonu sonraki iş)
+    if (tip.topicId != null) return warning;
 
     return Row(
       children: [
-        _InteractionButton(
-          icon: Icons.thumb_up_outlined,
-          activeIcon: Icons.thumb_up_rounded,
-          count: likeCount,
-          activeColor: kStar,
-          borderColor: kPrimary,
-          isActive: liked,
-          onTap: () => _setReaction(_Reaction.liked),
-        ),
-        const SizedBox(width: AppSizes.sm + 4),
-        _InteractionButton(
-          icon: Icons.thumb_down_outlined,
-          activeIcon: Icons.thumb_down_rounded,
-          count: dislikeCount,
-          activeColor: kError,
-          borderColor: kError,
-          isActive: disliked,
-          onTap: () => _setReaction(_Reaction.disliked),
-        ),
-        const SizedBox(width: AppSizes.sm + 4),
-        _InteractionButton(
-          icon: Icons.chat_bubble_outline_rounded,
-          activeIcon: Icons.chat_bubble_rounded,
-          count: tip.commentCount,
-          activeColor: kPrimary,
-          borderColor: kPrimary,
-          isActive: false,
-          onTap: () {},
-        ),
-        const Spacer(),
+        Expanded(child: warning),
+        const SizedBox(width: AppSizes.md),
         GestureDetector(
           onTap: _toggleSaved,
           child: Container(
@@ -298,64 +258,3 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Etkileşim butonu (like / dislike / yorum)
-// ─────────────────────────────────────────────────────────────────────────────
-class _InteractionButton extends StatelessWidget {
-  const _InteractionButton({
-    required this.icon,
-    required this.activeIcon,
-    required this.count,
-    required this.activeColor,
-    required this.borderColor,
-    required this.isActive,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final IconData activeIcon;
-  final int count;
-  final Color activeColor;
-  final Color borderColor;
-  final bool isActive;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: isActive ? activeColor : kOutlineVariant,
-                width: 1.5,
-              ),
-            ),
-            child: Icon(
-              isActive ? activeIcon : icon,
-              size: AppSizes.iconSm + 4,
-              color: isActive ? activeColor : kOnSurfaceVariant,
-            ),
-          ),
-          const SizedBox(width: AppSizes.xs),
-          Text(
-            '$count',
-            style: GoogleFonts.manrope(
-              color: kOnSurfaceVariant,
-              fontSize: AppSizes.fontMd,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-

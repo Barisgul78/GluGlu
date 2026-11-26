@@ -14,11 +14,7 @@ class TipsService {
       title: 'Çölyak Hastalığı Nedir?\nBelirtileri ve Glutensiz Yaşam Rehberi',
       summary:
           'Çölyak hastalığı, glutene karşı oluşan otoimmün bir hastalıktır. İnce bağırsakta hasar oluşturarak besin emilimini etkiler. Erken teşhis ve glutensiz diyet ile sağlıklı bir yaşam mümkündür.',
-      author: 'Dr. Ayşe Yılmaz',
       date: DateTime(2026, 6, 23),
-      likes: 24,
-      dislikes: 2,
-      commentCount: 5,
       sections: [
         const TipSection(
           heading: 'Çölyak Hastalığı Nedir?',
@@ -44,11 +40,7 @@ class TipsService {
       title: 'Gluten Nedir ve Nerede Bulunur?',
       summary:
           'Gluten; buğday, arpa ve çavdarda doğal olarak bulunan bir protein grubudur. Hamura elastikiyet kazandırır ancak çölyak hastalarında bağırsak hasarına yol açar.',
-      author: 'Dr. Ayşe Yılmaz',
       date: DateTime(2026, 6, 20),
-      likes: 18,
-      dislikes: 1,
-      commentCount: 3,
       sections: [
         const TipSection(
           heading: 'Gluten Nedir?',
@@ -74,11 +66,7 @@ class TipsService {
       title: 'Çapraz Bulaşmadan Nasıl Korunulur?',
       summary:
           'Glutensiz ürünlerin gluten içeren gıdalarla temas etmesi "çapraz bulaşma" olarak adlandırılır. Birkaç basit önlemle bu riski önemli ölçüde azaltmak mümkündür.',
-      author: 'Dr. Mehmet Kaya',
       date: DateTime(2026, 6, 18),
-      likes: 31,
-      dislikes: 0,
-      commentCount: 8,
       sections: [
         const TipSection(
           heading: 'Çapraz Bulaşma Nedir?',
@@ -104,11 +92,7 @@ class TipsService {
       title: 'Belediyelerin Çölyak Yardımları',
       summary:
           'Pek çok belediye, çölyak tanısı almış düşük gelirli vatandaşlara aylık glutensiz ürün yardımı ve sosyal destek sunmaktadır. Başvuru süreci ve şartları öğrenmek için yakınınızdaki sosyal hizmetler müdürlüğüne başvurun.',
-      author: 'GluGlu Editörü',
       date: DateTime(2026, 6, 15),
-      likes: 47,
-      dislikes: 3,
-      commentCount: 12,
       sections: [
         const TipSection(
           heading: 'Sosyal Yardım Programları',

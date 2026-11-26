@@ -3,3 +3,4 @@ const String kFavorilerCollection = 'favoriler';
 const String kMekanlarCollection = 'mekanlar';
 const String kUsersCollection = 'users';
 const String kUsernamesCollection = 'usernames';
+const String kRehberBilgileriCollection = 'rehber_bilgileri';

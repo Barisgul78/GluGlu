@@ -399,16 +399,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    tip.author.toUpperCase(),
-                    style: GoogleFonts.manrope(
-                      color: kOnSurfaceVariant,
-                      fontSize: AppSizes.fontXs,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.8,
-                    ),
-                  ),
-                  const SizedBox(height: AppSizes.space2),
-                  Text(
                     tip.title,
                     style: GoogleFonts.manrope(
                       color: kOnSurface,

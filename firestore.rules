@@ -39,5 +39,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+
+    // Rehber bilgi kartları; içerik konsol/seed scriptiyle girilir, client yazamaz
+    match /rehber_bilgileri/{bilgiId} {
+      allow read: if true;
+      allow write: if false;
+    }
   }
 }

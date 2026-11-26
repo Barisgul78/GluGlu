@@ -81,7 +81,17 @@ GoRouter createAppRouter({required bool showOnboarding}) {
       GoRoute(
         path: '/tips',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const TipsListScreen(),
+        builder: (context, state) {
+          // Rehber konusundan açılırsa {topicId, title}; yoksa Günün Bilgisi listesi
+          final args = state.extra;
+          if (args is Map<String, String>) {
+            return TipsListScreen(
+              topicId: args['topicId'],
+              title: args['title'],
+            );
+          }
+          return const TipsListScreen();
+        },
         routes: [
           GoRoute(
             path: 'detay',
