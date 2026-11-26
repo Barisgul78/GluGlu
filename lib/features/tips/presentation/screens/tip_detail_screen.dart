@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
@@ -97,22 +96,6 @@ class _TipDetailScreenState extends State<TipDetailScreen> {
           ),
         ),
         centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () => context.push('/tips'),
-            style: TextButton.styleFrom(
-              foregroundColor: kPrimary,
-              padding: const EdgeInsets.only(right: AppSizes.md),
-            ),
-            child: Text(
-              'Tümü',
-              style: GoogleFonts.manrope(
-                fontSize: AppSizes.fontMd,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
       ),
       body: Stack(
         children: [
